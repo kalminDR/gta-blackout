@@ -16,6 +16,7 @@ Design rules:
 Missing API keys are fine - that source is simply skipped and marked as such.
 """
 
+import glob
 import json
 import os
 import sys
@@ -372,19 +373,26 @@ def collect_stocks():
         ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
               "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36")
         try:
+            # Yahoo throttles the first calls from a shared IP and then
+            # lets later ones through, so back off and try again rather
+            # than giving up on the first refusal.
             raw = None
-            for host in ("query2", "query1"):
-                try:
-                    raw = get_json(
-                        f"https://{host}.finance.yahoo.com/v8/finance/chart/"
-                        f"{sym}?interval=1m&range=1d",
-                        headers={"User-Agent": ua},
-                    )
+            for attempt in range(3):
+                for host in ("query2", "query1"):
+                    try:
+                        raw = get_json(
+                            f"https://{host}.finance.yahoo.com/v8/finance/"
+                            f"chart/{sym}?interval=1m&range=1d",
+                            headers={"User-Agent": ua},
+                        )
+                        break
+                    except Exception:
+                        continue
+                if raw is not None:
                     break
-                except Exception:
-                    continue
+                time.sleep(2 + 3 * attempt)
             if raw is None:
-                raise RuntimeError("all yahoo hosts refused")
+                raise RuntimeError("all yahoo hosts refused after 3 tries")
             meta = raw["chart"]["result"][0]["meta"]
             out[sym] = {
                 "description": desc,
@@ -420,7 +428,7 @@ def collect_stocks():
             except Exception as e2:
                 out[sym] = {"description": desc,
                             "error": f"yahoo: {str(e)[:80]} | stooq: {str(e2)[:80]}"}
-        time.sleep(0.5)
+        time.sleep(2)
     return out
 
 
@@ -471,5 +479,53 @@ def main():
     print(f"wrote {path}", file=sys.stderr)
 
 
+def has_real_data(value):
+    """Did this source return anything usable, or only errors/skips?"""
+    if isinstance(value, dict):
+        if "skipped" in value:
+            return False
+        return any(k not in ("error", "errors", "description", "source_url")
+                   and has_real_data(v) for k, v in value.items())
+    if isinstance(value, list):
+        return any(has_real_data(v) for v in value)
+    return value is not None
+
+
+def check():
+    """Read the newest snapshot and fail loudly if a source has gone dark.
+
+    The collector deliberately swallows errors so one bad source cannot kill
+    a run. The downside is that a broken source stays broken in silence, so
+    this runs afterwards and makes the workflow fail, which makes GitHub
+    send an email.
+    """
+    days = sorted(glob.glob(os.path.join("data", "*")))
+    if not days:
+        print("no data directory yet", file=sys.stderr)
+        return 0
+    files = sorted(glob.glob(os.path.join(days[-1], "*.json")))
+    if not files:
+        print("no snapshots yet", file=sys.stderr)
+        return 0
+
+    with open(files[-1], encoding="utf-8") as f:
+        snap = json.load(f)
+
+    dead = [name for name, val in snap["sources"].items()
+            if not has_real_data(val)]
+
+    for name in snap["sources"]:
+        print(f"  {name:16s} {'DEAD' if name in dead else 'ok'}", file=sys.stderr)
+
+    if dead:
+        print(f"\nThese sources returned no usable data: {', '.join(dead)}",
+              file=sys.stderr)
+        print(f"Check {files[-1]} for the exact errors.", file=sys.stderr)
+        return 1
+    return 0
+
+
 if __name__ == "__main__":
+    if "--check" in sys.argv:
+        sys.exit(check())
     main()
