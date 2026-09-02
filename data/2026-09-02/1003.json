@@ -1,0 +1,48 @@
+{
+ "collected_at_utc": "2026-09-02T10:03:44+00:00",
+ "collector_version": "1.0",
+ "sources": {
+  "reddit": {
+   "GTA6": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "GamingLeaksAndRumours": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "PS5": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "gaming": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "pcgaming": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "programming": {
+    "error": "HTTP Error 403: Blocked"
+   },
+   "sysadmin": {
+    "error": "HTTP Error 403: Blocked"
+   }
+  },
+  "steam": {
+   "Apex Legends": 108420,
+   "Baldur's Gate 3": 27349,
+   "Counter-Strike 2": 721005,
+   "Dota 2": 489938,
+   "Grand Theft Auto V": 44869,
+   "Grand Theft Auto V Enhanced": 49518,
+   "PUBG": 322311,
+   "Red Dead Redemption 2": 31109
+  },
+  "traffic": {
+   "skipped": "no TOMTOM_API_KEY"
+  },
+  "twitch": {
+   "skipped": "no TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET"
+  },
+  "youtube": {
+   "skipped": "no YOUTUBE_API_KEY"
+  }
+ }
+}
