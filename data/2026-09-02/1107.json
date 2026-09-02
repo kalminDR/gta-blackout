@@ -1,0 +1,76 @@
+{
+ "collected_at_utc": "2026-09-02T11:07:56+00:00",
+ "collector_version": "1.0",
+ "sources": {
+  "hackernews": {
+   "max_item_id": 49534590,
+   "top_stories_count": 500
+  },
+  "steam": {
+   "Apex Legends": 126337,
+   "Baldur's Gate 3": 29698,
+   "Counter-Strike 2": 803205,
+   "Dota 2": 556003,
+   "Grand Theft Auto V": 49620,
+   "Grand Theft Auto V Enhanced": 54061,
+   "PUBG": 358596,
+   "Red Dead Redemption 2": 33693
+  },
+  "traffic": {
+   "skipped": "no TOMTOM_API_KEY"
+  },
+  "twitch": {
+   "stream_count": 100,
+   "total_viewers_top100": 605363,
+   "viewers_by_game": {
+    "Aliens: Fireteam Elite 2": 4493,
+    "Always On": 3779,
+    "Apex Legends": 30003,
+    "Breathedge 2": 3739,
+    "Counter-Strike": 15974,
+    "Crimson Moon": 5197,
+    "Dota 2": 24531,
+    "Escape from Tarkov": 4411,
+    "FINAL FANTASY XIV ONLINE": 2418,
+    "FINAL FANTASY XVI": 12750,
+    "Genshin Impact": 3306,
+    "Grand Theft Auto V": 16397,
+    "IRL": 14734,
+    "JUMP KING QUEST": 4072,
+    "Just Chatting": 54838,
+    "League of Legends": 267452,
+    "Minecraft": 1915,
+    "Music": 4097,
+    "Overwatch": 4415,
+    "PUBG: BATTLEGROUNDS": 4301,
+    "Pogostuck: Rage With Your Friends": 10416,
+    "Project Zomboid": 15670,
+    "Slots": 4152,
+    "Sports": 9545,
+    "Star Wars Zero Company": 4218,
+    "Street Fighter 6": 5230,
+    "Teamfight Tactics": 5267,
+    "The Last Caretaker": 1938,
+    "Tomb Raider II": 3443,
+    "VALORANT": 27799,
+    "World of Warcraft": 32696,
+    "Wuthering Waves": 2167
+   },
+   "viewers_by_language": {
+    "de": 30306,
+    "en": 256059,
+    "es": 12046,
+    "fr": 47498,
+    "it": 2091,
+    "ja": 109593,
+    "ru": 40826,
+    "th": 2511,
+    "vi": 32686,
+    "zh": 71747
+   }
+  },
+  "youtube": {
+   "skipped": "no YOUTUBE_API_KEY"
+  }
+ }
+}
