@@ -35,6 +35,9 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_VIDEO_IDS: ${{ vars.YOUTUBE_VIDEO_IDS }}
           TOMTOM_API_KEY: ${{ secrets.TOMTOM_API_KEY }}
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
         run: python collect.py
 
       - name: Summarise into public/
