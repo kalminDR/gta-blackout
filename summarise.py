@@ -159,6 +159,27 @@ def flatten(snap):
         else:
             row[f"{key}_delay_pct"] = None
 
+    # --- Hardware scarcity: resale price, then actual retail stock
+    for market, short in (("EBAY_US", "us"), ("EBAY_GB", "uk"), ("EBAY_DE", "de")):
+        for prod in ("ps5_pro", "ps5", "xbox_series_x"):
+            row[f"price_{short}_{prod}"] = as_number(
+                dig(src, "console_prices", market, prod, "median"))
+            row[f"listings_{short}_{prod}"] = as_number(
+                dig(src, "console_prices", market, prod, "count"))
+
+    for prod in ("ps5_pro", "ps5", "xbox_series_x"):
+        products = dig(src, "retail_stock", prod, "products", default=[])
+        if isinstance(products, list) and products:
+            # "in stock somewhere" is the honest reading: any matching SKU
+            # that Best Buy will actually sell you right now.
+            row[f"bestbuy_{prod}_online"] = any(
+                p.get("online") is True for p in products if isinstance(p, dict))
+            row[f"bestbuy_{prod}_price"] = as_number(
+                dig(products, 0, "sale_price"))
+        else:
+            row[f"bestbuy_{prod}_online"] = None
+            row[f"bestbuy_{prod}_price"] = None
+
     # --- Console health
     row["psn_incidents"] = as_number(
         dig(src, "console_status", "playstation", "data", "incident_count"))

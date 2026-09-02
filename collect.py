@@ -21,9 +21,11 @@ instead of fighting a rate limiter every hour until then.
 Missing API keys are fine - that source is simply skipped and marked as such.
 """
 
+import base64
 import glob
 import json
 import os
+import statistics
 import sys
 import time
 import urllib.error
@@ -66,6 +68,26 @@ def try_urls(candidates, parser=None):
         except Exception as e:
             errors[url] = str(e)[:100]
     return {"errors": errors}
+
+
+def as_float(value):
+    """Numbers arrive as ints, floats and strings depending on the API."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def dig(obj, *path):
+    """Nested lookup that never raises on a missing or odd-shaped field."""
+    cur = obj
+    for step in path:
+        if not isinstance(cur, dict):
+            return None
+        cur = cur.get(step)
+        if cur is None:
+            return None
+    return cur
 
 
 def env(name):
@@ -346,6 +368,136 @@ def collect_steam_charts():
     ], parser=parse)
 
 
+# ------------------------------------------------------- console hardware
+
+# What we search for, on each marketplace. Prices are in the marketplace's
+# own currency, so each entry carries its own sanity range: anything outside
+# it is an accessory, a controller, a faceplate or a scam, not a console.
+EBAY_MARKETS = {
+    "EBAY_US": {"currency": "USD", "min": 300, "max": 1600},
+    "EBAY_GB": {"currency": "GBP", "min": 250, "max": 1400},
+    "EBAY_DE": {"currency": "EUR", "min": 300, "max": 1600},
+}
+
+EBAY_PRODUCTS = {
+    "ps5_pro": "PlayStation 5 Pro console",
+    "ps5": "PlayStation 5 Slim console disc",
+    "xbox_series_x": "Xbox Series X console",
+}
+
+
+def _price_stats(prices):
+    """Median and spread. Median, not mean, because one absurd listing
+    should not move the number."""
+    if not prices:
+        return None
+    prices = sorted(prices)
+    return {
+        "count": len(prices),
+        "min": round(prices[0], 2),
+        "median": round(statistics.median(prices), 2),
+        "max": round(prices[-1], 2),
+    }
+
+
+def collect_console_prices():
+    """Second-hand console prices per market.
+
+    Retail price barely moves, because it is set by Sony and Microsoft. What
+    moves when stock runs out is the resale price, and that is a continuous
+    number rather than a yes/no, so it is the more sensitive measure of
+    scarcity.
+    """
+    cid, secret = env("EBAY_CLIENT_ID"), env("EBAY_CLIENT_SECRET")
+    if not (cid and secret):
+        return {"skipped": "no EBAY_CLIENT_ID / EBAY_CLIENT_SECRET"}
+
+    basic = base64.b64encode(f"{cid}:{secret}".encode()).decode()
+    tok = get_json(
+        "https://api.ebay.com/identity/v1/oauth2/token",
+        headers={"Authorization": f"Basic {basic}",
+                 "Content-Type": "application/x-www-form-urlencoded"},
+        data={"grant_type": "client_credentials",
+              "scope": "https://api.ebay.com/oauth/api_scope"},
+        method="POST",
+    )["access_token"]
+
+    out = {}
+    for market, cfg in EBAY_MARKETS.items():
+        out[market] = {"currency": cfg["currency"]}
+        for key, query in EBAY_PRODUCTS.items():
+            try:
+                url = ("https://api.ebay.com/buy/browse/v1/item_summary/search"
+                       "?q=" + urllib.parse.quote(query) +
+                       "&limit=100&filter=" + urllib.parse.quote(
+                           f"price:[{cfg['min']}..{cfg['max']}],"
+                           f"priceCurrency:{cfg['currency']},"
+                           "buyingOptions:{FIXED_PRICE}"))
+                res = get_json(url, headers={
+                    "Authorization": f"Bearer {tok}",
+                    "X-EBAY-C-MARKETPLACE-ID": market,
+                })
+                items = res.get("itemSummaries") or []
+                prices, titles = [], []
+                for it in items:
+                    p = as_float(dig(it, "price", "value"))
+                    if p is not None:
+                        prices.append(p)
+                        titles.append((it.get("title") or "")[:70])
+                stats = _price_stats(prices)
+                out[market][key] = stats or {"count": 0}
+                # Keep a few titles so we can see whether the search is
+                # returning consoles or junk, and tighten it if needed.
+                out[market][key]["sample_titles"] = titles[:3]
+            except Exception as e:
+                out[market][key] = {"error": str(e)[:120]}
+            time.sleep(0.6)
+    return out
+
+
+# Best Buy is the largest US electronics retailer with a public API, so it
+# is our one real window into actual retail stock rather than resale prices.
+BESTBUY_SEARCHES = {
+    "ps5_pro": "PlayStation 5 Pro",
+    "ps5": "PlayStation 5 Console",
+    "xbox_series_x": "Xbox Series X Console",
+}
+
+
+def collect_retail_stock():
+    """Is it actually on the shelves? US only, but the biggest single market."""
+    key = env("BESTBUY_API_KEY")
+    if not key:
+        return {"skipped": "no BESTBUY_API_KEY"}
+
+    out = {}
+    for slug, term in BESTBUY_SEARCHES.items():
+        try:
+            search = urllib.parse.quote(f'search={term}')
+            url = (f"https://api.bestbuy.com/v1/products(({search}))"
+                   f"?apiKey={key}&format=json&pageSize=10"
+                   "&show=sku,name,salePrice,regularPrice,onlineAvailability,"
+                   "inStoreAvailability,orderable")
+            res = get_json(url)
+            products = res.get("products") or []
+            out[slug] = {
+                "matches": res.get("total"),
+                "products": [{
+                    "sku": p.get("sku"),
+                    "name": (p.get("name") or "")[:70],
+                    "sale_price": p.get("salePrice"),
+                    "regular_price": p.get("regularPrice"),
+                    "online": p.get("onlineAvailability"),
+                    "in_store": p.get("inStoreAvailability"),
+                    "orderable": p.get("orderable"),
+                } for p in products[:5]],
+            }
+        except Exception as e:
+            out[slug] = {"error": str(e)[:120]}
+        time.sleep(1)
+    return out
+
+
 # ---------------------------------------------------------------- runner
 
 SOURCES = {
@@ -356,6 +508,8 @@ SOURCES = {
     "traffic": collect_traffic,
     "console_status": collect_console_status,
     "steam_charts": collect_steam_charts,
+    "console_prices": collect_console_prices,
+    "retail_stock": collect_retail_stock,
 }
 
 
@@ -424,11 +578,17 @@ def check():
     with open(files[-1], encoding="utf-8") as f:
         snap = json.load(f)
 
+    # A source that says "skipped" has no key configured yet. That is a
+    # decision, not a fault, so it must not raise an alarm every hour -
+    # otherwise the real alarms get ignored.
+    waiting = [name for name, val in snap["sources"].items()
+               if isinstance(val, dict) and "skipped" in val]
     dead = [name for name, val in snap["sources"].items()
-            if not has_real_data(val)]
+            if name not in waiting and not has_real_data(val)]
 
     for name in snap["sources"]:
-        print(f"  {name:16s} {'DEAD' if name in dead else 'ok'}", file=sys.stderr)
+        state = "DEAD" if name in dead else ("waiting for key" if name in waiting else "ok")
+        print(f"  {name:16s} {state}", file=sys.stderr)
 
     if dead:
         print(f"\nThese sources returned no usable data: {', '.join(dead)}",
