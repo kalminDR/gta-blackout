@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+"""
+Attention Heist - snapshot collector.
+
+Runs once per hour. Takes a snapshot of five "perishable" data sources
+(ones that cannot be recovered retroactively) and writes everything into
+a single timestamped JSON file.
+
+Design rules:
+  1. Never crash. One broken source must not kill the whole run.
+  2. Store raw numbers, never derived/calculated ones. Formulas change later,
+     data cannot be re-collected.
+  3. Everything in UTC.
+  4. Append-only. Never overwrite an existing snapshot.
+
+Missing API keys are fine - that source is simply skipped and marked as such.
+"""
+
+import json
+import os
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime, timezone
+
+UA = "attention-heist/1.0 (research project; contact: hello@eureka.works)"
+TIMEOUT = 25
+
+
+# ---------------------------------------------------------------- helpers
+
+def get_json(url, headers=None, data=None, method="GET"):
+    """Minimal HTTP client. Returns parsed JSON or raises."""
+    h = {"User-Agent": UA, "Accept": "application/json"}
+    if headers:
+        h.update(headers)
+    body = None
+    if data is not None:
+        body = urllib.parse.urlencode(data).encode()
+    req = urllib.request.Request(url, data=body, headers=h, method=method)
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return json.loads(r.read().decode("utf-8", errors="replace"))
+
+
+def env(name):
+    v = os.environ.get(name, "").strip()
+    return v or None
+
+
+# ---------------------------------------------------------------- sources
+
+def collect_twitch():
+    """Top 100 live streams worldwide, aggregated per game.
+
+    This is the substitution signal: when GTA VI launches, everything else
+    on Twitch should visibly deflate. We store the per-game totals plus the
+    language breakdown (our only geographic hint on Twitch).
+    """
+    cid, secret = env("TWITCH_CLIENT_ID"), env("TWITCH_CLIENT_SECRET")
+    if not (cid and secret):
+        return {"skipped": "no TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET"}
+
+    tok = get_json(
+        "https://id.twitch.tv/oauth2/token",
+        data={"client_id": cid, "client_secret": secret,
+              "grant_type": "client_credentials"},
+        method="POST",
+    )["access_token"]
+
+    headers = {"Client-Id": cid, "Authorization": f"Bearer {tok}"}
+    res = get_json("https://api.twitch.tv/helix/streams?first=100", headers=headers)
+    streams = res.get("data", [])
+
+    per_game, per_lang = {}, {}
+    for s in streams:
+        g = s.get("game_name") or "(unknown)"
+        lang = s.get("language") or "(unknown)"
+        v = int(s.get("viewer_count") or 0)
+        per_game[g] = per_game.get(g, 0) + v
+        per_lang[lang] = per_lang.get(lang, 0) + v
+
+    return {
+        "stream_count": len(streams),
+        "total_viewers_top100": sum(per_game.values()),
+        "viewers_by_game": dict(sorted(per_game.items(),
+                                       key=lambda kv: -kv[1])),
+        "viewers_by_language": dict(sorted(per_lang.items(),
+                                           key=lambda kv: -kv[1])),
+    }
+
+
+# Steam app IDs. GTA VI will not be here (console-only at launch), which is
+# exactly the point: we are measuring what people stop playing.
+STEAM_APPS = {
+    "271590": "Grand Theft Auto V",
+    "3240220": "Grand Theft Auto V Enhanced",
+    "1174180": "Red Dead Redemption 2",
+    "730": "Counter-Strike 2",
+    "570": "Dota 2",
+    "578080": "PUBG",
+    "1172470": "Apex Legends",
+    "1086940": "Baldur's Gate 3",
+}
+
+
+def collect_steam():
+    """Concurrent player counts for a fixed basket of games."""
+    key = env("STEAM_API_KEY")
+    out = {}
+    for appid, name in STEAM_APPS.items():
+        url = ("https://api.steampowered.com/ISteamUserStats/"
+               f"GetNumberOfCurrentPlayers/v1/?appid={appid}")
+        if key:
+            url += f"&key={key}"
+        try:
+            n = get_json(url)["response"].get("player_count")
+            out[name] = n
+        except Exception as e:
+            out[name] = {"error": str(e)[:120]}
+        time.sleep(0.4)   # be polite
+    return out
+
+
+SUBREDDITS = [
+    "GTA6",          # the main event
+    "GamingLeaksAndRumours",
+    "gaming",        # broad gaming baseline
+    "pcgaming",
+    "PS5",
+    "programming",   # control group: people who are supposed to be working
+    "sysadmin",      # control group
+]
+
+
+def collect_reddit():
+    """Subscriber and currently-online counts per subreddit.
+
+    The control subreddits matter as much as r/GTA6. If r/GTA6 spikes while
+    r/programming stays flat, that is just hype. If r/programming *drops*,
+    that is the story.
+    """
+    out = {}
+    for sub in SUBREDDITS:
+        try:
+            d = get_json(f"https://www.reddit.com/r/{sub}/about.json")["data"]
+            out[sub] = {
+                "subscribers": d.get("subscribers"),
+                "active_users": d.get("active_user_count"),
+            }
+        except Exception as e:
+            out[sub] = {"error": str(e)[:120]}
+        time.sleep(1.2)   # reddit rate-limits hard
+    return out
+
+
+def collect_youtube():
+    """Rockstar's channel and trailer counters.
+
+    Slow-moving numbers, but the run-up curve makes good content in October,
+    and view counts cannot be reconstructed after the fact.
+    """
+    key = env("YOUTUBE_API_KEY")
+    if not key:
+        return {"skipped": "no YOUTUBE_API_KEY"}
+
+    out = {}
+    try:
+        ch = get_json("https://www.googleapis.com/youtube/v3/channels"
+                      f"?part=statistics&forHandle=RockstarGames&key={key}")
+        st = ch["items"][0]["statistics"]
+        out["rockstar_channel"] = {
+            "subscribers": st.get("subscriberCount"),
+            "total_views": st.get("viewCount"),
+        }
+    except Exception as e:
+        out["rockstar_channel"] = {"error": str(e)[:120]}
+
+    # Comma-separated video IDs. Add each new trailer here as it drops.
+    vids = env("YOUTUBE_VIDEO_IDS") or "QdBZY2fkU-0"
+    try:
+        vr = get_json("https://www.googleapis.com/youtube/v3/videos"
+                      f"?part=statistics,snippet&id={vids}&key={key}")
+        out["videos"] = {
+            i["id"]: {
+                "title": i["snippet"]["title"],
+                "views": i["statistics"].get("viewCount"),
+                "likes": i["statistics"].get("likeCount"),
+                "comments": i["statistics"].get("commentCount"),
+            }
+            for i in vr.get("items", [])
+        }
+    except Exception as e:
+        out["videos"] = {"error": str(e)[:120]}
+    return out
+
+
+# City centre coordinates. TomTom tells us current speed vs free-flow speed
+# on the road segment nearest to each point.
+CITIES = {
+    "Budapest":   (47.4979, 19.0402),
+    "London":     (51.5074, -0.1278),
+    "Berlin":     (52.5200, 13.4050),
+    "Warsaw":     (52.2297, 21.0122),
+    "New York":   (40.7128, -74.0060),
+    "Los Angeles": (34.0522, -118.2437),
+}
+
+
+def collect_traffic():
+    """Live congestion per city. If people stay home, the commute lightens."""
+    key = env("TOMTOM_API_KEY")
+    if not key:
+        return {"skipped": "no TOMTOM_API_KEY"}
+
+    out = {}
+    for city, (lat, lon) in CITIES.items():
+        url = ("https://api.tomtom.com/traffic/services/4/flowSegmentData/"
+               f"absolute/10/json?point={lat},{lon}&key={key}")
+        try:
+            d = get_json(url)["flowSegmentData"]
+            out[city] = {
+                "current_speed": d.get("currentSpeed"),
+                "free_flow_speed": d.get("freeFlowSpeed"),
+                "current_travel_time": d.get("currentTravelTime"),
+                "free_flow_travel_time": d.get("freeFlowTravelTime"),
+            }
+        except Exception as e:
+            out[city] = {"error": str(e)[:120]}
+        time.sleep(0.4)
+    return out
+
+
+# ---------------------------------------------------------------- runner
+
+SOURCES = {
+    "twitch": collect_twitch,
+    "steam": collect_steam,
+    "reddit": collect_reddit,
+    "youtube": collect_youtube,
+    "traffic": collect_traffic,
+}
+
+
+def main():
+    now = datetime.now(timezone.utc)
+    snapshot = {
+        "collected_at_utc": now.isoformat(timespec="seconds"),
+        "collector_version": "1.0",
+        "sources": {},
+    }
+
+    for name, fn in SOURCES.items():
+        started = time.time()
+        try:
+            snapshot["sources"][name] = fn()
+            status = "ok"
+        except Exception as e:
+            snapshot["sources"][name] = {"error": str(e)[:300]}
+            status = "FAILED"
+        print(f"  {name:9s} {status:6s} ({time.time() - started:.1f}s)",
+              file=sys.stderr)
+
+    outdir = os.path.join("data", now.strftime("%Y-%m-%d"))
+    os.makedirs(outdir, exist_ok=True)
+    path = os.path.join(outdir, now.strftime("%H%M") + ".json")
+
+    # Never overwrite an existing snapshot.
+    if os.path.exists(path):
+        path = path.replace(".json", f"-{int(time.time())}.json")
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(snapshot, f, ensure_ascii=False, indent=1, sort_keys=True)
+
+    print(f"wrote {path}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
