@@ -259,28 +259,70 @@ def collect_traffic():
 
 # ------------------------------------------------- console service status
 
+def _condense_psn(raw):
+    """Keep only what changed, not the whole localized service catalogue.
+
+    The raw response lists every service in every country in every language,
+    which is ~340 KB per call. All we actually need is: how many services we
+    looked at, and which ones are currently reporting a problem.
+    """
+    countries = raw.get("countries") or []
+    checked, incidents = 0, []
+    for c in countries:
+        for s in c.get("services") or []:
+            checked += 1
+            st = s.get("status") or []
+            if st:
+                incidents.append({
+                    "country": c.get("countryCode"),
+                    "service": s.get("serviceName"),
+                    "since": (st[0] or {}).get("createdDate"),
+                })
+    return {
+        "countries_checked": len(countries),
+        "services_checked": checked,
+        "incident_count": len(incidents),
+        "incidents": incidents[:50],
+    }
+
+
+def _condense_xbox(raw):
+    """Same idea for Xbox. A Status name of 'None' means healthy."""
+    def bad(item):
+        name = (item.get("Status") or {}).get("Name")
+        return name and name != "None"
+
+    services = raw.get("CoreServices") or []
+    titles = raw.get("Titles") or []
+    return {
+        "overall": (raw.get("Status") or {}).get("Name"),
+        "services_checked": len(services),
+        "service_issues": [{"service": s.get("Name"),
+                            "status": (s.get("Status") or {}).get("Name")}
+                           for s in services if bad(s)],
+        "titles_checked": len(titles),
+        "title_issues": [{"title": x.get("Name"),
+                          "status": (x.get("Status") or {}).get("Name")}
+                         for x in titles if bad(x)][:50],
+    }
+
+
 def collect_console_status():
     """Are PlayStation Network and Xbox Live healthy right now?
 
     Nobody archives this publicly, so if PSN buckles four minutes after the
     midnight unlock, the only way to have proof is to have been watching.
-    These endpoints are undocumented and change over time, hence the
-    fallback list.
     """
-    out = {}
-
-    out["playstation"] = try_urls([
-        "https://status.playstation.com/data/statuses/region/SCEE.json",
-        "https://status.playstation.com/data/statuses/region/SCEA.json",
-        "https://status.playstation.com/data/statuses/region/SCEJ.json",
-    ])
-
-    out["xbox"] = try_urls([
-        "https://xnotify.xboxlive.com/servicestatusv6/US/en-US",
-        "https://xnotify.xboxlive.com/servicestatusv6/GB/en-GB",
-    ])
-
-    return out
+    return {
+        "playstation": try_urls([
+            "https://status.playstation.com/data/statuses/region/SCEE.json",
+            "https://status.playstation.com/data/statuses/region/SCEA.json",
+        ], parser=_condense_psn),
+        "xbox": try_urls([
+            "https://xnotify.xboxlive.com/servicestatusv6/US/en-US",
+            "https://xnotify.xboxlive.com/servicestatusv6/GB/en-GB",
+        ], parser=_condense_xbox),
+    }
 
 
 # ------------------------------------------------------ steam top charts
@@ -330,11 +372,19 @@ def collect_stocks():
         ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
               "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36")
         try:
-            raw = get_json(
-                f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
-                "?interval=1m&range=1d",
-                headers={"User-Agent": ua},
-            )
+            raw = None
+            for host in ("query2", "query1"):
+                try:
+                    raw = get_json(
+                        f"https://{host}.finance.yahoo.com/v8/finance/chart/"
+                        f"{sym}?interval=1m&range=1d",
+                        headers={"User-Agent": ua},
+                    )
+                    break
+                except Exception:
+                    continue
+            if raw is None:
+                raise RuntimeError("all yahoo hosts refused")
             meta = raw["chart"]["result"][0]["meta"]
             out[sym] = {
                 "description": desc,
@@ -350,8 +400,16 @@ def collect_stocks():
         except Exception as e:
             # Fall back to Stooq, which serves a plain CSV with no key.
             try:
-                csv = get_text("https://stooq.com/q/l/?s="
-                               f"{sym.lower()}.us&f=sd2t2ohlcv&h&e=csv")
+                csv = None
+                for host in ("stooq.pl", "stooq.com"):
+                    try:
+                        csv = get_text(f"https://{host}/q/l/?s={sym.lower()}"
+                                       ".us&f=sd2t2ohlcv&h&e=csv")
+                        break
+                    except Exception:
+                        continue
+                if csv is None:
+                    raise RuntimeError("all stooq hosts refused")
                 header, row = csv.strip().splitlines()[:2]
                 out[sym] = {
                     "description": desc,
