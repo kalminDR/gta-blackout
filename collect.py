@@ -13,6 +13,11 @@ Design rules:
   3. Everything in UTC.
   4. Append-only. Never overwrite an existing snapshot.
 
+Deliberately NOT collected here: share prices. Yahoo and Stooq both refuse
+requests from GitHub Actions IP ranges, and minute-level history stays free
+for about 30 days anyway - so grab TTWO/SONY/MSFT by hand in early December
+instead of fighting a rate limiter every hour until then.
+
 Missing API keys are fine - that source is simply skipped and marked as such.
 """
 
@@ -43,16 +48,6 @@ def get_json(url, headers=None, data=None, method="GET"):
     req = urllib.request.Request(url, data=body, headers=h, method=method)
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         return json.loads(r.read().decode("utf-8", errors="replace"))
-
-
-def get_text(url, headers=None):
-    """Same as get_json, but returns the raw body (for CSV endpoints)."""
-    h = {"User-Agent": UA}
-    if headers:
-        h.update(headers)
-    req = urllib.request.Request(url, headers=h)
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return r.read().decode("utf-8", errors="replace")
 
 
 def try_urls(candidates, parser=None):
@@ -351,87 +346,6 @@ def collect_steam_charts():
     ], parser=parse)
 
 
-# ------------------------------------------------------------- the money
-
-TICKERS = {
-    "TTWO": "Take-Two Interactive (Rockstar's parent)",
-    "SONY": "Sony (PlayStation)",
-    "MSFT": "Microsoft (Xbox)",
-}
-
-
-def collect_stocks():
-    """Share prices around the launch.
-
-    Daily history stays free forever, but minute-level history only stays
-    available from the free sources for about a month, so it is cheaper to
-    just record it as we go than to rely on remembering in November.
-    """
-    out = {}
-    for sym, desc in TICKERS.items():
-        # Yahoo's chart endpoint wants to look like a browser.
-        ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-              "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36")
-        try:
-            # Yahoo throttles the first calls from a shared IP and then
-            # lets later ones through, so back off and try again rather
-            # than giving up on the first refusal.
-            raw = None
-            for attempt in range(3):
-                for host in ("query2", "query1"):
-                    try:
-                        raw = get_json(
-                            f"https://{host}.finance.yahoo.com/v8/finance/"
-                            f"chart/{sym}?interval=1m&range=1d",
-                            headers={"User-Agent": ua},
-                        )
-                        break
-                    except Exception:
-                        continue
-                if raw is not None:
-                    break
-                time.sleep(2 + 3 * attempt)
-            if raw is None:
-                raise RuntimeError("all yahoo hosts refused after 3 tries")
-            meta = raw["chart"]["result"][0]["meta"]
-            out[sym] = {
-                "description": desc,
-                "price": meta.get("regularMarketPrice"),
-                "previous_close": meta.get("chartPreviousClose"),
-                "day_high": meta.get("regularMarketDayHigh"),
-                "day_low": meta.get("regularMarketDayLow"),
-                "volume": meta.get("regularMarketVolume"),
-                "currency": meta.get("currency"),
-                "market_state": meta.get("marketState"),
-                "source": "yahoo",
-            }
-        except Exception as e:
-            # Fall back to Stooq, which serves a plain CSV with no key.
-            try:
-                csv = None
-                for host in ("stooq.pl", "stooq.com"):
-                    try:
-                        csv = get_text(f"https://{host}/q/l/?s={sym.lower()}"
-                                       ".us&f=sd2t2ohlcv&h&e=csv")
-                        break
-                    except Exception:
-                        continue
-                if csv is None:
-                    raise RuntimeError("all stooq hosts refused")
-                header, row = csv.strip().splitlines()[:2]
-                out[sym] = {
-                    "description": desc,
-                    "csv": dict(zip(header.split(","), row.split(","))),
-                    "source": "stooq",
-                    "yahoo_error": str(e)[:100],
-                }
-            except Exception as e2:
-                out[sym] = {"description": desc,
-                            "error": f"yahoo: {str(e)[:80]} | stooq: {str(e2)[:80]}"}
-        time.sleep(2)
-    return out
-
-
 # ---------------------------------------------------------------- runner
 
 SOURCES = {
@@ -442,7 +356,6 @@ SOURCES = {
     "traffic": collect_traffic,
     "console_status": collect_console_status,
     "steam_charts": collect_steam_charts,
-    "stocks": collect_stocks,
 }
 
 
