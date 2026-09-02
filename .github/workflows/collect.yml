@@ -55,3 +55,29 @@ jobs:
             sleep 5
           done
           exit 1
+
+      # Runs after the snapshot is safely committed, so a failure here never
+      # costs us data - it only makes GitHub send an email.
+      - name: Health check
+        run: python collect.py --check
+          TOMTOM_API_KEY: ${{ secrets.TOMTOM_API_KEY }}
+        run: python collect.py
+
+      - name: Commit snapshot
+        run: |
+          git config user.name  "attention-heist-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "nothing new to commit"
+            exit 0
+          fi
+          git commit -m "snapshot $(date -u '+%Y-%m-%d %H:%M') UTC"
+          # Another run may have landed while we were working - rebase, retry.
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push failed, retrying ($i)"
+            sleep 5
+          done
+          exit 1
