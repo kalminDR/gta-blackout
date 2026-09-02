@@ -75,6 +75,17 @@ def dig(obj, *path, default=None):
     return cur
 
 
+def road_class_number(value):
+    """TomTom returns the road class as "FRC0".."FRC7", not a number.
+    0 is a motorway, 7 is a local street."""
+    if isinstance(value, str) and value.upper().startswith("FRC"):
+        try:
+            return int(value[3:])
+        except ValueError:
+            return None
+    return as_number(value)
+
+
 def as_number(value):
     """Return a number, or None. Counts arrive as ints and as strings."""
     if isinstance(value, bool) or value is None:
@@ -161,21 +172,29 @@ def flatten(snap):
             # reading per city. Keep reading them so the history survives.
             readings = [entry] if entry else []
 
-        delays, road_classes = [], []
+        # Sum the seconds, then take the ratio - which is how traffic
+        # indices are normally built. It weights each point by how long its
+        # segment is, so a jammed 60-metre stub cannot outvote a clear 2 km
+        # of main road, and a median cannot hide a real jam behind two
+        # free-flowing stretches.
+        cur_total, free_total, ok, road_classes = 0, 0, 0, []
         for r in readings:
             if not isinstance(r, dict):
                 continue
             cur = as_number(r.get("current_travel_time"))
             free = as_number(r.get("free_flow_travel_time"))
             if cur and free:
-                delays.append((cur / free - 1) * 100)
-            rc = as_number(r.get("road_class"))
+                cur_total += cur
+                free_total += free
+                ok += 1
+            rc = road_class_number(r.get("road_class"))
             if rc is not None:
                 road_classes.append(rc)
 
-        row[f"{key}_delay_pct"] = round(median(delays), 1) if delays else None
-        row[f"{key}_points_ok"] = len(delays) or None
-        # A rising road_class means a point has drifted onto a smaller road.
+        row[f"{key}_delay_pct"] = round((cur_total / free_total - 1) * 100, 1) if free_total else None
+        row[f"{key}_points_ok"] = ok or None
+        row[f"{key}_seconds_measured"] = free_total or None
+        # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
 
     # --- Hardware scarcity: resale price, then actual retail stock
@@ -211,9 +230,11 @@ def flatten(snap):
 def add_hn_rate(points):
     """Convert the ever-rising Hacker News counter into items per hour.
 
-    Only meaningful between two consecutive readings, so gaps longer than
-    three hours (a failed run, a pause) are left blank rather than smeared
-    into a misleading average.
+    Two guards. Gaps over three hours are left blank rather than smeared
+    into a misleading average. Gaps under thirty minutes are also blank:
+    the counter lags by a few minutes, so a five-minute window measures
+    that lag rather than the real posting rate, and it showed up in the
+    data as a systematic underestimate.
     """
     prev = None
     for p in points:
@@ -222,7 +243,7 @@ def add_hn_rate(points):
         if prev and now_id and now_t:
             prev_id, prev_t = prev
             gap_h = (now_t - prev_t).total_seconds() / 3600
-            if prev_id and 0 < gap_h <= 3 and now_id >= prev_id:
+            if prev_id and 0.5 <= gap_h <= 3 and now_id >= prev_id:
                 p["hn_items_per_hour"] = round((now_id - prev_id) / gap_h)
         if now_id and now_t:
             prev = (now_id, now_t)
