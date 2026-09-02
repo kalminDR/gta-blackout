@@ -22,6 +22,7 @@ import json
 import os
 import sys
 from datetime import datetime, timedelta, timezone
+from statistics import median
 
 DATA_DIR = "data"
 OUT_DIR = "public"
@@ -148,16 +149,34 @@ def flatten(snap):
             row[f"yt_{vid}_views"] = as_number(stats.get("views"))
             row[f"yt_{vid}_likes"] = as_number(stats.get("likes"))
 
-    # --- Traffic: how much slower than a free-flowing road
+    # --- Traffic: how much slower than a free-flowing road.
+    # Median across several points per city, so one dud measurement point
+    # or a segment that shifts cannot drag the city's number around.
     traffic = src.get("traffic") or {}
     for city, key in CITY_KEYS.items():
-        cur = as_number(dig(traffic, city, "current_travel_time"))
-        free = as_number(dig(traffic, city, "free_flow_travel_time"))
-        if cur and free:
-            # 0% = no delay, 100% = the trip takes twice as long as it should
-            row[f"{key}_delay_pct"] = round((cur / free - 1) * 100, 1)
-        else:
-            row[f"{key}_delay_pct"] = None
+        entry = traffic.get(city) or {}
+        readings = entry.get("points")
+        if not isinstance(readings, list):
+            # Snapshots from before the multi-point change had one flat
+            # reading per city. Keep reading them so the history survives.
+            readings = [entry] if entry else []
+
+        delays, road_classes = [], []
+        for r in readings:
+            if not isinstance(r, dict):
+                continue
+            cur = as_number(r.get("current_travel_time"))
+            free = as_number(r.get("free_flow_travel_time"))
+            if cur and free:
+                delays.append((cur / free - 1) * 100)
+            rc = as_number(r.get("road_class"))
+            if rc is not None:
+                road_classes.append(rc)
+
+        row[f"{key}_delay_pct"] = round(median(delays), 1) if delays else None
+        row[f"{key}_points_ok"] = len(delays) or None
+        # A rising road_class means a point has drifted onto a smaller road.
+        row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
 
     # --- Hardware scarcity: resale price, then actual retail stock
     for market, short in (("EBAY_US", "us"), ("EBAY_GB", "uk"), ("EBAY_DE", "de")):

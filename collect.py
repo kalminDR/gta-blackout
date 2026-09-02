@@ -239,39 +239,79 @@ def collect_youtube():
     return out
 
 
-# City centre coordinates. TomTom tells us current speed vs free-flow speed
-# on the road segment nearest to each point.
-CITIES = {
-    "Budapest":   (47.4979, 19.0402),
-    "London":     (51.5074, -0.1278),
-    "Berlin":     (52.5200, 13.4050),
-    "Warsaw":     (52.2297, 21.0122),
-    "New York":   (40.7128, -74.0060),
-    "Los Angeles": (34.0522, -118.2437),
+# Traffic measurement points.
+#
+# The first version used city-centre coordinates, which was wrong: TomTom
+# returns the road segment nearest the point, and in a dense centre that is
+# a random side street. New York landed on a 90-metre stretch that never
+# congests, and London kept snapping to different segments between calls.
+#
+# So: three points per city, placed on major commuter arteries, and the
+# city's figure is the median of the three. One dud point can no longer
+# ruin a city, and a segment that shifts is outvoted by the other two.
+CITY_POINTS = {
+    "Budapest": {
+        "hungaria_korut": (47.5300, 19.0800),
+        "ulloi_ut":       (47.4650, 19.1200),
+        "budaorsi_ut":    (47.4650, 18.9900),
+    },
+    "London": {
+        "a40_westway":       (51.5200, -0.2100),
+        "a406_north_circ":   (51.5750, -0.2300),
+        "a2_old_kent_road":  (51.4850, -0.0650),
+    },
+    "Berlin": {
+        "a100_stadtring":   (52.4900, 13.3300),
+        "frankfurter_allee": (52.5150, 13.4700),
+        "kaiserdamm":       (52.5100, 13.2950),
+    },
+    "Warsaw": {
+        "wislostrada":        (52.2450, 21.0300),
+        "s8_trasa_torunska":  (52.2900, 20.9900),
+        "aleje_jerozolimskie": (52.2280, 20.9800),
+    },
+    "New York": {
+        "fdr_drive":       (40.7500, -73.9700),
+        "cross_bronx_i95": (40.8430, -73.9200),
+        "lie_i495_queens": (40.7350, -73.8700),
+    },
+    "Los Angeles": {
+        "i405_sepulveda": (34.0900, -118.4500),
+        "i10_santa_monica": (34.0300, -118.3400),
+        "us101_hollywood": (34.0950, -118.3300),
+    },
 }
 
 
 def collect_traffic():
-    """Live congestion per city. If people stay home, the commute lightens."""
+    """Live congestion on major roads. If people stay home, the commute
+    lightens - but only if we are measuring roads that carry commuters."""
     key = env("TOMTOM_API_KEY")
     if not key:
         return {"skipped": "no TOMTOM_API_KEY"}
 
     out = {}
-    for city, (lat, lon) in CITIES.items():
-        url = ("https://api.tomtom.com/traffic/services/4/flowSegmentData/"
-               f"absolute/10/json?point={lat},{lon}&key={key}")
-        try:
-            d = get_json(url)["flowSegmentData"]
-            out[city] = {
-                "current_speed": d.get("currentSpeed"),
-                "free_flow_speed": d.get("freeFlowSpeed"),
-                "current_travel_time": d.get("currentTravelTime"),
-                "free_flow_travel_time": d.get("freeFlowTravelTime"),
-            }
-        except Exception as e:
-            out[city] = {"error": str(e)[:120]}
-        time.sleep(0.4)
+    for city, points in CITY_POINTS.items():
+        readings = []
+        for name, (lat, lon) in points.items():
+            url = ("https://api.tomtom.com/traffic/services/4/flowSegmentData/"
+                   f"absolute/10/json?point={lat},{lon}&key={key}")
+            try:
+                d = get_json(url)["flowSegmentData"]
+                readings.append({
+                    "point": name,
+                    "current_speed": d.get("currentSpeed"),
+                    "free_flow_speed": d.get("freeFlowSpeed"),
+                    "current_travel_time": d.get("currentTravelTime"),
+                    "free_flow_travel_time": d.get("freeFlowTravelTime"),
+                    # Road class: 0 is a motorway, higher is more local.
+                    # Lets us spot a point that has drifted onto a side street.
+                    "road_class": d.get("frc"),
+                })
+            except Exception as e:
+                readings.append({"point": name, "error": str(e)[:100]})
+            time.sleep(0.4)
+        out[city] = {"points": readings}
     return out
 
 
