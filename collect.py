@@ -44,6 +44,34 @@ def get_json(url, headers=None, data=None, method="GET"):
         return json.loads(r.read().decode("utf-8", errors="replace"))
 
 
+def get_text(url, headers=None):
+    """Same as get_json, but returns the raw body (for CSV endpoints)."""
+    h = {"User-Agent": UA}
+    if headers:
+        h.update(headers)
+    req = urllib.request.Request(url, headers=h)
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return r.read().decode("utf-8", errors="replace")
+
+
+def try_urls(candidates, parser=None):
+    """Try several URLs in order, return the first that works.
+
+    These third-party endpoints are undocumented and move around, so instead
+    of betting on one, we try each and record what happened. The snapshot
+    then tells us which ones are alive.
+    """
+    errors = {}
+    for url in candidates:
+        try:
+            raw = get_json(url)
+            return {"source_url": url,
+                    "data": parser(raw) if parser else raw}
+        except Exception as e:
+            errors[url] = str(e)[:100]
+    return {"errors": errors}
+
+
 def env(name):
     v = os.environ.get(name, "").strip()
     return v or None
@@ -229,6 +257,115 @@ def collect_traffic():
     return out
 
 
+# ------------------------------------------------- console service status
+
+def collect_console_status():
+    """Are PlayStation Network and Xbox Live healthy right now?
+
+    Nobody archives this publicly, so if PSN buckles four minutes after the
+    midnight unlock, the only way to have proof is to have been watching.
+    These endpoints are undocumented and change over time, hence the
+    fallback list.
+    """
+    out = {}
+
+    out["playstation"] = try_urls([
+        "https://status.playstation.com/data/statuses/region/SCEE.json",
+        "https://status.playstation.com/data/statuses/region/SCEA.json",
+        "https://status.playstation.com/data/statuses/region/SCEJ.json",
+    ])
+
+    out["xbox"] = try_urls([
+        "https://xnotify.xboxlive.com/servicestatusv6/US/en-US",
+        "https://xnotify.xboxlive.com/servicestatusv6/GB/en-GB",
+    ])
+
+    return out
+
+
+# ------------------------------------------------------ steam top charts
+
+def collect_steam_charts():
+    """The whole Steam most-played list, not just our hand-picked basket.
+
+    Our fixed basket is a guess about which games GTA VI will pull people
+    away from. This captures the full ranking so that in November we are not
+    limited to the guesses we made in September.
+    """
+    def parse(raw):
+        ranks = (raw.get("response") or {}).get("ranks") or []
+        return [
+            {"rank": r.get("rank"),
+             "appid": r.get("appid"),
+             "concurrent_in_game": r.get("concurrent_in_game"),
+             "peak_in_game": r.get("peak_in_game")}
+            for r in ranks[:100]
+        ]
+
+    return try_urls([
+        "https://api.steampowered.com/ISteamChartsService/GetMostPlayedGames/v1/",
+        "https://api.steampowered.com/ISteamChartsService/GetGamesByConcurrentPlayers/v1/",
+    ], parser=parse)
+
+
+# ------------------------------------------------------------- the money
+
+TICKERS = {
+    "TTWO": "Take-Two Interactive (Rockstar's parent)",
+    "SONY": "Sony (PlayStation)",
+    "MSFT": "Microsoft (Xbox)",
+}
+
+
+def collect_stocks():
+    """Share prices around the launch.
+
+    Daily history stays free forever, but minute-level history only stays
+    available from the free sources for about a month, so it is cheaper to
+    just record it as we go than to rely on remembering in November.
+    """
+    out = {}
+    for sym, desc in TICKERS.items():
+        # Yahoo's chart endpoint wants to look like a browser.
+        ua = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+              "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36")
+        try:
+            raw = get_json(
+                f"https://query1.finance.yahoo.com/v8/finance/chart/{sym}"
+                "?interval=1m&range=1d",
+                headers={"User-Agent": ua},
+            )
+            meta = raw["chart"]["result"][0]["meta"]
+            out[sym] = {
+                "description": desc,
+                "price": meta.get("regularMarketPrice"),
+                "previous_close": meta.get("chartPreviousClose"),
+                "day_high": meta.get("regularMarketDayHigh"),
+                "day_low": meta.get("regularMarketDayLow"),
+                "volume": meta.get("regularMarketVolume"),
+                "currency": meta.get("currency"),
+                "market_state": meta.get("marketState"),
+                "source": "yahoo",
+            }
+        except Exception as e:
+            # Fall back to Stooq, which serves a plain CSV with no key.
+            try:
+                csv = get_text("https://stooq.com/q/l/?s="
+                               f"{sym.lower()}.us&f=sd2t2ohlcv&h&e=csv")
+                header, row = csv.strip().splitlines()[:2]
+                out[sym] = {
+                    "description": desc,
+                    "csv": dict(zip(header.split(","), row.split(","))),
+                    "source": "stooq",
+                    "yahoo_error": str(e)[:100],
+                }
+            except Exception as e2:
+                out[sym] = {"description": desc,
+                            "error": f"yahoo: {str(e)[:80]} | stooq: {str(e2)[:80]}"}
+        time.sleep(0.5)
+    return out
+
+
 # ---------------------------------------------------------------- runner
 
 SOURCES = {
@@ -237,6 +374,9 @@ SOURCES = {
     "hackernews": collect_hackernews,
     "youtube": collect_youtube,
     "traffic": collect_traffic,
+    "console_status": collect_console_status,
+    "steam_charts": collect_steam_charts,
+    "stocks": collect_stocks,
 }
 
 
