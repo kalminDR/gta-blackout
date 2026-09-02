@@ -123,35 +123,32 @@ def collect_steam():
     return out
 
 
-SUBREDDITS = [
-    "GTA6",          # the main event
-    "GamingLeaksAndRumours",
-    "gaming",        # broad gaming baseline
-    "pcgaming",
-    "PS5",
-    "programming",   # control group: people who are supposed to be working
-    "sysadmin",      # control group
-]
+def collect_hackernews():
+    """Global developer activity, in one unauthenticated request.
 
+    Hacker News hands out sequential item IDs to every post and comment ever
+    made. The current maximum ID therefore only ever goes up, and the gap
+    between two hourly snapshots is exactly how many items were created in
+    that hour. That is a live activity rate for the people who are, in
+    theory, supposed to be working.
 
-def collect_reddit():
-    """Subscriber and currently-online counts per subreddit.
-
-    The control subreddits matter as much as r/GTA6. If r/GTA6 spikes while
-    r/programming stays flat, that is just hype. If r/programming *drops*,
-    that is the story.
+    This replaces the Reddit collector: Reddit closed self-service API
+    access in November 2025 and killed the public .json endpoints in
+    May 2026, so there is no free path to their data any more.
     """
     out = {}
-    for sub in SUBREDDITS:
-        try:
-            d = get_json(f"https://www.reddit.com/r/{sub}/about.json")["data"]
-            out[sub] = {
-                "subscribers": d.get("subscribers"),
-                "active_users": d.get("active_user_count"),
-            }
-        except Exception as e:
-            out[sub] = {"error": str(e)[:120]}
-        time.sleep(1.2)   # reddit rate-limits hard
+    try:
+        out["max_item_id"] = get_json(
+            "https://hacker-news.firebaseio.com/v0/maxitem.json")
+    except Exception as e:
+        out["max_item_id"] = {"error": str(e)[:120]}
+
+    try:
+        out["top_stories_count"] = len(get_json(
+            "https://hacker-news.firebaseio.com/v0/topstories.json") or [])
+    except Exception as e:
+        out["top_stories_count"] = {"error": str(e)[:120]}
+
     return out
 
 
@@ -237,7 +234,7 @@ def collect_traffic():
 SOURCES = {
     "twitch": collect_twitch,
     "steam": collect_steam,
-    "reddit": collect_reddit,
+    "hackernews": collect_hackernews,
     "youtube": collect_youtube,
     "traffic": collect_traffic,
 }
