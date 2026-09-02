@@ -1,0 +1,57 @@
+name: collect
+
+on:
+  schedule:
+    # Every hour, on the hour (UTC). GitHub sometimes runs a few minutes
+    # late under load - that is fine, the snapshot records its own timestamp.
+    - cron: "0 * * * *"
+  workflow_dispatch:        # lets you trigger a run by hand from the Actions tab
+
+# Needed so the job is allowed to push its commit back into the repo.
+permissions:
+  contents: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Collect snapshot
+        env:
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_VIDEO_IDS: ${{ vars.YOUTUBE_VIDEO_IDS }}
+          TOMTOM_API_KEY: ${{ secrets.TOMTOM_API_KEY }}
+        run: python collect.py
+
+      - name: Commit snapshot
+        run: |
+          git config user.name  "attention-heist-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/
+          if git diff --staged --quiet; then
+            echo "nothing new to commit"
+            exit 0
+          fi
+          git commit -m "snapshot $(date -u '+%Y-%m-%d %H:%M') UTC"
+          # Another run may have landed while we were working - rebase, retry.
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            echo "push failed, retrying ($i)"
+            sleep 5
+          done
+          exit 1
