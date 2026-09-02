@@ -1,0 +1,29 @@
+{
+ "collected_at_utc": "2026-09-02T11:03:19+00:00",
+ "collector_version": "1.0",
+ "sources": {
+  "hackernews": {
+   "max_item_id": 49534551,
+   "top_stories_count": 500
+  },
+  "steam": {
+   "Apex Legends": 120356,
+   "Baldur's Gate 3": 29172,
+   "Counter-Strike 2": 774644,
+   "Dota 2": 548234,
+   "Grand Theft Auto V": 50113,
+   "Grand Theft Auto V Enhanced": 52454,
+   "PUBG": 346699,
+   "Red Dead Redemption 2": 33336
+  },
+  "traffic": {
+   "skipped": "no TOMTOM_API_KEY"
+  },
+  "twitch": {
+   "skipped": "no TWITCH_CLIENT_ID / TWITCH_CLIENT_SECRET"
+  },
+  "youtube": {
+   "skipped": "no YOUTUBE_API_KEY"
+  }
+ }
+}
