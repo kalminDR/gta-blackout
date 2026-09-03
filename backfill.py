@@ -205,6 +205,67 @@ def fetch_wikipedia(start, end):
     return {"source": "wikimedia.org analytics API", "projects": out}
 
 
+# ------------------------------------------------- Wikipedia pageviews
+
+def fetch_wikipedia_pageviews(start, end):
+    """Daily views of the Grand Theft Auto VI article, per language.
+
+    Curiosity, measured directly and going back years, which makes it one
+    of the few hype signals with a real baseline rather than eleven weeks
+    of it. The language split doubles as a rough geography.
+
+    Article titles differ by language, so rather than guessing them we ask
+    the English Wikipedia for its own language links and use whatever it
+    returns.
+    """
+    titles = {"en.wikipedia": "Grand Theft Auto VI"}
+    try:
+        res = get_json(
+            "https://en.wikipedia.org/w/api.php?action=query&format=json"
+            "&prop=langlinks&lllimit=500&titles="
+            + urllib.parse.quote("Grand Theft Auto VI"))
+        pages = (res.get("query") or {}).get("pages") or {}
+        for page in pages.values():
+            for link in page.get("langlinks") or []:
+                code, title = link.get("lang"), link.get("*")
+                if code and title:
+                    titles[f"{code}.wikipedia"] = title
+    except Exception as e:
+        return {"error": f"could not resolve article titles: {str(e)[:120]}"}
+
+    # Six languages is enough for a geographic read without 300 calls.
+    wanted = ["en.wikipedia", "de.wikipedia", "ja.wikipedia",
+              "es.wikipedia", "fr.wikipedia", "ru.wikipedia", "pt.wikipedia"]
+
+    out, resolved = {}, {}
+    for project in wanted:
+        title = titles.get(project)
+        if not title:
+            out[project] = {"error": "no article in this language"}
+            continue
+        resolved[project] = title
+        url = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/"
+               f"{project}/all-access/user/"
+               + urllib.parse.quote(title.replace(" ", "_"), safe="")
+               + f"/daily/{start.strftime('%Y%m%d')}/{end.strftime('%Y%m%d')}")
+        try:
+            res = get_json(url)
+            out[project] = [
+                {"date": (i.get("timestamp") or "")[:8], "views": i.get("views")}
+                for i in res.get("items") or []
+            ]
+        except Exception as e:
+            out[project] = {"error": str(e)[:120]}
+        time.sleep(0.6)
+
+    return {
+        "source": "wikimedia.org pageviews API, per article",
+        "article_titles": resolved,
+        "languages_available": len(titles),
+        "projects": out,
+    }
+
+
 # -------------------------------------------------------------- main
 
 def main():
@@ -216,6 +277,7 @@ def main():
         "mta_ridership": lambda: fetch_mta(start),
         "stackexchange": lambda: fetch_stackexchange(start, end),
         "wikipedia": lambda: fetch_wikipedia(start, end),
+        "wikipedia_pageviews": lambda: fetch_wikipedia_pageviews(start, end),
     }
 
     print(f"Backfilling {start} to {end}\n", file=sys.stderr)

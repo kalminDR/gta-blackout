@@ -516,12 +516,24 @@ async function load(){
     // For the first weeks there is no baseline, so an index would be a lie.
     // Lead with the thing we can honestly show: how many people are in
     // front of a game right now.
-    const live = (twitch || 0) + (steam || 0);
-    rollTo(live, 0);
+    // Until the index has a baseline, lead with the one number that is
+    // both about this game and immediately legible: how many people have
+    // watched a trailer for something nobody can play yet.
+    let views = 0, rate = 0;
+    for (const [k, v] of Object.entries(L)){
+      // Trailer videos only. The Rockstar channel's lifetime total is a
+      // different, much larger number and has nothing to do with this game.
+      if (k.includes("rockstar")) continue;
+      if (/^yt_.+_views$/.test(k) && typeof v === "number") views += v;
+      if (/^yt_.+_views_per_hour$/.test(k) && typeof v === "number") rate += v;
+    }
+    rollTo(views, 0);
     document.querySelector(".index-label").innerHTML =
-      "People playing<br>or watching<br><span id=\"baseline-note\"></span>";
-    $("baseline-note").textContent =
-      "counted every hour · the index needs six comparable hours before it can say anything";
+      "Views of a trailer<br>for a game nobody<br>can play yet" +
+      "<br><span id=\"baseline-note\"></span>";
+    $("baseline-note").textContent = rate
+      ? "another " + nf.format(Math.round(rate)) + " in the last hour, and it is still not out"
+      : "counted every hour";
   } else {
     rollTo(idx, 0);
     document.querySelector(".index-label").innerHTML =
@@ -535,13 +547,10 @@ async function load(){
 
   // The explanation has to match what the headline is actually showing.
   $("count-note").innerHTML = (idx === null)
-    ? "Across the games and live streams we track, counted every hour since " +
-      "2 September. What we are building towards is an <strong>index</strong>: " +
-      "each reading judged against the same hour of the same weekday, so a " +
-      "quiet Tuesday morning is compared with other quiet Tuesday mornings " +
-      "and not with a Saturday night. That needs a few weeks of history " +
-      "before it can say anything, so until October it stays blank rather " +
-      "than guessing."
+    ? "That is the pull of this game <strong>before it exists</strong>. From " +
+      "19 November we measure the other half: what people stop doing. The " +
+      "four readings below are already collecting, every hour, and switch on " +
+      "in October once each has enough ordinary hours to be judged against."
     : "<strong>100 is an ordinary hour.</strong> Every reading is compared with " +
       "the same hour of the same weekday, so a quiet Tuesday morning is judged " +
       "against other quiet Tuesday mornings and not against a Saturday night. " +

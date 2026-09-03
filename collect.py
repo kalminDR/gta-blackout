@@ -626,6 +626,127 @@ def collect_retail_stock():
     return out
 
 
+# ------------------------------------------------------- press attention
+
+# GDELT indexes news from over a hundred countries and needs no key at all.
+# We ask three ways: how much coverage, in which languages, from which
+# countries. The country split is the geographic layer most of our other
+# sources cannot give us.
+GDELT_QUERY = '("grand theft auto vi" OR "grand theft auto 6" OR "gta vi" OR "gta 6")'
+
+
+def _gdelt(mode, timespan="24h"):
+    url = ("https://api.gdeltproject.org/api/v2/doc/doc?query="
+           + urllib.parse.quote(GDELT_QUERY)
+           + f"&mode={mode}&timespan={timespan}&format=json")
+    return get_json(url)
+
+
+def collect_gdelt():
+    """How much of the world's press is talking about this game.
+
+    Volume is returned as a raw article count alongside "norm", the total
+    number of articles GDELT saw in the same interval. The ratio matters
+    more than the count, because global news output itself swings by day
+    and by weekend.
+    """
+    out = {}
+
+    try:
+        raw = _gdelt("timelinevolraw")
+        series = (raw.get("timeline") or [{}])[0].get("data") or []
+        recent = series[-6:]
+        out["volume"] = {
+            "points": [{"t": p.get("date"), "articles": p.get("value"),
+                        "all_articles": p.get("norm")} for p in recent],
+            "series_length": len(series),
+        }
+    except Exception as e:
+        out["volume"] = {"error": str(e)[:150]}
+
+    for mode, key in (("timelinesourcecountry", "by_country"),
+                      ("timelinelang", "by_language")):
+        try:
+            raw = _gdelt(mode, timespan="24h")
+            # Each series is one country or language; we want the latest
+            # value from each, not the whole curve.
+            latest = {}
+            for s in raw.get("timeline") or []:
+                pts = s.get("data") or []
+                if pts:
+                    latest[s.get("series")] = pts[-1].get("value")
+            out[key] = dict(sorted(latest.items(), key=lambda kv: -(kv[1] or 0))[:25])
+        except Exception as e:
+            out[key] = {"error": str(e)[:150]}
+        time.sleep(1)
+
+    return out
+
+
+# ------------------------------------------------------- money on the line
+
+# People are betting real money on when this game arrives and whether it
+# slips again. That is attention priced in dollars, and the delay market is
+# a live read on the single biggest risk to this project.
+POLYMARKET_TERMS = ["gta", "grand theft auto"]
+
+
+def collect_polymarket():
+    """Open prediction markets about Grand Theft Auto VI.
+
+    The endpoint shape is undocumented and has moved before, so we try a
+    few forms and record which one answered.
+    """
+    found, errors = {}, {}
+    candidates = [
+        "https://gamma-api.polymarket.com/events?closed=false&limit=100&order=volume&ascending=false",
+        "https://gamma-api.polymarket.com/markets?closed=false&limit=200&order=volume&ascending=false",
+    ]
+
+    for url in candidates:
+        try:
+            data = get_json(url)
+        except Exception as e:
+            errors[url] = str(e)[:100]
+            continue
+
+        rows = data if isinstance(data, list) else (data.get("data") or [])
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            text = " ".join(str(row.get(k) or "") for k in
+                            ("title", "question", "slug", "description")).lower()
+            if not any(term in text for term in POLYMARKET_TERMS):
+                continue
+            key = row.get("slug") or row.get("id")
+            if not key or key in found:
+                continue
+            found[key] = {
+                "title": (row.get("title") or row.get("question") or "")[:120],
+                "volume": as_float(row.get("volume") or row.get("volumeNum")),
+                "liquidity": as_float(row.get("liquidity") or row.get("liquidityNum")),
+                "end_date": row.get("endDate"),
+                # Outcome prices are the actual probabilities the crowd is
+                # paying for; they arrive as a JSON string more often than not.
+                "outcomes": row.get("outcomes"),
+                "outcome_prices": row.get("outcomePrices"),
+                "source_url": url,
+            }
+        if found:
+            break
+        time.sleep(0.5)
+
+    if not found:
+        return {"markets": {}, "market_count": 0, "errors": errors,
+                "note": "no matching markets found - check the query terms"}
+
+    return {
+        "market_count": len(found),
+        "total_volume": round(sum(m["volume"] or 0 for m in found.values()), 2),
+        "markets": found,
+    }
+
+
 # ---------------------------------------------------------------- runner
 
 SOURCES = {
@@ -638,6 +759,8 @@ SOURCES = {
     "steam_charts": collect_steam_charts,
     "console_prices": collect_console_prices,
     "retail_stock": collect_retail_stock,
+    "gdelt": collect_gdelt,
+    "polymarket": collect_polymarket,
 }
 
 
