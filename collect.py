@@ -49,8 +49,19 @@ def get_json(url, headers=None, data=None, method="GET"):
     if data is not None:
         body = urllib.parse.urlencode(data).encode()
     req = urllib.request.Request(url, data=body, headers=h, method=method)
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode("utf-8", errors="replace"))
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            return json.loads(r.read().decode("utf-8", errors="replace"))
+    except urllib.error.HTTPError as e:
+        # Most APIs explain themselves in the response body. Throwing that
+        # away leaves a bare "401 Unauthorized", which says nothing about
+        # whether the key is wrong, the scope is wrong, or the account is
+        # not approved yet.
+        try:
+            detail = e.read().decode("utf-8", errors="replace")[:400]
+        except Exception:
+            detail = ""
+        raise RuntimeError(f"HTTP {e.code}: {detail or e.reason}") from None
 
 
 def try_urls(candidates, parser=None):
@@ -541,14 +552,23 @@ def collect_console_prices():
         return {"skipped": "no EBAY_CLIENT_ID / EBAY_CLIENT_SECRET"}
 
     basic = base64.b64encode(f"{cid}:{secret}".encode()).decode()
-    tok = get_json(
-        "https://api.ebay.com/identity/v1/oauth2/token",
-        headers={"Authorization": f"Basic {basic}",
-                 "Content-Type": "application/x-www-form-urlencoded"},
-        data={"grant_type": "client_credentials",
-              "scope": "https://api.ebay.com/oauth/api_scope"},
-        method="POST",
-    )["access_token"]
+    try:
+        tok = get_json(
+            "https://api.ebay.com/identity/v1/oauth2/token",
+            headers={"Authorization": f"Basic {basic}",
+                     "Content-Type": "application/x-www-form-urlencoded"},
+            data={"grant_type": "client_credentials",
+                  "scope": "https://api.ebay.com/oauth/api_scope"},
+            method="POST",
+        )["access_token"]
+    except Exception as e:
+        # Fingerprints of the credentials, never the credentials. Enough to
+        # spot a truncated paste or a stray space without leaking anything.
+        return {"auth_error": str(e)[:400],
+                "client_id_length": len(cid),
+                "client_id_prefix": cid[:12],
+                "client_secret_length": len(secret),
+                "looks_like_sandbox": "SBX" in cid.upper()}
 
     out = {}
     for market, cfg in EBAY_MARKETS.items():
@@ -664,8 +684,11 @@ def collect_gdelt():
     except Exception as e:
         out["volume"] = {"error": str(e)[:150]}
 
-    for mode, key in (("timelinesourcecountry", "by_country"),
-                      ("timelinelang", "by_language")):
+    # GDELT throttles aggressively; three rapid calls earned a 429. Two
+    # calls, five seconds apart, is inside what it tolerates. Language is
+    # dropped because source country already carries the geography.
+    time.sleep(5)
+    for mode, key in (("timelinesourcecountry", "by_country"),):
         try:
             raw = _gdelt(mode, timespan="24h")
             # Each series is one country or language; we want the latest
@@ -678,7 +701,7 @@ def collect_gdelt():
             out[key] = dict(sorted(latest.items(), key=lambda kv: -(kv[1] or 0))[:25])
         except Exception as e:
             out[key] = {"error": str(e)[:150]}
-        time.sleep(1)
+        time.sleep(5)
 
     return out
 
@@ -697,10 +720,12 @@ def collect_polymarket():
     The endpoint shape is undocumented and has moved before, so we try a
     few forms and record which one answered.
     """
-    found, errors = {}, {}
+    found, errors, seen = {}, {}, {}
     candidates = [
-        "https://gamma-api.polymarket.com/events?closed=false&limit=100&order=volume&ascending=false",
-        "https://gamma-api.polymarket.com/markets?closed=false&limit=200&order=volume&ascending=false",
+        # A direct search is the cheapest route if this endpoint exists.
+        "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+        "https://gamma-api.polymarket.com/events?closed=false&limit=500&order=volume&ascending=false",
+        "https://gamma-api.polymarket.com/markets?closed=false&limit=500&order=volume&ascending=false",
     ]
 
     for url in candidates:
@@ -710,7 +735,30 @@ def collect_polymarket():
             errors[url] = str(e)[:100]
             continue
 
-        rows = data if isinstance(data, list) else (data.get("data") or [])
+        # The three endpoints wrap their results differently, so unwrap
+        # whichever shape came back rather than assuming one.
+        if isinstance(data, list):
+            rows = data
+        elif isinstance(data, dict):
+            rows = (data.get("data") or data.get("events")
+                    or data.get("markets") or [])
+            if not rows:
+                for v in data.values():
+                    if isinstance(v, list) and v and isinstance(v[0], dict):
+                        rows = v
+                        break
+        else:
+            rows = []
+
+        seen[url] = {
+            "rows": len(rows),
+            "keys": sorted(rows[0].keys())[:14] if rows and isinstance(rows[0], dict) else [],
+            "sample_titles": [
+                str(r.get("title") or r.get("question") or r.get("slug") or "")[:60]
+                for r in rows[:3] if isinstance(r, dict)
+            ],
+        }
+
         for row in rows:
             if not isinstance(row, dict):
                 continue
@@ -738,7 +786,8 @@ def collect_polymarket():
 
     if not found:
         return {"markets": {}, "market_count": 0, "errors": errors,
-                "note": "no matching markets found - check the query terms"}
+                "endpoints_tried": seen,
+                "note": "no matching markets - see endpoints_tried for what came back"}
 
     return {
         "market_count": len(found),
