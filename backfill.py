@@ -266,6 +266,46 @@ def fetch_wikipedia_pageviews(start, end):
     }
 
 
+# ------------------------------------------------------- press geography
+
+GDELT_QUERY = ('("grand theft auto vi" OR "grand theft auto 6" '
+               'OR "gta vi" OR "gta 6")')
+
+
+def fetch_gdelt_geography():
+    """Which countries' press is covering this, over the past three months.
+
+    This lives here rather than in the hourly collector because GDELT
+    enforces one request every five seconds per address and its timelines
+    are retroactive anyway - there is nothing to lose by fetching geography
+    occasionally instead of every hour.
+    """
+    out = {}
+    for mode, key, span in (("timelinesourcecountry", "by_country", "3m"),
+                            ("timelinelang", "by_language", "3m")):
+        url = ("https://api.gdeltproject.org/api/v2/doc/doc?query="
+               + urllib.parse.quote(GDELT_QUERY)
+               + f"&mode={mode}&timespan={span}&format=json")
+        for attempt in range(3):
+            try:
+                res = get_json(url)
+                out[key] = {
+                    (s.get("series") or "?"): [
+                        {"t": p.get("date"), "value": p.get("value")}
+                        for p in (s.get("data") or [])
+                    ]
+                    for s in (res.get("timeline") or [])
+                }
+                break
+            except Exception as e:
+                out[key] = {"error": str(e)[:150]}
+                if "429" not in str(e):
+                    break
+                time.sleep(8 * (attempt + 1))
+        time.sleep(6)
+    return {"source": "api.gdeltproject.org DOC 2.0", "query": GDELT_QUERY, **out}
+
+
 # -------------------------------------------------------------- main
 
 def main():
@@ -278,6 +318,7 @@ def main():
         "stackexchange": lambda: fetch_stackexchange(start, end),
         "wikipedia": lambda: fetch_wikipedia(start, end),
         "wikipedia_pageviews": lambda: fetch_wikipedia_pageviews(start, end),
+        "gdelt_geography": lambda: fetch_gdelt_geography(),
     }
 
     print(f"Backfilling {start} to {end}\n", file=sys.stderr)
