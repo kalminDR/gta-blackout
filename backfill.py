@@ -55,32 +55,41 @@ def fetch_mta(start):
     Published by the State of New York the following day, going back to
     2020. The strongest 'did people actually travel to work' number we can
     get, because it needs no interpretation at all - it is a count.
+
+    The dataset returns one row per date PER MODE, so the text column that
+    names the mode matters as much as the number. An earlier version kept
+    only numeric fields and threw the labels away, leaving seven anonymous
+    figures per day.
     """
     url = ("https://data.ny.gov/resource/sayj-mze2.json"
            f"?$where=date>='{start.isoformat()}T00:00:00'"
-           "&$order=date&$limit=50000")
+           "&$order=date&$limit=100000")
     rows = get_json(url)
     if not rows:
         return {"error": "no rows returned"}
 
-    # Field names on this dataset have changed before, so discover them
-    # rather than hard-coding and silently reading nothing.
-    numeric_fields = sorted(
-        k for k, v in rows[0].items()
-        if k != "date" and _is_number(v)
-    )
+    all_fields = sorted(rows[0].keys())
 
     out = []
     for r in rows:
-        rec = {"date": (r.get("date") or "")[:10]}
-        for f in numeric_fields:
-            rec[f] = _num(r.get(f))
+        rec = {}
+        for k, v in r.items():
+            if k == "date":
+                rec["date"] = (v or "")[:10]
+            elif _is_number(v):
+                rec[k] = _num(v)
+            else:
+                rec[k] = v          # the mode label lives here
         out.append(rec)
+
+    modes = sorted({r.get(k) for r in out for k in r
+                    if isinstance(r.get(k), str) and k != "date"})
 
     return {
         "source": "data.ny.gov dataset sayj-mze2",
-        "fields_found": numeric_fields,
-        "days": len(out),
+        "all_fields": all_fields,
+        "modes_found": modes,
+        "rows": len(out),
         "first": out[0]["date"] if out else None,
         "last": out[-1]["date"] if out else None,
         "data": out,
@@ -106,6 +115,13 @@ def _num(v):
 
 def fetch_stackexchange(start, end):
     """How many questions people asked, per day.
+
+    KEPT FOR THE RECORD, NOT FOR THE INDEX. The backfill showed Stack
+    Overflow falling from ~2,990 questions a day in January 2023 to a
+    median of 43 in August 2026 - about 1.4% of what it was. At that
+    volume the random variation alone is around plus or minus six, so a
+    one-day effect could never be separated from noise. The decline itself
+    is worth publishing; the series is not usable as a work signal.
 
     The free API allows 300 calls a day from one address, so older history
     is fetched a week at a time and only the recent months day by day. That
@@ -180,7 +196,7 @@ def fetch_wikipedia(start, end):
             res = get_json(url)
             results = (res.get("items") or [{}])[0].get("results") or []
             out[project] = [
-                {"date": (r.get("timestamp") or "")[:8], "edits": r.get("edits")}
+                {"date": (r.get("timestamp") or "")[:10], "edits": r.get("edits")}
                 for r in results
             ]
         except Exception as e:
