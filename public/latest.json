@@ -1,67 +1,78 @@
 {
- "generated_at_utc": "2026-09-03T06:22:19+00:00",
+ "generated_at_utc": "2026-09-03T07:17:10+00:00",
  "coverage": {
   "first_snapshot": "2026-09-02T09:14:59+00:00",
-  "last_snapshot": "2026-09-03T06:22:04+00:00",
-  "snapshot_count": 27,
+  "last_snapshot": "2026-09-03T07:16:54+00:00",
+  "snapshot_count": 28,
   "days_of_history": 0.9,
   "unreadable_files": [],
   "hours_since_last_snapshot": 0.0
  },
  "latest": {
-  "t": "2026-09-03T06:22:04+00:00",
-  "twitch_top100_total": 309883,
-  "twitch_gta5": 12730,
+  "t": "2026-09-03T07:16:54+00:00",
+  "twitch_top100_total": 300165,
+  "twitch_gta5": 12049,
   "twitch_top_game": "Just Chatting",
-  "twitch_top_game_viewers": 34741,
+  "twitch_top_game_viewers": 39155,
   "twitch_by_language": {
-   "de": 4383,
-   "en": 248114,
-   "es": 4193,
-   "fr": 1718,
-   "ja": 17184,
-   "pt": 6460,
-   "ru": 12372,
-   "zh": 15459
+   "de": 5929,
+   "en": 216997,
+   "es": 4873,
+   "fr": 4076,
+   "ja": 23114,
+   "pt": 6301,
+   "ru": 21651,
+   "zh": 17224
   },
-  "steam_gta5": 32006,
-  "steam_gta5_enhanced": 41806,
-  "steam_cs2": 499466,
-  "steam_dota2": 412240,
-  "steam_pubg": 258942,
-  "steam_apex": 92628,
-  "steam_bg3": 26996,
-  "steam_rdr2": 26438,
-  "steam_basket_total": 1390522,
+  "twitch_gta5_viewers": 20574,
+  "twitch_gta5_channels": 97,
+  "twitch_gta5_top5_share": 63.3,
+  "twitch_other_viewers": 288116,
+  "steam_gta5": 35146,
+  "steam_gta5_enhanced": 43493,
+  "steam_cs2": 513866,
+  "steam_dota2": 433482,
+  "steam_pubg": 297423,
+  "steam_apex": 101729,
+  "steam_bg3": 25547,
+  "steam_rdr2": 26866,
+  "steam_basket_total": 1477552,
   "steam_rank_gta5": 7,
   "steam_rank_gta5_enh": 20,
-  "hn_max_item_id": 49546530,
+  "hn_max_item_id": 49546892,
   "yt_subscribers": 13700000,
-  "yt_QdBZY2fkU-0_views": 294346541,
-  "yt_QdBZY2fkU-0_likes": 12472910,
-  "traffic_budapest_delay_pct": 29.6,
+  "yt_rockstar_total_views": 1743090999,
+  "yt_QdBZY2fkU-0_views": 294354107,
+  "yt_QdBZY2fkU-0_likes": 12472935,
+  "traffic_budapest_delay_pct": 23.1,
+  "traffic_budapest_travel_index": 123.1,
   "traffic_budapest_points_ok": 3,
-  "traffic_budapest_seconds_measured": 179,
+  "traffic_budapest_seconds_measured": 182,
   "traffic_budapest_road_class": 2,
-  "traffic_london_delay_pct": 45.7,
+  "traffic_london_delay_pct": 54.0,
+  "traffic_london_travel_index": 154.0,
   "traffic_london_points_ok": 3,
-  "traffic_london_seconds_measured": 138,
+  "traffic_london_seconds_measured": 139,
   "traffic_london_road_class": 3,
-  "traffic_berlin_delay_pct": 79.1,
+  "traffic_berlin_delay_pct": 33.1,
+  "traffic_berlin_travel_index": 133.1,
   "traffic_berlin_points_ok": 3,
   "traffic_berlin_seconds_measured": 335,
   "traffic_berlin_road_class": 1,
-  "traffic_warsaw_delay_pct": 101.4,
+  "traffic_warsaw_delay_pct": 212.3,
+  "traffic_warsaw_travel_index": 312.3,
   "traffic_warsaw_points_ok": 3,
-  "traffic_warsaw_seconds_measured": 218,
+  "traffic_warsaw_seconds_measured": 211,
   "traffic_warsaw_road_class": 1,
-  "traffic_newyork_delay_pct": 12.8,
+  "traffic_newyork_delay_pct": 0.0,
+  "traffic_newyork_travel_index": 100.0,
   "traffic_newyork_points_ok": 3,
   "traffic_newyork_seconds_measured": 344,
   "traffic_newyork_road_class": 3,
-  "traffic_losangeles_delay_pct": 0.0,
+  "traffic_losangeles_delay_pct": 3.8,
+  "traffic_losangeles_travel_index": 103.8,
   "traffic_losangeles_points_ok": 3,
-  "traffic_losangeles_seconds_measured": 396,
+  "traffic_losangeles_seconds_measured": 392,
   "traffic_losangeles_road_class": 4,
   "price_us_ps5_pro": null,
   "listings_us_ps5_pro": null,
@@ -89,70 +100,404 @@
   "bestbuy_xbox_series_x_price": null,
   "psn_incidents": 1,
   "xbox_service_issues": 0,
-  "hn_items_per_hour": 307
+  "hn_items_per_hour": 396.11,
+  "yt_rockstar_views_per_hour": 0.0,
+  "yt_subscribers_per_hour": 0.0,
+  "yt_QdBZY2fkU-0_views_per_hour": 8278.91,
+  "yt_QdBZY2fkU-0_likes_per_hour": 27.36,
+  "deviations": null,
+  "baseline_quality": null,
+  "indices": {
+   "attention": null,
+   "displacement": null,
+   "work": null,
+   "infrastructure": null
+  }
+ },
+ "panels": {
+  "panels": {
+   "attention": {
+    "name": "Attention",
+    "effect_direction": "higher = more effect",
+    "index": null,
+    "sources_available": 0,
+    "sources_expected": 3,
+    "placebo_thursdays": 0,
+    "placebo_peak_today": null,
+    "placebo_percentile": null,
+    "evidence": "measured"
+   },
+   "displacement": {
+    "name": "Displacement",
+    "effect_direction": "higher = more effect",
+    "index": null,
+    "sources_available": 0,
+    "sources_expected": 9,
+    "placebo_thursdays": 0,
+    "placebo_peak_today": null,
+    "placebo_percentile": null,
+    "evidence": "measured"
+   },
+   "work": {
+    "name": "Work & Mobility",
+    "effect_direction": "lower = more effect",
+    "index": null,
+    "sources_available": 0,
+    "sources_expected": 6,
+    "placebo_thursdays": 0,
+    "placebo_peak_today": null,
+    "placebo_percentile": null,
+    "evidence": "measured"
+   },
+   "infrastructure": {
+    "name": "Infrastructure",
+    "effect_direction": "higher = more effect",
+    "index": null,
+    "sources_available": 0,
+    "sources_expected": 2,
+    "placebo_thursdays": 0,
+    "placebo_peak_today": null,
+    "placebo_percentile": null,
+    "evidence": "measured"
+   }
+  },
+  "metrics": [
+   {
+    "key": "twitch_gta6_viewers",
+    "label": "GTA VI viewers on Twitch",
+    "panel": "attention",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": null,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "twitch_gta6_channels",
+    "label": "GTA VI live channels",
+    "panel": "attention",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": null,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "yt_trailer_views_per_hour",
+    "label": "Trailer views per hour",
+    "panel": "attention",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": null,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "yt_rockstar_views_per_hour",
+    "label": "Rockstar channel views per hour",
+    "panel": "attention",
+    "direction": "rise = GTA effect",
+    "primary": false,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 0.0,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_cs2",
+    "label": "Counter-Strike 2",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 513866,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_dota2",
+    "label": "Dota 2",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 433482,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_pubg",
+    "label": "PUBG",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 297423,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_apex",
+    "label": "Apex Legends",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 101729,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_bg3",
+    "label": "Baldur's Gate 3",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 25547,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_rdr2",
+    "label": "Red Dead Redemption 2",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 26866,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_gta5",
+    "label": "Grand Theft Auto V",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 35146,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "steam_gta5_enhanced",
+    "label": "GTA V Enhanced",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 43493,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "twitch_other_viewers",
+    "label": "Twitch viewers outside GTA",
+    "panel": "displacement",
+    "direction": "fall = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 288116,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_budapest_travel_index",
+    "label": "Budapest road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "Europe/Budapest",
+    "evidence": "measured",
+    "value": 123.1,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_london_travel_index",
+    "label": "London road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "Europe/London",
+    "evidence": "measured",
+    "value": 154.0,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_berlin_travel_index",
+    "label": "Berlin road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "Europe/Berlin",
+    "evidence": "measured",
+    "value": 133.1,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_warsaw_travel_index",
+    "label": "Warsaw road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "Europe/Warsaw",
+    "evidence": "measured",
+    "value": 312.3,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_newyork_travel_index",
+    "label": "Newyork road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "America/New_York",
+    "evidence": "measured",
+    "value": 100.0,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "traffic_losangeles_travel_index",
+    "label": "Losangeles road load",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "America/Los_Angeles",
+    "evidence": "measured",
+    "value": 103.8,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "hn_items_per_hour",
+    "label": "Hacker News items per hour",
+    "panel": "work",
+    "direction": "rise = GTA effect",
+    "primary": false,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 396.11,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "psn_incidents",
+    "label": "PlayStation Network incidents",
+    "panel": "infrastructure",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 1,
+    "deviation_log2": null,
+    "baseline_quality": null
+   },
+   {
+    "key": "xbox_service_issues",
+    "label": "Xbox service issues",
+    "panel": "infrastructure",
+    "direction": "rise = GTA effect",
+    "primary": true,
+    "timezone": "UTC",
+    "evidence": "measured",
+    "value": 0,
+    "deviation_log2": null,
+    "baseline_quality": null
+   }
+  ],
+  "frozen_metrics": [
+   "psn_incidents"
+  ],
+  "baseline_rules": {
+   "min_samples_hour_of_week": 6,
+   "min_samples_hour_of_day": 10,
+   "timezone_support": true
+  }
  },
  "changes": {
   "steam_gta5": {
    "vs_24h": {
     "then": 41797,
-    "absolute": -9791,
-    "percent": -23.4
+    "absolute": -6651,
+    "percent": -15.9
    }
   },
   "steam_gta5_enhanced": {
    "vs_24h": {
     "then": 47374,
-    "absolute": -5568,
-    "percent": -11.8
+    "absolute": -3881,
+    "percent": -8.2
    }
   },
   "steam_cs2": {
    "vs_24h": {
     "then": 703138,
-    "absolute": -203672,
-    "percent": -29.0
+    "absolute": -189272,
+    "percent": -26.9
    }
   },
   "steam_dota2": {
    "vs_24h": {
     "then": 461754,
-    "absolute": -49514,
-    "percent": -10.7
+    "absolute": -28272,
+    "percent": -6.1
    }
   },
   "steam_pubg": {
    "vs_24h": {
     "then": 338704,
-    "absolute": -79762,
-    "percent": -23.5
+    "absolute": -41281,
+    "percent": -12.2
    }
   },
   "steam_apex": {
    "vs_24h": {
     "then": 112003,
-    "absolute": -19375,
-    "percent": -17.3
+    "absolute": -10274,
+    "percent": -9.2
    }
   },
   "steam_bg3": {
    "vs_24h": {
     "then": 26302,
-    "absolute": 694,
-    "percent": 2.6
+    "absolute": -755,
+    "percent": -2.9
    }
   },
   "steam_rdr2": {
    "vs_24h": {
     "then": 29873,
-    "absolute": -3435,
-    "percent": -11.5
+    "absolute": -3007,
+    "percent": -10.1
    }
   },
   "steam_basket_total": {
    "vs_24h": {
     "then": 1760945,
-    "absolute": -370423,
-    "percent": -21.0
+    "absolute": -283393,
+    "percent": -16.1
    }
   }
  }
