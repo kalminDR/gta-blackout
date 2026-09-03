@@ -25,6 +25,7 @@ import base64
 import glob
 import json
 import os
+import re
 import statistics
 import sys
 import time
@@ -693,9 +694,14 @@ def check():
     this runs afterwards and makes the workflow fail, which makes GitHub
     send an email.
     """
-    days = sorted(glob.glob(os.path.join("data", "*")))
+    # Only date-named folders. data/backfill/ also lives here and holds a
+    # completely different shape of file; sorted() puts "backfill" after
+    # "2026-..." alphabetically, so without this filter the check reads a
+    # backfill file, finds no "sources" key and crashes every hour.
+    days = sorted(d for d in glob.glob(os.path.join("data", "*"))
+                  if re.fullmatch(r"\d{4}-\d{2}-\d{2}", os.path.basename(d)))
     if not days:
-        print("no data directory yet", file=sys.stderr)
+        print("no snapshot folders yet", file=sys.stderr)
         return 0
     files = sorted(glob.glob(os.path.join(days[-1], "*.json")))
     if not files:
