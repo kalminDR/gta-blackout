@@ -320,7 +320,12 @@ def collect_youtube():
         out["rockstar_channel"] = {"error": str(e)[:120]}
 
     # Comma-separated video IDs. Add each new trailer here as it drops.
-    vids = env("YOUTUBE_VIDEO_IDS") or "QdBZY2fkU-0"
+    # However the list was typed - spaces after commas, a trailing comma,
+    # a stray newline - normalise it rather than making the person retype it.
+    raw_ids = env("YOUTUBE_VIDEO_IDS") or "QdBZY2fkU-0"
+    ids = [v.strip() for v in raw_ids.replace("\n", ",").split(",") if v.strip()]
+    odd = [v for v in ids if len(v) != 11]
+    vids = ",".join(ids)
     try:
         vr = get_json("https://www.googleapis.com/youtube/v3/videos"
                       f"?part=statistics,snippet&id={vids}&key={key}")
@@ -334,7 +339,13 @@ def collect_youtube():
             for i in vr.get("items", [])
         }
     except Exception as e:
-        out["videos"] = {"error": str(e)[:120]}
+        out["videos"] = {"error": str(e)[:200]}
+
+    # A YouTube id is always eleven characters. Flagging the odd ones here
+    # saves hunting for a silently missing video later.
+    if odd:
+        out["video_ids_wrong_length"] = odd
+    out["video_ids_tracked"] = len(ids)
     return out
 
 
@@ -665,42 +676,52 @@ def _gdelt(mode, timespan="24h"):
 def collect_gdelt():
     """How much of the world's press is talking about this game.
 
-    GDELT asks for no more than one request every five seconds and enforces
-    it from the caller's IP. GitHub's runners are shared, so the budget can
-    already be spent before we start. Hence: one request per run, and a
-    patient retry rather than a hard failure.
+    NOT IN THE HOURLY RUN. GDELT returned 429 to every attempt from GitHub
+    Actions, including single requests with sixteen-second backoffs, so it
+    is blocking the shared runner addresses rather than rate-limiting us.
+    Kept here because the function works fine from an ordinary connection,
+    and because GDELT timelines are retroactive - see the browser URL in
+    README.md for fetching it by hand.
 
-    The country breakdown moved to backfill.py - GDELT's timelines are
-    retroactive, so geography does not need to be fetched hourly.
+    Volume is returned as a raw article count alongside "norm", the total
+    number of articles GDELT saw in the same interval. The ratio matters
+    more than the count, because global news output itself swings by day
+    and by weekend.
     """
-    last = None
-    for attempt in range(3):
+    out = {}
+
+    try:
+        raw = _gdelt("timelinevolraw")
+        series = (raw.get("timeline") or [{}])[0].get("data") or []
+        recent = series[-6:]
+        out["volume"] = {
+            "points": [{"t": p.get("date"), "articles": p.get("value"),
+                        "all_articles": p.get("norm")} for p in recent],
+            "series_length": len(series),
+        }
+    except Exception as e:
+        out["volume"] = {"error": str(e)[:150]}
+
+    # GDELT throttles aggressively; three rapid calls earned a 429. Two
+    # calls, five seconds apart, is inside what it tolerates. Language is
+    # dropped because source country already carries the geography.
+    time.sleep(5)
+    for mode, key in (("timelinesourcecountry", "by_country"),):
         try:
-            raw = _gdelt("timelinevolraw")
-            series = (raw.get("timeline") or [{}])[0].get("data") or []
-            if not series:
-                return {"volume": {"error": "empty timeline"}, "raw_keys": list(raw)[:6]}
-            recent = series[-6:]
-            latest = recent[-1]
-            articles = latest.get("value")
-            allarts = latest.get("norm")
-            return {
-                "volume": {
-                    "points": [{"t": p.get("date"), "articles": p.get("value"),
-                                "all_articles": p.get("norm")} for p in recent],
-                    "series_length": len(series),
-                },
-                # Share of world news output, which is the comparable figure:
-                # global article volume itself swings by day and weekend.
-                "share_of_all_news_pct": (round(100 * articles / allarts, 5)
-                                          if articles and allarts else None),
-            }
+            raw = _gdelt(mode, timespan="24h")
+            # Each series is one country or language; we want the latest
+            # value from each, not the whole curve.
+            latest = {}
+            for s in raw.get("timeline") or []:
+                pts = s.get("data") or []
+                if pts:
+                    latest[s.get("series")] = pts[-1].get("value")
+            out[key] = dict(sorted(latest.items(), key=lambda kv: -(kv[1] or 0))[:25])
         except Exception as e:
-            last = str(e)[:200]
-            if "429" not in last:
-                break
-            time.sleep(8 * (attempt + 1))
-    return {"volume": {"error": last or "unknown"}}
+            out[key] = {"error": str(e)[:150]}
+        time.sleep(5)
+
+    return out
 
 
 # ------------------------------------------------------- money on the line
@@ -766,23 +787,15 @@ def collect_polymarket():
             key = row.get("slug") or row.get("id")
             if not key or key in found:
                 continue
-            # The search endpoint returns events; the probabilities live on
-            # the markets nested inside them, not on the event itself.
-            outcomes, prices = row.get("outcomes"), row.get("outcomePrices")
-            if prices is None:
-                for sub in (row.get("markets") or []):
-                    if isinstance(sub, dict) and sub.get("outcomePrices"):
-                        outcomes = sub.get("outcomes")
-                        prices = sub.get("outcomePrices")
-                        break
-
             found[key] = {
                 "title": (row.get("title") or row.get("question") or "")[:120],
                 "volume": as_float(row.get("volume") or row.get("volumeNum")),
                 "liquidity": as_float(row.get("liquidity") or row.get("liquidityNum")),
                 "end_date": row.get("endDate"),
-                "outcomes": outcomes,
-                "outcome_prices": prices,
+                # Outcome prices are the actual probabilities the crowd is
+                # paying for; they arrive as a JSON string more often than not.
+                "outcomes": row.get("outcomes"),
+                "outcome_prices": row.get("outcomePrices"),
                 "source_url": url,
             }
         if found:
@@ -813,7 +826,6 @@ SOURCES = {
     "steam_charts": collect_steam_charts,
     "console_prices": collect_console_prices,
     "retail_stock": collect_retail_stock,
-    "gdelt": collect_gdelt,
     "polymarket": collect_polymarket,
 }
 

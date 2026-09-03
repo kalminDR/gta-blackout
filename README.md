@@ -40,6 +40,24 @@ Nem számol semmit. Csak nyers számokat ment. A képletet és az indexet
 később, az adat birtokában írjuk meg, és akkor a teljes múltra
 visszamenőleg újraszámolható.
 
+## GDELT — kézzel, böngészőből
+
+A GDELT a GitHub megosztott gépeit blokkolja (429 minden kérésre, még
+egyetlen, lassított hívásra is), ezért kikerült az óránkénti gyűjtésből.
+Az adata viszont visszamenőleges, tehát elég hetente egyszer, kézzel.
+
+Nyisd meg ezt a címet a böngésződben, és mentsd el a JSON-t
+`data/backfill/gdelt_volume.json` néven:
+
+```
+https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22grand%20theft%20auto%20vi%22%20OR%20%22grand%20theft%20auto%206%22%20OR%20%22gta%20vi%22%20OR%20%22gta%206%22%29&mode=timelinevolraw&timespan=3m&format=json
+```
+
+Az országbontáshoz cseréld a `mode=timelinevolraw` részt
+`mode=timelinesourcecountry`-ra, a nyelvihez `mode=timelinelang`-ra.
+
+A `timespan=3m` három hónapot jelent; novemberben állítsd `6m`-re.
+
 ## Amit nem ez gyűjt, mert utólag is megvan
 
 GH Archive (GitHub események), Wikimedia pageview és edit API,
