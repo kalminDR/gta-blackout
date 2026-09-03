@@ -18,6 +18,7 @@ Run:  python summarise.py
 """
 
 import glob
+import indices
 import json
 import os
 import sys
@@ -131,6 +132,26 @@ def flatten(snap):
     lang = tw.get("viewers_by_language")
     row["twitch_by_language"] = lang if isinstance(lang, dict) else None
 
+    # Direct category figures. Absent from older snapshots, which is fine:
+    # the metric is simply blank for those hours rather than zero.
+    cats = tw.get("categories")
+    if isinstance(cats, dict):
+        for slug in ("gta6", "gta5"):
+            c = cats.get(slug)
+            if not isinstance(c, dict) or not c.get("category_exists"):
+                continue
+            row[f"twitch_{slug}_viewers"] = as_number(c.get("total_viewers"))
+            row[f"twitch_{slug}_channels"] = as_number(c.get("channels"))
+            row[f"twitch_{slug}_top5_share"] = as_number(c.get("top5_share_pct"))
+
+    # Everything on the platform's top end that is not GTA. This is the
+    # displacement side of Twitch and has to be separated from the GTA
+    # figures above - added together they would partly cancel out.
+    if isinstance(by_game, dict) and by_game:
+        row["twitch_other_viewers"] = sum(
+            v for g, v in by_game.items()
+            if isinstance(v, (int, float)) and "grand theft auto" not in g.lower())
+
     # --- Steam: what people stop playing
     st = src.get("steam") or {}
     basket = []
@@ -152,6 +173,8 @@ def flatten(snap):
     # --- YouTube: the hype curve
     row["yt_subscribers"] = as_number(
         dig(src, "youtube", "rockstar_channel", "subscribers"))
+    row["yt_rockstar_total_views"] = as_number(
+        dig(src, "youtube", "rockstar_channel", "total_views"))
     videos = dig(src, "youtube", "videos", default={})
     if isinstance(videos, dict):
         for vid, stats in videos.items():
@@ -192,6 +215,11 @@ def flatten(snap):
                 road_classes.append(rc)
 
         row[f"{key}_delay_pct"] = round((cur_total / free_total - 1) * 100, 1) if free_total else None
+        # Travel time as a percentage of free flow: 100 is an empty road,
+        # 130 is a third slower. A delay percentage cannot be used for a
+        # ratio because it sits near zero at night and the log of a ratio
+        # of near-zero numbers is meaningless.
+        row[f"{key}_travel_index"] = round(cur_total / free_total * 100, 1) if free_total else None
         row[f"{key}_points_ok"] = ok or None
         row[f"{key}_seconds_measured"] = free_total or None
         # A rising road class means a point has drifted onto a smaller road.
@@ -227,26 +255,64 @@ def flatten(snap):
     return row
 
 
-def add_hn_rate(points):
-    """Convert the ever-rising Hacker News counter into items per hour.
+# Counters that only ever go up, and the per-hour metric each becomes.
+#
+# A cumulative total must never be compared to a baseline directly. Rockstar's
+# lifetime view count rises every hour whether anything is happening or not,
+# so against a four-week-old baseline it would show a permanent, meaningless
+# "effect" that grows with time. The rate of change is the real signal.
+CUMULATIVE = {
+    "hn_max_item_id": "hn_items_per_hour",
+    "yt_rockstar_total_views": "yt_rockstar_views_per_hour",
+    "yt_subscribers": "yt_subscribers_per_hour",
+}
 
-    Two guards. Gaps over three hours are left blank rather than smeared
-    into a misleading average. Gaps under thirty minutes are also blank:
-    the counter lags by a few minutes, so a five-minute window measures
-    that lag rather than the real posting rate, and it showed up in the
-    data as a systematic underestimate.
-    """
-    prev = None
+# Trailer view and like counters are discovered per video ID, so they are
+# matched by suffix rather than listed.
+CUMULATIVE_SUFFIXES = {"_views": "_views_per_hour", "_likes": "_likes_per_hour"}
+
+
+def rate_targets(points):
+    """Which keys to differentiate, fixed list plus discovered trailers."""
+    targets = dict(CUMULATIVE)
     for p in points:
-        p["hn_items_per_hour"] = None
-        now_id, now_t = p.get("hn_max_item_id"), parse_time(p.get("t"))
-        if prev and now_id and now_t:
-            prev_id, prev_t = prev
-            gap_h = (now_t - prev_t).total_seconds() / 3600
-            if prev_id and 0.5 <= gap_h <= 3 and now_id >= prev_id:
-                p["hn_items_per_hour"] = round((now_id - prev_id) / gap_h)
-        if now_id and now_t:
-            prev = (now_id, now_t)
+        for key in p:
+            if not key.startswith("yt_"):
+                continue
+            for suffix, replacement in CUMULATIVE_SUFFIXES.items():
+                if key.endswith(suffix) and key not in targets:
+                    targets[key] = key[: -len(suffix)] + replacement
+    return targets
+
+
+def add_rates(points):
+    """Turn every cumulative counter into a per-hour rate.
+
+    Two guards, both learned from the Hacker News data. Gaps over three
+    hours are left blank rather than smeared into a misleading average.
+    Gaps under thirty minutes are also blank: these counters lag by a few
+    minutes, so a five-minute window measures the lag rather than the real
+    rate, and it showed up as a systematic underestimate - 280 to 587 items
+    where the true figure was 865 to 991.
+    """
+    targets = rate_targets(points)
+    prev = {}
+    for p in points:
+        now_t = parse_time(p.get("t"))
+        for source, out_key in targets.items():
+            p[out_key] = None
+            now_v = p.get(source)
+            if not isinstance(now_v, (int, float)) or isinstance(now_v, bool):
+                continue
+            if now_t and source in prev:
+                prev_v, prev_t = prev[source]
+                gap_h = (now_t - prev_t).total_seconds() / 3600
+                # A counter that goes backwards means the API restated
+                # something. Skip rather than publish a negative rate.
+                if 0.5 <= gap_h <= 3 and now_v >= prev_v:
+                    p[out_key] = round((now_v - prev_v) / gap_h, 2)
+            if now_t:
+                prev[source] = (now_v, now_t)
     return points
 
 
@@ -314,7 +380,8 @@ def main():
         return 1
 
     points.sort(key=lambda p: p.get("t") or "")
-    add_hn_rate(points)
+    add_rates(points)
+    indices.compute(points)
 
     first_t, last_t = parse_time(points[0]["t"]), parse_time(points[-1]["t"])
     span_days = round((last_t - first_t).total_seconds() / 86400, 1) if first_t and last_t else 0
@@ -337,12 +404,29 @@ def main():
                    "coverage": coverage,
                    "points": points}, f, ensure_ascii=False, separators=(",", ":"))
 
+    panels = indices.summary(points)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
                    "latest": points[-1],
+                   "panels": panels,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
+
+    # A small file with nothing but the four index lines, so the chart on
+    # the page does not have to download the whole series.
+    chart = [{"t": p["t"],
+              **{name: (p.get("indices") or {}).get(name, {}).get("index")
+                 if isinstance((p.get("indices") or {}).get(name), dict) else None
+                 for name in indices.PANEL_NAMES}}
+             for p in points]
+    with open(os.path.join(OUT_DIR, "chart.json"), "w", encoding="utf-8") as f:
+        json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
+                   "panels": {k: v for k, v in indices.PANEL_NAMES.items()},
+                   "placebo": {name: indices.placebo(points, name)
+                               for name in indices.PANEL_NAMES},
+                   "points": chart}, f, ensure_ascii=False, separators=(",", ":"))
 
     series_kb = os.path.getsize(os.path.join(OUT_DIR, "series.json")) / 1024
     print(f"{len(points)} snapshots over {span_days} days "

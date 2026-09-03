@@ -97,12 +97,90 @@ def env(name):
 
 # ---------------------------------------------------------------- sources
 
-def collect_twitch():
-    """Top 100 live streams worldwide, aggregated per game.
+# Twitch categories we follow directly, by exact name.
+#
+# GTA V is here as much for testing as for measurement: it is live right now,
+# so it exercises the same code path as GTA VI every hour and proves the
+# pagination works long before launch night, when there is no time to debug.
+TWITCH_CATEGORIES = {
+    "gta6": "Grand Theft Auto VI",
+    "gta5": "Grand Theft Auto V",
+}
 
-    This is the substitution signal: when GTA VI launches, everything else
-    on Twitch should visibly deflate. We store the per-game totals plus the
-    language breakdown (our only geographic hint on Twitch).
+# Pages of 100 streams. Twenty is 2,000 channels.
+#
+# Five would have been plenty on a normal day and useless on the one night
+# that matters: the channel count would simply have flatlined at the page
+# limit exactly when it was supposed to spike. The `truncated` flag says
+# whether the ceiling was actually hit, so a capped reading is never
+# mistaken for a real one.
+TWITCH_MAX_PAGES = 20
+
+
+def _twitch_category(headers, name):
+    """Every visible live stream in one category, aggregated.
+
+    The top-100 list answers "how busy is Twitch", not "how much attention
+    is on GTA VI" - on a normal day GTA VI need not appear in it at all,
+    and on launch night it would be capped by the size of the list. Asking
+    for the category directly removes both problems.
+    """
+    games = get_json("https://api.twitch.tv/helix/games?name="
+                     + urllib.parse.quote(name), headers=headers)
+    items = games.get("data") or []
+    if not items:
+        # Expected for GTA VI until Twitch creates the category. Recorded as
+        # a fact rather than an error, so it is visible when it flips.
+        return {"category_exists": False, "queried_name": name}
+
+    game_id = items[0].get("id")
+    streams, cursor, pages = [], None, 0
+    while pages < TWITCH_MAX_PAGES:
+        url = f"https://api.twitch.tv/helix/streams?game_id={game_id}&first=100"
+        if cursor:
+            url += "&after=" + urllib.parse.quote(cursor)
+        res = get_json(url, headers=headers)
+        batch = res.get("data") or []
+        streams.extend(batch)
+        pages += 1
+        cursor = dig(res, "pagination", "cursor")
+        if not cursor or len(batch) < 100:
+            break
+        time.sleep(0.3)
+
+    viewers = [int(s.get("viewer_count") or 0) for s in streams]
+    per_lang = {}
+    for s in streams:
+        per_lang[s.get("language") or "(unknown)"] = (
+            per_lang.get(s.get("language") or "(unknown)", 0)
+            + int(s.get("viewer_count") or 0))
+
+    total = sum(viewers)
+    top5 = sum(sorted(viewers, reverse=True)[:5])
+    return {
+        "category_exists": True,
+        "game_id": game_id,
+        "channels": len(streams),
+        "total_viewers": total,
+        "median_viewers_per_channel": (
+            round(statistics.median(viewers), 1) if viewers else 0),
+        # If a handful of big channels hold nearly all the viewers, the
+        # number says more about who went live than about public interest.
+        "top5_share_pct": round(100 * top5 / total, 1) if total else None,
+        "viewers_by_language": dict(sorted(per_lang.items(),
+                                           key=lambda kv: -kv[1])[:25]),
+        "pages_fetched": pages,
+        "truncated": bool(cursor) and pages >= TWITCH_MAX_PAGES,
+    }
+
+
+def collect_twitch():
+    """Two views of Twitch: the platform's top end, and GTA specifically.
+
+    The top-100 total is the displacement signal - when GTA VI launches,
+    everything else should visibly deflate. The per-category figures are the
+    direct attention signal. They answer different questions and must not be
+    added together.
     """
     cid, secret = env("TWITCH_CLIENT_ID"), env("TWITCH_CLIENT_SECRET")
     if not (cid and secret):
@@ -127,6 +205,14 @@ def collect_twitch():
         per_game[g] = per_game.get(g, 0) + v
         per_lang[lang] = per_lang.get(lang, 0) + v
 
+    categories = {}
+    for key, name in TWITCH_CATEGORIES.items():
+        try:
+            categories[key] = _twitch_category(headers, name)
+        except Exception as e:
+            categories[key] = {"error": str(e)[:120]}
+        time.sleep(0.3)
+
     return {
         "stream_count": len(streams),
         "total_viewers_top100": sum(per_game.values()),
@@ -134,6 +220,7 @@ def collect_twitch():
                                        key=lambda kv: -kv[1])),
         "viewers_by_language": dict(sorted(per_lang.items(),
                                            key=lambda kv: -kv[1])),
+        "categories": categories,
     }
 
 
