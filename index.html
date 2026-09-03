@@ -2,328 +2,267 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grand Theft Attention</title>
-<meta name="description" content="A public count of how much of the world's attention Grand Theft Auto VI takes on 19 November 2026. Measured hourly since September, in the open.">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grand Theft Attention — measuring what one game release displaces</title>
+<meta name="description" content="An independent measurement project tracking the release of Grand Theft Auto VI on 19 November 2026. Nine public sources, read every hour, published as we go.">
 <meta property="og:title" content="Grand Theft Attention">
-<meta property="og:description" content="Counting the world's attention, hourly, until Grand Theft Auto VI arrives on 19 November 2026.">
+<meta property="og:description" content="522 million views for a game nobody can play yet. On 19 November we measure what stops.">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#0B0420">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  /* Continuous-feed report paper: the stock a mainframe printed onto,
-     hour after hour, without anyone watching. */
-  --paper:#F1F3EC;
-  --bar:#DCE6D8;
-  --ink:#16241B;
-  --ink-soft:#5B6B5E;
-  --rule:#B9C7B6;
-  --red:#B93326;      /* ledger red: the deficit */
-  --measure:64ch;
+  --night:#0B0420; --violet:#2B1160;
+  --pink:#FF2E88; --cyan:#22E6E0; --amber:#FFB43D;
+  --text:#F4ECFF; --dim:#9C86C7; --line:rgba(255,255,255,.10);
+  --measure:62ch;
 }
-
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
 body{
-  margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:16px;
-  line-height:1.6;
+  margin:0; background:var(--night); color:var(--text);
+  font-family:"Space Grotesk",system-ui,sans-serif; font-size:16px; line-height:1.6;
+  overflow-x:hidden;
 }
+/* The light comes from below, the way a city glows against a night sky.
+   Gradients only: no borrowed artwork, no logo, none of their typefaces.
+   The palette is the 1980s, which belongs to nobody. */
+.glow,.grid{position:fixed; inset:auto 0 0 0; pointer-events:none; z-index:0}
+.glow{
+  height:70vh; opacity:.5; filter:blur(10px);
+  background:
+    radial-gradient(120% 90% at 50% 118%, var(--pink) 0%, transparent 58%),
+    radial-gradient(90% 70% at 18% 112%, var(--violet) 0%, transparent 62%),
+    radial-gradient(80% 60% at 84% 116%, #1B4CE0 0%, transparent 60%);
+}
+.grid{
+  height:40vh;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 78px,rgba(34,230,224,.10) 78px 79px),
+    repeating-linear-gradient(0deg,transparent 0 44px,rgba(34,230,224,.09) 44px 45px);
+  -webkit-mask-image:linear-gradient(to top,#000,transparent);
+  mask-image:linear-gradient(to top,#000,transparent);
+  transform:perspective(340px) rotateX(66deg); transform-origin:bottom;
+}
+.sheet{position:relative; z-index:1; max-width:76rem; margin:0 auto;
+  padding:0 clamp(1.1rem,4vw,3rem)}
 
-/* The sprocket strip down each edge of continuous-feed paper. */
-.sheet{
-  max-width:76rem;
-  margin:0 auto;
-  border-left:1px dashed var(--rule);
-  border-right:1px dashed var(--rule);
-  padding:0 clamp(1rem,4vw,3.5rem);
-}
+a{color:inherit}
+a:hover{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan); outline-offset:3px}
+h1,h2,h3{font-family:Anton,system-ui,sans-serif; font-weight:400; margin:0; line-height:1.04}
 
-h1,h2,h3{font-family:Archivo,system-ui,sans-serif;font-weight:900;line-height:1.05;margin:0}
+header{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; align-items:center;
+  justify-content:space-between; padding:1.4rem 0}
+.mark{font-family:Anton,sans-serif; font-size:1.1rem; letter-spacing:.11em; text-transform:uppercase}
+.mark i{font-style:normal; color:var(--pink)}
+nav{display:flex; gap:1.2rem; font-size:.78rem; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--dim)}
+nav a{text-decoration:none}
 
-/* ---------------------------------------------------------- masthead */
-.masthead{
-  display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;
-  align-items:baseline;justify-content:space-between;
-  padding:1.25rem 0;border-bottom:2px solid var(--ink);
-}
-.wordmark{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
-.masthead nav{display:flex;gap:1.25rem;font-size:.82rem}
-a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
-a:hover{color:var(--red)}
-:focus-visible{outline:2px solid var(--red);outline-offset:3px}
-
-/* -------------------------------------------------------------- hero */
-.hero{padding:clamp(3rem,9vw,6.5rem) 0 clamp(2rem,5vw,3.5rem)}
-.stamp{
-  font-size:.78rem;color:var(--ink-soft);
-  display:flex;gap:.6rem;align-items:center;margin-bottom:1.25rem;
-}
-.pulse{
-  width:.5rem;height:.5rem;border-radius:50%;background:var(--red);
-  animation:blink 2.4s steps(1,end) infinite;
-}
-@keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.25}}
+.hero{padding:clamp(2.5rem,8vw,6rem) 0 2rem}
+.live{display:inline-flex; align-items:center; gap:.55rem; font-size:.72rem;
+  letter-spacing:.19em; text-transform:uppercase; color:var(--cyan); margin-bottom:1.5rem}
+.dot{width:.45rem;height:.45rem;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 12px var(--cyan); animation:blip 2s infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
 
 .count{
-  font-size:clamp(3.4rem,15vw,11rem);
-  font-weight:600;line-height:.88;letter-spacing:-.045em;
+  font-family:Anton,sans-serif; font-size:clamp(3rem,13vw,10.5rem);
+  line-height:.84; letter-spacing:-.02em; margin:0;
   font-variant-numeric:tabular-nums;
-  margin:0 0 1.25rem;
-  overflow-wrap:anywhere;
+  background:linear-gradient(178deg,#FFF 4%,#FFD9EC 34%,var(--pink) 74%,#8B1FCB 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 0 34px rgba(255,46,136,.42));
 }
-.index-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 1.5rem}
-.index-label{
-  font-family:Archivo,system-ui,sans-serif;font-weight:700;
-  font-size:clamp(1rem,2.6vw,1.4rem);line-height:1.2;margin:0 0 1.25rem;
-}
-.index-label span{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:.72rem;color:var(--ink-soft)}
+.count-label{font-family:Anton,sans-serif; font-size:clamp(1rem,3.2vw,1.8rem);
+  letter-spacing:.02em; text-transform:uppercase; color:var(--cyan); margin:.9rem 0 0}
+.count-note{max-width:var(--measure); color:var(--dim); margin:1rem 0 0;
+  font-size:clamp(.98rem,2.1vw,1.1rem)}
+.count-note strong{color:var(--text); font-weight:500}
 
-/* Four readouts under the headline. Each panel says which way a real
-   effect would push it, so a fall is not mistaken for a failure. */
-.panels{
-  display:grid;gap:1px;background:var(--rule);
-  grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
-  border:1px solid var(--rule);margin:2.25rem 0 0;
-}
-.panel{background:var(--paper);padding:.9rem 1rem}
-.panel h3{font-size:.78rem;font-weight:700;letter-spacing:.01em;margin:0 0 .35rem}
-.panel .v{font-size:1.9rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
-.panel .v.pending{font-size:.95rem;font-weight:400;color:var(--ink-soft)}
-.panel .d{font-size:.7rem;color:var(--ink-soft);margin-top:.35rem;line-height:1.4}
-.panel .pc{color:var(--red);font-weight:600}
+.thesis{margin-top:2.2rem; font-size:clamp(1.4rem,4vw,2.4rem); max-width:22ch;
+  text-transform:uppercase; letter-spacing:.01em}
+.thesis span{color:var(--pink)}
 
-.chart{margin:2.5rem 0 0;padding:0}
-.chart svg{width:100%;height:clamp(120px,22vw,220px);display:block;overflow:visible}
-.chart figcaption{
-  display:flex;justify-content:space-between;
-  font-size:.72rem;color:var(--ink-soft);
-  border-top:1px solid var(--rule);padding-top:.4rem;margin-top:.25rem;
-}
-.count-note{font-size:clamp(1rem,2.4vw,1.35rem);max-width:var(--measure);color:var(--ink-soft)}
-.count-note strong{color:var(--ink);font-weight:500}
+.clock{display:inline-flex; align-items:baseline; gap:.9rem; margin-top:1.8rem;
+  padding:.65rem 1.4rem; border:1px solid rgba(34,230,224,.4); border-radius:999px}
+.clock span{color:var(--dim); font-size:.68rem; letter-spacing:.16em; text-transform:uppercase}
+.clock b{font-family:Anton,sans-serif; font-weight:400; letter-spacing:.1em;
+  font-size:1.05rem; color:var(--cyan); font-variant-numeric:tabular-nums}
 
-.thesis{
-  font-family:Archivo,system-ui,sans-serif;font-weight:700;
-  font-size:clamp(1.5rem,4.2vw,2.6rem);line-height:1.15;
-  letter-spacing:-.02em;max-width:22ch;
-  margin:clamp(2.5rem,6vw,4rem) 0 0;
-}
-.thesis .drop{color:var(--red)}
+.panels{display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:14px; overflow:hidden; margin:3rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr))}
+.panel{background:rgba(11,4,32,.72); padding:1.1rem 1.2rem}
+.panel h3{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--dim); font-family:"Space Grotesk"; font-weight:500; margin-bottom:.45rem}
+.panel .v{font-family:Anton,sans-serif; font-size:1.6rem; font-variant-numeric:tabular-nums}
+.panel .v.pending{font-family:"Space Grotesk"; font-size:.92rem; color:var(--dim)}
+.panel .m{font-size:.7rem; color:var(--dim); margin-top:.35rem; line-height:1.45}
+.panel .m em{font-style:normal; color:var(--amber)}
+.panel .pc{color:var(--pink); font-weight:700}
 
-.clock{
-  margin-top:2rem;display:inline-flex;gap:1.75rem;
-  border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
-  padding:.7rem 0;
-}
-.clock div{font-variant-numeric:tabular-nums}
-.clock b{display:block;font-size:1.5rem;font-weight:600}
-.clock span{font-size:.72rem;color:var(--ink-soft)}
+figure.chart{margin:2.75rem 0 0; padding:0}
+.chart svg{width:100%; height:clamp(120px,20vw,210px); display:block; overflow:visible}
+.chart figcaption{display:flex; justify-content:space-between; gap:1rem;
+  font-size:.7rem; color:var(--dim); border-top:1px solid var(--line);
+  padding-top:.45rem; margin-top:.3rem}
 
-/* ------------------------------------------------------- the readout */
-section{padding:clamp(2.5rem,7vw,4.5rem) 0;border-top:1px solid var(--rule)}
-.section-head{
-  display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;
-  align-items:baseline;justify-content:space-between;margin-bottom:1.75rem;
-}
-.section-head h2{font-size:clamp(1.35rem,3.4vw,1.9rem)}
-.section-head p{margin:0;font-size:.82rem;color:var(--ink-soft)}
-
-table{width:100%;border-collapse:collapse;font-size:clamp(.8rem,2.1vw,.95rem)}
-caption{text-align:left;font-size:.8rem;color:var(--ink-soft);padding-bottom:.75rem}
-th{
-  text-align:left;font-weight:500;font-size:.72rem;color:var(--ink-soft);
-  border-bottom:1px solid var(--ink);padding:.35rem .75rem;
-}
-th:last-child,td:last-child{text-align:right}
-td{padding:.5rem .75rem;font-variant-numeric:tabular-nums}
-/* The green bar itself: every other line, so the eye can track across. */
-tbody tr:nth-child(odd){background:var(--bar)}
-td:first-child{white-space:nowrap}
-.val{font-weight:600}
-/* Red ink for a fall, the way a ledger has always marked one. The whole
-   project is about what goes down, so the drops should read first. */
-.down{color:var(--red)}
-.sub{color:var(--ink-soft);font-size:.78rem}
-tr.grp td{
-  background:var(--ink);color:var(--paper);font-weight:600;
-  font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;
-}
-
-/* --------------------------------------------------------- narrative */
-.prose{max-width:var(--measure)}
-.prose p{margin:0 0 1.15rem}
+section{padding:clamp(2.5rem,7vw,4.5rem) 0; border-top:1px solid var(--line)}
+.head{display:flex; flex-wrap:wrap; gap:.4rem 1.5rem; align-items:baseline;
+  justify-content:space-between; margin-bottom:1.5rem}
+.head h2{font-size:clamp(1.3rem,3.6vw,2rem); text-transform:uppercase; letter-spacing:.01em}
+.head p{margin:0; font-size:.76rem; color:var(--dim)}
+.prose{max-width:var(--measure); color:var(--dim)}
+.prose p{margin:0 0 1.05rem}
 .prose p:last-child{margin-bottom:0}
-.sources{
-  list-style:none;padding:0;margin:1.75rem 0 0;max-width:var(--measure);
-  font-size:.88rem;
-}
-.sources li{
-  display:flex;gap:1rem;padding:.6rem 0;border-top:1px solid var(--rule);
-}
-.sources li span:first-child{flex:0 0 9rem;color:var(--ink-soft)}
+.prose strong{color:var(--text); font-weight:500}
 
-/* ------------------------------------------------------------ signup */
-.signup{max-width:var(--measure)}
-form{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.25rem}
-input[type=email]{
-  flex:1 1 16rem;font:inherit;font-size:.95rem;padding:.7rem .85rem;
-  background:#fff;color:var(--ink);
-  border:1px solid var(--ink);border-radius:0;
-}
-button{
-  font:inherit;font-weight:600;font-size:.95rem;padding:.7rem 1.4rem;
-  background:var(--ink);color:var(--paper);
-  border:1px solid var(--ink);border-radius:0;cursor:pointer;
-}
-button:hover{background:var(--red);border-color:var(--red)}
-.form-msg{margin-top:.75rem;font-size:.85rem;min-height:1.3em}
-.form-msg.err{color:var(--red)}
+table{width:100%; border-collapse:collapse; font-size:clamp(.8rem,2vw,.92rem)}
+th{text-align:left; font-size:.66rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--dim); font-weight:500; padding:.4rem .7rem; border-bottom:1px solid var(--line)}
+th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){text-align:right}
+td{padding:.65rem .7rem; border-bottom:1px solid rgba(255,255,255,.06);
+  font-variant-numeric:tabular-nums}
+td .sub{display:block; color:var(--dim); font-size:.72rem}
+td.v{font-family:Anton,sans-serif; font-size:1.05rem; color:var(--cyan)}
+tr.grp td{background:rgba(255,46,136,.14); color:var(--text);
+  font-family:Anton,sans-serif; font-size:.74rem; letter-spacing:.14em; text-transform:uppercase}
+.down{color:var(--pink)}
 
-/* ------------------------------------------------------------ footer */
-footer{
-  border-top:2px solid var(--ink);padding:2rem 0 3.5rem;
-  font-size:.8rem;color:var(--ink-soft);
-}
-footer p{margin:0 0 .75rem;max-width:var(--measure)}
-footer a{color:var(--ink)}
+form{display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1.2rem; max-width:var(--measure)}
+input[type=email]{flex:1 1 16rem; font:inherit; font-size:.95rem; padding:.75rem .9rem;
+  background:rgba(255,255,255,.05); color:var(--text);
+  border:1px solid rgba(255,255,255,.22); border-radius:8px}
+input::placeholder{color:var(--dim)}
+button{font:inherit; font-weight:700; font-size:.95rem; padding:.75rem 1.5rem;
+  background:var(--pink); color:#12001F; border:0; border-radius:8px; cursor:pointer}
+button:hover{background:var(--cyan)}
+.msg{margin-top:.7rem; font-size:.85rem; min-height:1.3em; color:var(--cyan)}
+.msg.err{color:var(--amber)}
 
-/* On a narrow screen the week-on-week column is the first thing to go:
-   four numeric columns squeeze the labels into unreadable stacks. */
+footer{border-top:1px solid var(--line); padding:2rem 0 4rem;
+  font-size:.78rem; color:var(--dim)}
+footer p{margin:0 0 .7rem; max-width:var(--measure)}
+
 @media (max-width:34rem){
   th:nth-child(4),td:nth-child(4){display:none}
-  th,td{padding:.5rem .4rem}
-  .sources li{flex-direction:column;gap:.15rem}
-  .sources li span:first-child{flex:none}
+  th,td{padding:.55rem .4rem}
 }
-
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
 </style>
 </head>
 <body>
-<div class="sheet">
+<div class="glow" aria-hidden="true"></div>
+<div class="grid" aria-hidden="true"></div>
 
-  <header class="masthead">
-    <div class="wordmark">Grand Theft Attention</div>
+<div class="sheet">
+  <header>
+    <div class="mark">Grand <i>Theft</i> Attention</div>
     <nav>
       <a href="#readout">Readout</a>
       <a href="#method">Method</a>
-      <a href="#watch">Get the results</a>
+      <a href="#watch">Results</a>
     </nav>
   </header>
 
   <div class="hero">
-    <div class="stamp"><span class="pulse" aria-hidden="true"></span><span id="stamp">Reading the last count…</span></div>
+    <div class="live"><span class="dot" aria-hidden="true"></span><span id="stamp">Reading the last count…</span></div>
 
-    <div class="index-line">
-      <p class="count" id="count">—</p>
-      <p class="index-label">Attention Index<br><span id="baseline-note">building the baseline</span></p>
-    </div>
-
-    <div class="panels" id="panels"></div>
-
+    <p class="count" id="count">—</p>
+    <p class="count-label" id="count-label">Views of a game nobody can play</p>
     <p class="count-note" id="count-note"></p>
 
+    <h1 class="thesis">The <span>GTA VI</span> Attention Shift</h1>
+
+    <p class="count-note" style="margin-top:1.1rem">
+      An independent measurement project tracking the PlayStation 5 and Xbox
+      Series X|S release of <strong>Grand Theft Auto VI</strong>. Since 2 September
+      2026, an automated collector has taken an hourly reading from nine public
+      sources; on <strong>Thursday 19 November</strong>, the data will show what
+      changed, what did not, and what can only be estimated.
+    </p>
+
+    <div class="clock"><span>Release in</span><b id="clock">—</b></div>
+
     <figure class="chart">
-      <svg id="spark" viewBox="0 0 1000 220" preserveAspectRatio="none" role="img"
-           aria-labelledby="chart-title"><title id="chart-title">The Attention Index since counting began, with the time remaining until release</title></svg>
-      <figcaption>
-        <span>Counting began 2 September 2026</span>
-        <span id="chart-now"></span>
-      </figcaption>
+      <svg id="spark" viewBox="0 0 1000 210" preserveAspectRatio="none" role="img"
+           aria-labelledby="ct"><title id="ct">The index since counting began, and the time remaining until release</title></svg>
+      <figcaption><span>Counting began 2 September 2026</span><span id="chart-now"></span></figcaption>
     </figure>
-
-    <h1 class="thesis">
-      On 19 November, Grand Theft Auto VI arrives.<br>
-      We are counting <span class="drop">what stops</span>.
-    </h1>
-
-    <div class="clock" id="clock" aria-label="Time until release">
-      <div><b id="d">—</b><span>days</span></div>
-      <div><b id="h">—</b><span>hours</span></div>
-      <div><b id="m">—</b><span>minutes</span></div>
-    </div>
   </div>
 
+  <div class="panels" id="panels"></div>
+
   <section id="readout">
-    <div class="section-head">
-      <h2>The current count</h2>
-      <p id="freshness"></p>
-    </div>
+    <div class="head"><h2>Live data</h2><p id="freshness"></p></div>
+    <p class="prose" style="margin-bottom:1.5rem">
+      Each row shows the latest reading, its source and the baseline used for
+      comparison. Until roughly mid-October, several index fields will remain
+      blank because there is not enough history to calculate them honestly.
+      <strong>We publish missing values rather than manufacture precision.</strong>
+      Every hourly reading is committed to a public repository with a timestamp.
+    </p>
     <table>
-      <caption>Every figure is a live reading, not an estimate. The middle column shows how far it sits from an ordinary hour for this point in the week, and stays empty until there is enough history to say.</caption>
-      <thead>
-        <tr><th scope="col">Measure</th><th scope="col">Now</th><th scope="col">vs baseline</th><th scope="col">Clock</th></tr>
-      </thead>
-      <tbody id="rows">
-        <tr><td colspan="4">Loading the latest reading…</td></tr>
-      </tbody>
+      <thead><tr><th scope="col">Measure</th><th scope="col">Now</th><th scope="col">vs baseline</th><th scope="col">Clock</th></tr></thead>
+      <tbody id="rows"><tr><td colspan="4">Loading the latest reading…</td></tr></tbody>
     </table>
   </section>
 
   <section id="method">
-    <div class="section-head"><h2>What we are actually measuring</h2></div>
+    <div class="head"><h2>What we measure and why</h2></div>
     <div class="prose">
       <p>
-        A launch day is easy to describe and hard to measure. Everyone will
-        guess how much work went undone on 19 November. We would rather
-        count it, and we would rather start counting before it happens
-        instead of finding the pattern afterwards.
+        We track attention, play, movement, service health, resale prices and
+        prediction-market odds. Nine public sources are read every hour. The
+        launch is compared with New York transit and Wikipedia baselines since
+        2023.
       </p>
       <p>
-        So we take a reading every hour, from sources anyone can check, and
-        we publish the raw readings as we go. By November there will be
-        eleven weeks of ordinary Thursdays to compare against. That
-        baseline, not the launch day itself, is the hard part.
+        <strong>New York's subway carries about 4.5 million people on an ordinary
+        November Thursday; a drop of roughly 90,000 would be unmistakable.</strong>
       </p>
-      <ul class="sources">
-        <li><span>Attention</span><span>Twitch viewers across the hundred largest live streams, by game and by language</span></li>
-        <li><span>Play</span><span>Concurrent players on Steam, and where the Grand Theft Auto titles sit in its live ranking</span></li>
-        <li><span>Work</span><span>Public activity on Hacker News, as a rough pulse of people who are supposed to be working</span></li>
-        <li><span>Movement</span><span>Congestion on major commuter roads in six cities</span></li>
-        <li><span>Load</span><span>PlayStation Network and Xbox Live service health</span></li>
-        <li><span>Anticipation</span><span>Views and subscribers on Rockstar's own channel</span></li>
-      </ul>
-      <p style="margin-top:1.75rem">
-        Every reading ever taken is committed to a public repository with a
-        timestamp, which means none of it can be quietly adjusted later.
-        <a href="https://github.com/kalminDR/gta-blackout">Read the code and the raw data</a>.
+      <p>
+        Some results are measured directly. Nobody publishes daily data on who
+        took the day off, so that figure is estimated. We tested GitHub and Stack
+        Overflow as productivity measures, rejected both, and publish the
+        evidence.
       </p>
+      <p><a href="https://github.com/kalminDR/gta-blackout">Read the code and the raw data</a></p>
     </div>
   </section>
 
   <section id="watch">
-    <div class="section-head"><h2>Get the results</h2></div>
-    <div class="signup prose">
+    <div class="head"><h2>Get the results</h2></div>
+    <div class="prose">
       <p>
-        Two emails, no more. One in October with our prediction and the full
-        method, published before the launch so it can be judged against what
-        happens. One in late November with what we actually measured.
+        Two emails, then silence. In October, we publish the forecast before
+        GTA VI arrives. In late November, we send the results.
+        <strong>The first matters because a prediction made in advance cannot be
+        rewritten to flatter the outcome.</strong>
       </p>
       <form id="signup" novalidate>
-        <label for="email" class="sr-only" hidden>Email address</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        <input type="email" id="email" name="email" placeholder="you@example.com"
+               autocomplete="email" aria-label="Email address" required>
         <button type="submit">Send me both</button>
       </form>
-      <p class="form-msg" id="msg" role="status"></p>
+      <p class="msg" id="msg" role="status"></p>
     </div>
   </section>
 
   <footer>
     <p>
-      A measurement project by <a href="https://eureka.works">[eureka]</a>,
-      who spend their working lives asking why a game can hold attention that
-      a training course cannot.
+      Grand Theft Auto VI can make people plan months ahead, coordinate with
+      friends and change their routines without managers, deadlines or reminders.
+      Some of those people will not finish a mandatory thirty-minute course.
+      <a href="https://eureka.works">[eureka]</a>, which builds serious games and
+      gamified training, runs the project. The problem is not that a game earns
+      attention. It is that most training does not.
     </p>
     <p>
       Not affiliated with, endorsed by, or connected to Rockstar Games or
@@ -332,325 +271,203 @@ footer a{color:var(--ink)}
     </p>
     <p id="built"></p>
   </footer>
-
 </div>
 
 <script>
 "use strict";
-
-// Release date. Kept in one place because it has already moved twice.
 const RELEASE = new Date("2026-11-19T00:00:00Z");
 const START_COUNTING = "2026-09-02T09:14:59Z";
-
-// Where the signup form posts. Empty until the endpoint exists, and the
-// form says so plainly rather than pretending to have worked.
-const SIGNUP_ENDPOINT = "";
+const SIGNUP_ENDPOINT = "";        // fill in once the Cloudflare Worker exists
 
 const $ = id => document.getElementById(id);
 const nf = new Intl.NumberFormat("en-US");
+const num = v => (typeof v === "number" && isFinite(v)) ? v : null;
+const LABEL_FIX = {Newyork:"New York", Losangeles:"Los Angeles"};
+const pretty = s => Object.keys(LABEL_FIX).reduce((a,k)=>a.replace(k,LABEL_FIX[k]), s||"");
 
-/* ------------------------------------------------------------ countdown */
 function tick(){
   const left = RELEASE - new Date();
-  if (left <= 0){ $("clock").innerHTML = "<div><b>It is here.</b></div>"; return; }
+  if (left <= 0){ $("clock").textContent = "IT IS HERE"; return; }
   const m = Math.floor(left/6e4);
-  $("d").textContent = Math.floor(m/1440);
-  $("h").textContent = Math.floor(m%1440/60);
-  $("m").textContent = m%60;
+  $("clock").textContent = Math.floor(m/1440)+"d "+Math.floor(m%1440/60)+"h "+(m%60)+"m";
 }
 tick(); setInterval(tick, 30000);
 
-/* ------------------------------------------------- the headline number */
-// One orchestrated moment on load: the count rolls up to its real value,
-// the way a mechanical counter would. Skipped if motion is unwelcome.
-function rollTo(target, decimals){
-  const el = $("count");
-  const d = decimals || 0;
-  const fmt = v => v.toLocaleString("en-US", {minimumFractionDigits:d, maximumFractionDigits:d});
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce || !target){ el.textContent = fmt(target || 0); return; }
-  const start = performance.now(), dur = 1100;
+function roll(target, decimals){
+  const el = $("count"), d = decimals || 0;
+  const fmt = v => v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !target){
+    el.textContent = fmt(target || 0); return;
+  }
+  const start = performance.now(), dur = 1400;
   (function frame(now){
-    const p = Math.min(1, (now-start)/dur);
-    const eased = 1 - Math.pow(1-p, 3);
-    el.textContent = fmt(target * eased);
+    const p = Math.min(1,(now-start)/dur), e = 1-Math.pow(1-p,4);
+    el.textContent = fmt(target*e);
     if (p < 1) requestAnimationFrame(frame);
   })(performance.now());
 }
 
-/* --------------------------------------------------------------- chart */
-// The index so far, with the rest of the run to 19 November left empty.
-// The empty space is the point: we do not know yet what goes there.
 async function drawChart(){
-  const svg = $("spark");
-  let pts;
+  const svg = $("spark"), W = 1000, H = 210, P = 14;
+  let pts = [];
   try {
-    const r = await fetch("public/chart.json", {cache:"no-store"});
-    pts = (await r.json()).points.filter(p => typeof p.a === "number");
-  } catch(e){ return; }
-  const W0 = 1000, H0 = 220, PAD0 = 14;
+    const r = await fetch("public/chart.json",{cache:"no-store"});
+    pts = ((await r.json()).points || []).filter(p => typeof p.attention === "number");
+  } catch(e){ /* fall through to the empty state */ }
+
   if (!pts.length){
-    // No index yet. Draw the run itself - the counting so far, and the
-    // stretch still to come - so the reader sees the instrument is on.
-    const t0 = new Date(START_COUNTING).getTime();
-    const t1 = RELEASE.getTime();
-    const nowX = PAD0 + Math.max(0, Math.min(1, (Date.now() - t0) / (t1 - t0))) * (W0 - PAD0 * 2);
-    svg.innerHTML = `
-      <line x1="${PAD0}" y1="${H0/2}" x2="${nowX}" y2="${H0/2}"
-            stroke="var(--ink)" stroke-width="2"/>
-      <line x1="${nowX}" y1="${PAD0}" x2="${nowX}" y2="${H0 - PAD0}"
-            stroke="var(--rule)" stroke-width="1"/>
-      <text x="${nowX + 10}" y="${H0/2 - 10}" font-size="12" fill="var(--ink-soft)"
-            font-family="IBM Plex Mono, monospace">counting since 2 September</text>
-      <text x="${nowX + 10}" y="${H0/2 + 22}" font-size="12" fill="var(--ink-soft)"
-            font-family="IBM Plex Mono, monospace">the index line begins in October</text>
-      <line x1="${W0 - PAD0}" y1="${PAD0}" x2="${W0 - PAD0}" y2="${H0 - PAD0}"
-            stroke="var(--red)" stroke-width="2"/>
-      <text x="${W0 - PAD0 - 10}" y="${H0 - PAD0 - 6}" font-size="12" fill="var(--red)"
-            text-anchor="end" font-family="IBM Plex Mono, monospace">19 November</text>`;
-    $("chart-now").textContent = "";
+    // No index yet. Draw the run itself, so the instrument reads as on.
+    const t0 = new Date(START_COUNTING).getTime(), t1 = RELEASE.getTime();
+    const nowX = P + Math.max(0,Math.min(1,(Date.now()-t0)/(t1-t0)))*(W-P*2);
+    svg.innerHTML =
+      '<line x1="'+P+'" y1="'+(H/2)+'" x2="'+nowX+'" y2="'+(H/2)+'" stroke="#22E6E0" stroke-width="2"/>'+
+      '<line x1="'+nowX+'" y1="'+P+'" x2="'+nowX+'" y2="'+(H-P)+'" stroke="rgba(255,255,255,.18)"/>'+
+      '<text x="'+(nowX+10)+'" y="'+(H/2-12)+'" font-size="12" fill="#9C86C7" font-family="Space Grotesk">counting every hour</text>'+
+      '<text x="'+(nowX+10)+'" y="'+(H/2+22)+'" font-size="12" fill="#9C86C7" font-family="Space Grotesk">the index line begins in October</text>'+
+      '<line x1="'+(W-P)+'" y1="'+P+'" x2="'+(W-P)+'" y2="'+(H-P)+'" stroke="#FF2E88" stroke-width="2"/>'+
+      '<text x="'+(W-P-10)+'" y="'+(H-P-6)+'" font-size="12" fill="#FF2E88" text-anchor="end" font-family="Space Grotesk">19 November</text>';
     return;
   }
 
-  // An hourly index wobbles by a few percent, which at this size draws as a
-  // scribble rather than a line. A rolling median over a day keeps the shape
-  // and drops the hair - and a real launch spike will still tower over it.
-  const WINDOW = 24;
-  const smooth = pts.map((p, i) => {
-    const w = pts.slice(Math.max(0, i - WINDOW + 1), i + 1).map(q => q.a).sort((a,b)=>a-b);
-    return {t: p.t, a: w[Math.floor(w.length/2)]};
+  // A day-long rolling median: the hourly index is hairy, a launch spike is not.
+  const WIN = 24;
+  const sm = pts.map(function(p,i){
+    const w = pts.slice(Math.max(0,i-WIN+1),i+1).map(function(q){return q.attention;}).sort(function(a,b){return a-b;});
+    return {t:p.t, a:w[Math.floor(w.length/2)]};
   });
-
-  const W = 1000, H = 220, PAD = 14;
-  const t0 = new Date(pts[0].t).getTime();
-  const t1 = RELEASE.getTime();
-  const span = t1 - t0;
-
-  // Frame tightly while the line is flat, and open up on its own once a
-  // spike arrives, so September is legible and November is not clipped.
-  const vals = smooth.map(p => p.a);
-  const top = Math.max(112, Math.ceil(Math.max(...vals) * 1.12 / 10) * 10);
-  const bottom = Math.min(88, Math.floor(Math.min(...vals) * 0.9 / 10) * 10);
-
-  const x = t => PAD + (new Date(t).getTime() - t0) / span * (W - PAD * 2);
-  const y = v => H - PAD - (v - bottom) / (top - bottom) * (H - PAD * 2);
-
-  const path = smooth.map((p, i) => (i ? "L" : "M") + x(p.t).toFixed(1) + " " + y(p.a).toFixed(1)).join(" ");
-  const lastX = x(smooth[smooth.length - 1].t);
-
-  $("chart-now").textContent = smooth.length + " readings so far";
-  svg.innerHTML = `
-    <line x1="${PAD}" y1="${y(100)}" x2="${W - PAD}" y2="${y(100)}"
-          stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
-    <text x="${Math.min(lastX + 12, W - 220)}" y="${y(100) - 8}" font-size="12"
-          fill="var(--ink-soft)" font-family="IBM Plex Mono, monospace">100 = an ordinary hour</text>
-    <path d="${path}" fill="none" stroke="var(--ink)" stroke-width="2"
-          stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-    <line x1="${lastX}" y1="${PAD}" x2="${lastX}" y2="${H - PAD}"
-          stroke="var(--rule)" stroke-width="1"/>
-    <line x1="${W - PAD}" y1="${PAD}" x2="${W - PAD}" y2="${H - PAD}"
-          stroke="var(--red)" stroke-width="2"/>
-    <text x="${W - PAD - 10}" y="${H - PAD - 6}" font-size="12" fill="var(--red)"
-          text-anchor="end" font-family="IBM Plex Mono, monospace">19 November</text>`;
-}
-
-/* ------------------------------------------------------------- readout */
-const num = v => (typeof v === "number" && isFinite(v)) ? v : null;
-
-function pct(changes, key, window){
-  const c = changes && changes[key] && changes[key][window];
-  if (!c || typeof c.percent !== "number") return "—";
-  const v = c.percent;
-  const text = (v > 0 ? "+" : "") + v.toFixed(1) + "%";
-  return v < 0 ? `<span class="down">${text}</span>` : text;
-}
-
-const LABEL_FIX = {"Newyork": "New York", "Losangeles": "Los Angeles"};
-function pretty(s){
-  return Object.keys(LABEL_FIX).reduce((a, k) => a.replace(k, LABEL_FIX[k]), s || "");
-}
-
-function row(label, sub, value, format, changes, key){
-  const shown = value === null ? "building baseline"
-              : format === "pct" ? value.toFixed(1) + "%"
-              : format === "n0" ? Math.round(value).toString()
-              : nf.format(value);
-  return `<tr>
-    <td>${label}${sub ? `<div class="sub">${sub}</div>` : ""}</td>
-    <td class="val">${shown}</td>
-    <td>${pct(changes, key, "vs_24h")}</td>
-    <td>${pct(changes, key, "vs_7d")}</td>
-  </tr>`;
+  const t0 = new Date(sm[0].t).getTime(), span = RELEASE.getTime()-t0;
+  const vals = sm.map(function(p){return p.a;});
+  const top = Math.max(112, Math.ceil(Math.max.apply(null,vals)*1.12/10)*10);
+  const bot = Math.min(88, Math.floor(Math.min.apply(null,vals)*0.9/10)*10);
+  const x = function(t){ return P + (new Date(t).getTime()-t0)/span*(W-P*2); };
+  const y = function(v){ return H-P-(v-bot)/(top-bot)*(H-P*2); };
+  const path = sm.map(function(p,i){ return (i?"L":"M")+x(p.t).toFixed(1)+" "+y(p.a).toFixed(1); }).join(" ");
+  const lastX = x(sm[sm.length-1].t);
+  $("chart-now").textContent = sm.length + " readings so far";
+  svg.innerHTML =
+    '<line x1="'+P+'" y1="'+y(100)+'" x2="'+(W-P)+'" y2="'+y(100)+'" stroke="rgba(255,255,255,.18)" stroke-dasharray="3 4"/>'+
+    '<text x="'+Math.min(lastX+12,W-230)+'" y="'+(y(100)-8)+'" font-size="12" fill="#9C86C7" font-family="Space Grotesk">100 = an ordinary hour</text>'+
+    '<path d="'+path+'" fill="none" stroke="#22E6E0" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'+
+    '<line x1="'+lastX+'" y1="'+P+'" x2="'+lastX+'" y2="'+(H-P)+'" stroke="rgba(255,255,255,.18)"/>'+
+    '<line x1="'+(W-P)+'" y1="'+P+'" x2="'+(W-P)+'" y2="'+(H-P)+'" stroke="#FF2E88" stroke-width="2"/>'+
+    '<text x="'+(W-P-10)+'" y="'+(H-P-6)+'" font-size="12" fill="#FF2E88" text-anchor="end" font-family="Space Grotesk">19 November</text>';
 }
 
 function ago(iso){
-  const mins = Math.max(0, Math.round((Date.now() - new Date(iso)) / 6e4));
-  if (mins < 90) return mins + " minutes ago";
-  return Math.round(mins/60) + " hours ago";
+  const m = Math.max(0, Math.round((Date.now()-new Date(iso))/6e4));
+  return m < 90 ? m + " minutes ago" : Math.round(m/60) + " hours ago";
 }
 
 async function load(){
   let data;
   try {
-    const res = await fetch("public/latest.json", {cache:"no-store"});
+    const res = await fetch("public/latest.json",{cache:"no-store"});
     if (!res.ok) throw new Error(res.status);
     data = await res.json();
-  } catch (e) {
+  } catch(e){
     $("stamp").textContent = "The latest reading could not be loaded.";
-    $("count").textContent = "—";
     $("rows").innerHTML = '<tr><td colspan="4">No reading available. The hourly count is still running; this page will catch up on its next attempt.</td></tr>';
     return;
   }
 
-  const L = data.latest || {}, C = data.changes || {}, cov = data.coverage || {};
-  const P = (data.panels || {}).panels || {};
-  const M = (data.panels || {}).metrics || [];
-  const frozen = new Set((data.panels || {}).frozen_metrics || []);
+  const L = data.latest || {}, cov = data.coverage || {};
+  const PANELS = (data.panels||{}).panels || {};
+  const METRICS = (data.panels||{}).metrics || [];
+  const frozen = {};
+  ((data.panels||{}).frozen_metrics || []).forEach(function(k){ frozen[k] = true; });
+  const idx = num((L.indices||{}).attention);
 
-  const twitch = num(L.twitch_top100_total), steam = num(L.steam_basket_total);
-  const idx = num((L.indices || {}).attention);
+  // Views across every tracked trailer. The channel's lifetime total is a
+  // different, far larger number and has nothing to do with this game.
+  let views = 0, rate = 0;
+  Object.keys(L).forEach(function(k){
+    const v = L[k];
+    if (k.indexOf("rockstar") !== -1) return;
+    if (/^yt_.+_views$/.test(k) && typeof v === "number") views += v;
+    if (/^yt_.+_views_per_hour$/.test(k) && typeof v === "number") rate += v;
+  });
 
-  // The headline is the index. Until there is enough history to compare
-  // against, it says so rather than showing a number it cannot stand behind.
   if (idx === null){
-    // For the first weeks there is no baseline, so an index would be a lie.
-    // Lead with the thing we can honestly show: how many people are in
-    // front of a game right now.
-    // Until the index has a baseline, lead with the one number that is
-    // both about this game and immediately legible: how many people have
-    // watched a trailer for something nobody can play yet.
-    let views = 0, rate = 0;
-    for (const [k, v] of Object.entries(L)){
-      // Trailer videos only. The Rockstar channel's lifetime total is a
-      // different, much larger number and has nothing to do with this game.
-      if (k.includes("rockstar")) continue;
-      if (/^yt_.+_views$/.test(k) && typeof v === "number") views += v;
-      if (/^yt_.+_views_per_hour$/.test(k) && typeof v === "number") rate += v;
-    }
-    rollTo(views, 0);
-    document.querySelector(".index-label").innerHTML =
-      "Views of a trailer<br>for a game nobody<br>can play yet" +
-      "<br><span id=\"baseline-note\"></span>";
-    $("baseline-note").textContent = rate
-      ? "another " + nf.format(Math.round(rate)) + " in the last hour, and it is still not out"
-      : "counted every hour";
+    roll(views, 0);
+    $("count-label").textContent = "Views of a game nobody can play";
+    $("count-note").innerHTML =
+      "Five official Grand Theft Auto VI videos have drawn this many views for a " +
+      "game nobody can play yet; <strong>15 million of those went to a still image " +
+      "of the cover art</strong>." +
+      (rate ? " Another " + nf.format(Math.round(rate)) + " arrived in the last hour." : "");
   } else {
-    rollTo(idx, 0);
-    document.querySelector(".index-label").innerHTML =
-      "Attention Index<br><span id=\"baseline-note\"></span>";
-    $("baseline-note").textContent =
-      ((L.baseline_quality || "") === "hour_of_week"
-        ? "compared with the same hour of previous weeks"
-        : "compared with the same hour of previous days") +
-      " · " + (cov.days_of_history || 0) + " days of history";
+    roll(idx, 0);
+    $("count-label").textContent = "Attention Index";
+    $("count-note").innerHTML =
+      "<strong>100 is an ordinary hour.</strong> Every reading is compared with the " +
+      "same hour of the same weekday, so a quiet Tuesday morning is judged against " +
+      "other quiet Tuesday mornings and not against a Saturday night. " +
+      nf.format(views) + " video views and counting.";
   }
-
-  // The explanation has to match what the headline is actually showing.
-  $("count-note").innerHTML = (idx === null)
-    ? "That is the pull of this game <strong>before it exists</strong>. From " +
-      "19 November we measure the other half: what people stop doing. The " +
-      "four readings below are already collecting, every hour, and switch on " +
-      "in October once each has enough ordinary hours to be judged against."
-    : "<strong>100 is an ordinary hour.</strong> Every reading is compared with " +
-      "the same hour of the same weekday, so a quiet Tuesday morning is judged " +
-      "against other quiet Tuesday mornings and not against a Saturday night. " +
-      ((twitch !== null && steam !== null)
-        ? nf.format(twitch + steam) + " people are playing or watching right now." : "");
 
   $("stamp").textContent = "Last count " + ago(L.t) +
-    " · reading number " + nf.format(cov.snapshot_count || 0);
+    " · reading " + nf.format(cov.snapshot_count || 0);
   const dh = cov.days_of_history || 0;
   $("freshness").textContent = dh + (dh === 1 ? " day" : " days") + " of history so far";
+  $("built").textContent = "Page built from the reading taken at " + new Date(L.t).toUTCString() + ".";
 
-  $("panels").innerHTML = Object.entries(P).map(([key, p]) => {
-    const v = num(p.index);
-    const dir = (p.effect_direction || "").startsWith("higher")
+  $("panels").innerHTML = Object.keys(PANELS).map(function(k){
+    const p = PANELS[k], v = num(p.index);
+    const dir = (p.effect_direction||"").indexOf("higher") === 0
       ? "a launch pushes this up" : "a launch pushes this down";
     const pc = (typeof p.placebo_percentile === "number")
-      ? `<br><span class="pc">above ${p.placebo_percentile}% of past Thursdays</span>` : "";
-    return `<div class="panel">
-      <h3>${p.name}</h3>
-      <div class="v${v === null ? " pending" : ""}">${v === null ? "building baseline" : Math.round(v)}</div>
-      <div class="d">${p.sources_available} of ${p.sources_expected} sources · ${dir}${pc}</div>
-    </div>`;
+      ? '<br><span class="pc">above ' + p.placebo_percentile + '% of past Thursdays</span>' : "";
+    return '<div class="panel"><h3>'+p.name+'</h3>'+
+      '<div class="v'+(v===null?" pending":"")+'">'+(v===null?"building baseline":Math.round(v))+'</div>'+
+      '<div class="m">'+p.sources_available+' of '+p.sources_expected+' sources · '+dir+pc+'</div></div>';
   }).join("");
 
-  const rows = [
-    row("Twitch viewers", "top 100 live streams", twitch, "n", C, "twitch_top100_total"),
-    row("Steam players", "eight tracked games", steam, "n", C, "steam_basket_total"),
-    row("Grand Theft Auto V", "watching on Twitch", num(L.twitch_gta5), "n", C, "twitch_gta5"),
-    row("Grand Theft Auto V", "playing on Steam", num(L.steam_gta5), "n", C, "steam_gta5"),
-    row("Hacker News", "posts and comments per hour", num(L.hn_items_per_hour), "n", C, "hn_items_per_hour"),
-    row("London traffic", "delay on major roads", num(L.traffic_london_delay_pct), "pct", C, "traffic_london_delay_pct"),
-    row("New York traffic", "delay on major roads", num(L.traffic_newyork_delay_pct), "pct", C, "traffic_newyork_delay_pct"),
-    row("Trailer views", "Grand Theft Auto VI, trailer 1", num(L["yt_QdBZY2fkU-0_views"]), "n", C, "yt_QdBZY2fkU-0_views"),
-  ];
-  // Every tracked metric, grouped the way the panels are, with the
-  // deviation from its own baseline rather than a bare number.
-  if (M.length){
-    const order = Object.keys(P);
-    const html = [];
-    for (const key of order){
-      const mine = M.filter(m => m.panel === key);
-      if (!mine.length) continue;
-      html.push(`<tr class="grp"><td colspan="4">${P[key].name}</td></tr>`);
-      for (const m of mine){
-        const dev = (typeof m.deviation_log2 === "number")
-          ? (Math.pow(2, m.deviation_log2) - 1) * 100 : null;
-        const devTxt = dev === null ? "—"
-          : `<span class="${dev < 0 ? "down" : ""}">${dev > 0 ? "+" : ""}${dev.toFixed(1)}%</span>`;
-        const val = (typeof m.value === "number") ? nf.format(Math.round(m.value)) : "no reading";
-        const flags = [];
-        if (frozen.has(m.key)) flags.push("excluded, never moves");
-        if (m.evidence && m.evidence !== "measured") flags.push(m.evidence);
-        html.push(`<tr>
-          <td>${pretty(m.label)}<div class="sub">${m.direction}${flags.length ? " · " + flags.join(" · ") : ""}</div></td>
-          <td class="val">${val}</td>
-          <td>${devTxt}</td>
-          <td class="sub">${m.timezone || ""}</td>
-        </tr>`);
-      }
-    }
-    $("rows").innerHTML = html.join("");
-  } else {
-    $("rows").innerHTML = rows.join("");
-  }
-
-  $("built").textContent = "Page built from the reading taken at " +
-    new Date(L.t).toUTCString() + ".";
+  const html = [];
+  Object.keys(PANELS).forEach(function(key){
+    const mine = METRICS.filter(function(m){ return m.panel === key; });
+    if (!mine.length) return;
+    html.push('<tr class="grp"><td colspan="4">'+PANELS[key].name+'</td></tr>');
+    mine.forEach(function(m){
+      const dev = (typeof m.deviation_log2 === "number")
+        ? (Math.pow(2,m.deviation_log2)-1)*100 : null;
+      const devTxt = dev === null ? "—"
+        : '<span class="'+(dev<0?"down":"")+'">'+(dev>0?"+":"")+dev.toFixed(1)+'%</span>';
+      const val = (typeof m.value === "number") ? nf.format(Math.round(m.value)) : "no reading";
+      const flags = [];
+      if (frozen[m.key]) flags.push("excluded, never moves");
+      if (m.evidence && m.evidence !== "measured") flags.push(m.evidence);
+      html.push('<tr><td>'+pretty(m.label)+'<span class="sub">'+m.direction+
+        (flags.length?" · "+flags.join(" · "):"")+'</span></td>'+
+        '<td class="v">'+val+'</td><td>'+devTxt+'</td>'+
+        '<td class="sub">'+(m.timezone||"")+'</td></tr>');
+    });
+  });
+  $("rows").innerHTML = html.join("") ||
+    '<tr><td colspan="4">No metrics in this reading.</td></tr>';
 }
-load();
-drawChart();
-setInterval(load, 5 * 60 * 1000);
 
-/* -------------------------------------------------------------- signup */
-$("signup").addEventListener("submit", async ev => {
+load(); drawChart();
+setInterval(load, 5*60*1000);
+
+$("signup").addEventListener("submit", async function(ev){
   ev.preventDefault();
   const msg = $("msg"), email = $("email").value.trim();
-  msg.className = "form-msg";
-
+  msg.className = "msg";
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
-    msg.className = "form-msg err";
-    msg.textContent = "That does not look like an email address.";
-    return;
+    msg.className = "msg err"; msg.textContent = "That does not look like an email address."; return;
   }
   if (!SIGNUP_ENDPOINT){
-    msg.className = "form-msg err";
-    msg.textContent = "Signup is not connected yet. It opens in the next few days.";
-    return;
+    msg.className = "msg err"; msg.textContent = "Signup is not connected yet. It opens in the next few days."; return;
   }
   msg.textContent = "Sending…";
   try {
-    const r = await fetch(SIGNUP_ENDPOINT, {
-      method:"POST", headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({email})
-    });
+    const r = await fetch(SIGNUP_ENDPOINT,{method:"POST",
+      headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:email})});
     if (!r.ok) throw new Error(r.status);
     $("signup").reset();
-    msg.textContent = "You are on the list. Two emails, then we leave you alone.";
-  } catch (e) {
-    msg.className = "form-msg err";
-    msg.textContent = "That did not go through. Try again in a moment.";
+    msg.textContent = "You are on the list. Two emails, then silence.";
+  } catch(e){
+    msg.className = "msg err"; msg.textContent = "That did not go through. Try again in a moment.";
   }
 });
 </script>
