@@ -87,6 +87,20 @@ a:hover{color:var(--red)}
 }
 .index-label span{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:.72rem;color:var(--ink-soft)}
 
+/* Four readouts under the headline. Each panel says which way a real
+   effect would push it, so a fall is not mistaken for a failure. */
+.panels{
+  display:grid;gap:1px;background:var(--rule);
+  grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));
+  border:1px solid var(--rule);margin:2.25rem 0 0;
+}
+.panel{background:var(--paper);padding:.9rem 1rem}
+.panel h3{font-size:.78rem;font-weight:700;letter-spacing:.01em;margin:0 0 .35rem}
+.panel .v{font-size:1.9rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.panel .v.pending{font-size:.95rem;font-weight:400;color:var(--ink-soft)}
+.panel .d{font-size:.7rem;color:var(--ink-soft);margin-top:.35rem;line-height:1.4}
+.panel .pc{color:var(--red);font-weight:600}
+
 .chart{margin:2.5rem 0 0;padding:0}
 .chart svg{width:100%;height:clamp(120px,22vw,220px);display:block;overflow:visible}
 .chart figcaption{
@@ -139,6 +153,10 @@ td:first-child{white-space:nowrap}
    project is about what goes down, so the drops should read first. */
 .down{color:var(--red)}
 .sub{color:var(--ink-soft);font-size:.78rem}
+tr.grp td{
+  background:var(--ink);color:var(--paper);font-weight:600;
+  font-size:.74rem;letter-spacing:.04em;text-transform:uppercase;
+}
 
 /* --------------------------------------------------------- narrative */
 .prose{max-width:var(--measure)}
@@ -212,12 +230,9 @@ footer a{color:var(--ink)}
       <p class="index-label">Attention Index<br><span id="baseline-note">building the baseline</span></p>
     </div>
 
-    <p class="count-note">
-      100 is an ordinary hour. Every reading is compared with the same hour of
-      the same weekday, so a quiet Tuesday morning is judged against other
-      quiet Tuesday mornings and not against a Saturday night.
-      <span id="raw-note"></span>
-    </p>
+    <div class="panels" id="panels"></div>
+
+    <p class="count-note" id="count-note"></p>
 
     <figure class="chart">
       <svg id="spark" viewBox="0 0 1000 220" preserveAspectRatio="none" role="img"
@@ -246,9 +261,9 @@ footer a{color:var(--ink)}
       <p id="freshness"></p>
     </div>
     <table>
-      <caption>Every figure below is a live reading, not an estimate. Change columns compare with the same hour a day and a week ago.</caption>
+      <caption>Every figure is a live reading, not an estimate. The middle column shows how far it sits from an ordinary hour for this point in the week, and stays empty until there is enough history to say.</caption>
       <thead>
-        <tr><th scope="col">Measure</th><th scope="col">Now</th><th scope="col">24h</th><th scope="col">7d</th></tr>
+        <tr><th scope="col">Measure</th><th scope="col">Now</th><th scope="col">vs baseline</th><th scope="col">Clock</th></tr>
       </thead>
       <tbody id="rows">
         <tr><td colspan="4">Loading the latest reading…</td></tr>
@@ -325,6 +340,7 @@ footer a{color:var(--ink)}
 
 // Release date. Kept in one place because it has already moved twice.
 const RELEASE = new Date("2026-11-19T00:00:00Z");
+const START_COUNTING = "2026-09-02T09:14:59Z";
 
 // Where the signup form posts. Empty until the endpoint exists, and the
 // form says so plainly rather than pretending to have worked.
@@ -372,7 +388,29 @@ async function drawChart(){
     const r = await fetch("public/chart.json", {cache:"no-store"});
     pts = (await r.json()).points.filter(p => typeof p.a === "number");
   } catch(e){ return; }
-  if (!pts.length) return;
+  const W0 = 1000, H0 = 220, PAD0 = 14;
+  if (!pts.length){
+    // No index yet. Draw the run itself - the counting so far, and the
+    // stretch still to come - so the reader sees the instrument is on.
+    const t0 = new Date(START_COUNTING).getTime();
+    const t1 = RELEASE.getTime();
+    const nowX = PAD0 + Math.max(0, Math.min(1, (Date.now() - t0) / (t1 - t0))) * (W0 - PAD0 * 2);
+    svg.innerHTML = `
+      <line x1="${PAD0}" y1="${H0/2}" x2="${nowX}" y2="${H0/2}"
+            stroke="var(--ink)" stroke-width="2"/>
+      <line x1="${nowX}" y1="${PAD0}" x2="${nowX}" y2="${H0 - PAD0}"
+            stroke="var(--rule)" stroke-width="1"/>
+      <text x="${nowX + 10}" y="${H0/2 - 10}" font-size="12" fill="var(--ink-soft)"
+            font-family="IBM Plex Mono, monospace">counting since 2 September</text>
+      <text x="${nowX + 10}" y="${H0/2 + 22}" font-size="12" fill="var(--ink-soft)"
+            font-family="IBM Plex Mono, monospace">the index line begins in October</text>
+      <line x1="${W0 - PAD0}" y1="${PAD0}" x2="${W0 - PAD0}" y2="${H0 - PAD0}"
+            stroke="var(--red)" stroke-width="2"/>
+      <text x="${W0 - PAD0 - 10}" y="${H0 - PAD0 - 6}" font-size="12" fill="var(--red)"
+            text-anchor="end" font-family="IBM Plex Mono, monospace">19 November</text>`;
+    $("chart-now").textContent = "";
+    return;
+  }
 
   // An hourly index wobbles by a few percent, which at this size draws as a
   // scribble rather than a line. A rolling median over a day keeps the shape
@@ -427,6 +465,11 @@ function pct(changes, key, window){
   return v < 0 ? `<span class="down">${text}</span>` : text;
 }
 
+const LABEL_FIX = {"Newyork": "New York", "Losangeles": "Los Angeles"};
+function pretty(s){
+  return Object.keys(LABEL_FIX).reduce((a, k) => a.replace(k, LABEL_FIX[k]), s || "");
+}
+
 function row(label, sub, value, format, changes, key){
   const shown = value === null ? "building baseline"
               : format === "pct" ? value.toFixed(1) + "%"
@@ -460,35 +503,70 @@ async function load(){
   }
 
   const L = data.latest || {}, C = data.changes || {}, cov = data.coverage || {};
+  const P = (data.panels || {}).panels || {};
+  const M = (data.panels || {}).metrics || [];
+  const frozen = new Set((data.panels || {}).frozen_metrics || []);
 
   const twitch = num(L.twitch_top100_total), steam = num(L.steam_basket_total);
-  const idx = num(L.attention_index);
+  const idx = num((L.indices || {}).attention);
 
   // The headline is the index. Until there is enough history to compare
   // against, it says so rather than showing a number it cannot stand behind.
   if (idx === null){
-    $("count").textContent = "—";
-    $("baseline-note").textContent = "not enough history yet to compare against";
+    // For the first weeks there is no baseline, so an index would be a lie.
+    // Lead with the thing we can honestly show: how many people are in
+    // front of a game right now.
+    const live = (twitch || 0) + (steam || 0);
+    rollTo(live, 0);
+    document.querySelector(".index-label").innerHTML =
+      "People playing<br>or watching<br><span id=\"baseline-note\"></span>";
+    $("baseline-note").textContent =
+      "counted every hour · the index needs six comparable hours before it can say anything";
   } else {
     rollTo(idx, 0);
+    document.querySelector(".index-label").innerHTML =
+      "Attention Index<br><span id=\"baseline-note\"></span>";
     $("baseline-note").textContent =
-      (L.baseline_quality === "hour_of_week"
+      ((L.baseline_quality || "") === "hour_of_week"
         ? "compared with the same hour of previous weeks"
         : "compared with the same hour of previous days") +
       " · " + (cov.days_of_history || 0) + " days of history";
   }
 
-  $("raw-note").textContent = (twitch !== null && steam !== null)
-    ? nf.format(twitch + steam) + " people are playing or watching right now."
-    : "";
+  // The explanation has to match what the headline is actually showing.
+  $("count-note").innerHTML = (idx === null)
+    ? "Across the games and live streams we track, counted every hour since " +
+      "2 September. What we are building towards is an <strong>index</strong>: " +
+      "each reading judged against the same hour of the same weekday, so a " +
+      "quiet Tuesday morning is compared with other quiet Tuesday mornings " +
+      "and not with a Saturday night. That needs a few weeks of history " +
+      "before it can say anything, so until October it stays blank rather " +
+      "than guessing."
+    : "<strong>100 is an ordinary hour.</strong> Every reading is compared with " +
+      "the same hour of the same weekday, so a quiet Tuesday morning is judged " +
+      "against other quiet Tuesday mornings and not against a Saturday night. " +
+      ((twitch !== null && steam !== null)
+        ? nf.format(twitch + steam) + " people are playing or watching right now." : "");
 
   $("stamp").textContent = "Last count " + ago(L.t) +
     " · reading number " + nf.format(cov.snapshot_count || 0);
-  $("freshness").textContent = (cov.days_of_history || 0) + " days of history so far";
+  const dh = cov.days_of_history || 0;
+  $("freshness").textContent = dh + (dh === 1 ? " day" : " days") + " of history so far";
+
+  $("panels").innerHTML = Object.entries(P).map(([key, p]) => {
+    const v = num(p.index);
+    const dir = (p.effect_direction || "").startsWith("higher")
+      ? "a launch pushes this up" : "a launch pushes this down";
+    const pc = (typeof p.placebo_percentile === "number")
+      ? `<br><span class="pc">above ${p.placebo_percentile}% of past Thursdays</span>` : "";
+    return `<div class="panel">
+      <h3>${p.name}</h3>
+      <div class="v${v === null ? " pending" : ""}">${v === null ? "building baseline" : Math.round(v)}</div>
+      <div class="d">${p.sources_available} of ${p.sources_expected} sources · ${dir}${pc}</div>
+    </div>`;
+  }).join("");
 
   const rows = [
-    row("Attention Index", "games and streams, against a normal hour", idx, "n0", C, "attention_index"),
-    row("Work Index", "public activity and commuting, against a normal hour", num(L.work_index), "n0", C, "work_index"),
     row("Twitch viewers", "top 100 live streams", twitch, "n", C, "twitch_top100_total"),
     row("Steam players", "eight tracked games", steam, "n", C, "steam_basket_total"),
     row("Grand Theft Auto V", "watching on Twitch", num(L.twitch_gta5), "n", C, "twitch_gta5"),
@@ -498,7 +576,36 @@ async function load(){
     row("New York traffic", "delay on major roads", num(L.traffic_newyork_delay_pct), "pct", C, "traffic_newyork_delay_pct"),
     row("Trailer views", "Grand Theft Auto VI, trailer 1", num(L["yt_QdBZY2fkU-0_views"]), "n", C, "yt_QdBZY2fkU-0_views"),
   ];
-  $("rows").innerHTML = rows.join("");
+  // Every tracked metric, grouped the way the panels are, with the
+  // deviation from its own baseline rather than a bare number.
+  if (M.length){
+    const order = Object.keys(P);
+    const html = [];
+    for (const key of order){
+      const mine = M.filter(m => m.panel === key);
+      if (!mine.length) continue;
+      html.push(`<tr class="grp"><td colspan="4">${P[key].name}</td></tr>`);
+      for (const m of mine){
+        const dev = (typeof m.deviation_log2 === "number")
+          ? (Math.pow(2, m.deviation_log2) - 1) * 100 : null;
+        const devTxt = dev === null ? "—"
+          : `<span class="${dev < 0 ? "down" : ""}">${dev > 0 ? "+" : ""}${dev.toFixed(1)}%</span>`;
+        const val = (typeof m.value === "number") ? nf.format(Math.round(m.value)) : "no reading";
+        const flags = [];
+        if (frozen.has(m.key)) flags.push("excluded, never moves");
+        if (m.evidence && m.evidence !== "measured") flags.push(m.evidence);
+        html.push(`<tr>
+          <td>${pretty(m.label)}<div class="sub">${m.direction}${flags.length ? " · " + flags.join(" · ") : ""}</div></td>
+          <td class="val">${val}</td>
+          <td>${devTxt}</td>
+          <td class="sub">${m.timezone || ""}</td>
+        </tr>`);
+      }
+    }
+    $("rows").innerHTML = html.join("");
+  } else {
+    $("rows").innerHTML = rows.join("");
+  }
 
   $("built").textContent = "Page built from the reading taken at " +
     new Date(L.t).toUTCString() + ".";
