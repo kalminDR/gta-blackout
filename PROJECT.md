@@ -1,6 +1,6 @@
 # Grand Theft Attention — projektdokumentáció
 
-**Állapot dátuma:** 2026. szeptember 2.
+**Állapot dátuma:** 2026. szeptember 3.
 **Cél:** ha ez a beszélgetés elveszik, ebből a fájlból pontosan innen folytatható a munka.
 **Használat:** új beszélgetés indításakor töltsd fel ezt a fájlt, plusz a kódfájlokat.
 
@@ -84,7 +84,8 @@ megkérdezi, honnan az adat, a repó linkje a válasz.
 
 ```
 collect.py                      óránkénti gyűjtő
-summarise.py                    az összegző, ami az indexet számolja
+summarise.py                    az összegző
+indices.py                      a négy panel és a placebo-számítás
 backfill.py                     egyszeri történelmi letöltés
 index.html                      a nyilvános oldal
 README.md                       rövid beüzemelési leírás
@@ -115,19 +116,76 @@ public/chart.json               csak az indexek (kis fájl a grafikonhoz)
 | `console_prices` | **kulcsra vár** | eBay, jóváhagyás alatt |
 | `retail_stock` | **elhagyva** | Best Buy, amerikai telefonszám kell |
 
+Elvetve a vizsgálat után: **GitHub** (botok, lásd 4. szakasz),
+**Stack Overflow** (elfogyott), **Reddit** (API bezárt), **tőzsde**
+(Yahoo blokkol).
+
+Backfillelve, `data/backfill/`-ben: **MTA utasszám** (validálva, erős),
+**Wikipédia** hat nyelven (egészséges, nő), **Stack Overflow**
+(csak a feljegyzés kedvéért).
+
 ### Beállított GitHub secretek
 
 Beállítva: `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`, `YOUTUBE_API_KEY`,
 `TOMTOM_API_KEY`.
 
 Nincs beállítva: `STEAM_API_KEY` (opcionális, nélküle is megy),
-`EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `BESTBUY_API_KEY`.
+`EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET`, `ENTSOE_TOKEN` (a token megvan,
+csak fel kell venni), `BESTBUY_API_KEY` (nem is lesz).
+
+**Titkos kulcsot ne másolj chatbe vagy képernyőképre.** Ha mégis
+megtörtént, generálj újat — mindegyik szolgáltatásnál egy gomb.
 
 ---
 
 ## 4. Elvetett és függő források — és miért
 
 Ez a szakasz azért fontos, hogy ne kezdjük újra ezeket a zsákutcákat.
+
+### A legfontosabb tanulság: mi hal meg és mi marad
+
+Négy digitális forrást vizsgáltunk meg alaposan, és **hármat kidobtunk**:
+Reddit, GitHub, Stack Overflow. Mind a három technológiai, API-függő,
+és mind a három ugyanabba az irányba dőlt el.
+
+Ami viszont kiválónak bizonyult, az MTA utasszám: **fizikai, állami,
+unalmas.**
+
+**Ebből következik a beszerzési szabály: ne tech-API-kat keressünk, hanem
+kormányzati, fizikai méréseket.** Ide tartozik az áramfogyasztás, a
+közlekedési utasszám és a forgalom. Ezek nem szűnnek meg, nem zárnak be,
+és nem kell hozzájuk jóváhagyás.
+
+### Az MTA — a projekt legerősebb forrása (validálva 2026. szeptember 3.)
+
+Kilenc közlekedési mód, napi bontás, 2023 januárjától, állami nyílt adat.
+Ellenőriztük, hogy tényleg embereket mér-e, és igen:
+
+**A hétvége látszik.** Metró 59%, busz 54%, a két elővárosi vasút 50-50%,
+a tisztán ingázóvonal Staten Island-i vasút **33%**. Ezzel szemben a
+hidak-alagutak 95%, mert hétvégén az ingázást felváltja a kirándulás.
+
+**A munkaszüneti napok látszanak.** Metró a szokásos hét-napjához mérve:
+karácsony **37%**, hálaadás **45%**, újév **49%**, július 4. **61%**.
+Sima novemberi csütörtök: 110%.
+
+**Az érzékenység.** Egy novemberen belül a tiszta csütörtökök szórása
+2023-ban 0,7%, 2024-ben 1,0%, 2025-ben 0,4%. **A kimutatási küszöb tehát
+nagyjából 1,5–2%**, ami kb. 90 000 utas. Ha ennyivel kevesebben szállnak
+metróra november 19-én, azt látjuk, és nem lehet a szokásos ingadozásra
+fogni.
+
+**Két kódba írandó szabály.** A hálaadást minden alapvonalból ki kell
+zárni (november negyedik csütörtökje). És **azonos éven belül** kell
+hasonlítani, mert az utasszám évi ~5%-kal nő a járvány utáni
+visszaállás miatt.
+
+**2026-os összehasonlító csütörtökök:** november 5. és 12., plusz az
+októberiek. Hálaadás idén november 26., tehát a rajtot nem zavarja.
+
+**Súlyozásnál:** a metró, busz és a két vasút erős ingázási jel. A
+hidak-alagutak és a manhattani behajtás gyenge, mert hétvégén is majdnem
+ugyanannyi.
 
 **Reddit — halott.** 2025 novemberében bevezették a Responsible Builder
 Policyt, ami megszüntette az önkiszolgáló API-hozzáférést. Új fejlesztő nem
@@ -141,6 +199,38 @@ mind sikertelen. **Nem baj: a Yahoo a percenkénti adatot 30 napig
 visszamenőleg is kiadja.** Teendő: **2026. december 1-jén** kézzel letölteni
 a TTWO, SONY és MSFT novemberi percadatát. Ez a projekt egyetlen kötött
 naptári dátuma.
+
+**GitHub / GH Archive — elvetve, 2026. szeptember 3.** Ez volt a
+legígéretesebb forrás, és a legalaposabban megvizsgált. Két BigQuery
+lekérdezés után egyértelmű lett, hogy nem használható.
+
+*Az első jel:* 2026 augusztusában a commitok napi ritmusa **megfordult**.
+Csúcs hajnali 3-kor, mélypont délután 3-kor, és hétvégén 110% a hétköznapi
+szinthez képest. Ember nem így dolgozik; ezek CI-rendszerek és kódoló
+ügynökök.
+
+*A megerősítés:* botok kiszűrése után, óránkénti mediánban, 2025-09-ről
+2026-08-ra: issue kommentek 2 483 → **49**, review kommentek 1 477 → **23**,
+pull requestek 7 131 → **138**, csillagozás 5 003 → **50**. Eközben a
+commitok 68 497 → **122 065**. A kommentek 98%-a eltűnt, miközben a
+commitok duplázódtak — ez nem viselkedésváltozás, hanem az archívum
+hibája. A törés 2026 májusában kezdődött.
+
+*A ritmus romlása hónapról hónapra a kommenteken:* 2025-09-ben csúcs
+14:00 UTC, hétvége 62% (tankönyvi emberi munkahét). 2026-05-re csúcs
+23:00, hétvége 265%.
+
+**Ez publikálható tartalom.** Az októberi módszertani íráshoz: megnéztük a
+világ legnagyobb nyilvános munkanaplóját, és elutasítottuk, itt a
+bizonyíték. Aki leírja, mit dobott ki, annak a megtartott forrásait is
+elhiszik.
+
+**Stack Overflow — elvetve, 2026. szeptember 3.** Heti kérdésszám:
+2023 január **20 940**, 2025 augusztus **1 437**. Napi medián 2026
+augusztusban: **43 kérdés**, ami a 2023-as szint 1,44%-a. Ekkora
+számnál a véletlen ingadozás ±6, tehát egy 15%-os visszaesés
+megkülönböztethetetlen a zajtól. Az ok közismert: a nyelvi modellek
+elvitték a kérdéseket.
 
 **Best Buy — elvetve.** Ingyenes API van, de a regisztrációhoz amerikai
 telefonszám kell SMS-ellenőrzéssel. Nem éri meg egyetlen ország egyetlen
@@ -157,12 +247,13 @@ tartalmaz grafikont és adatexportot, az adata pedig **visszamenőleges**
 decemberben: egy hónapra előfizetni, exportálni a PS5, PS5 Pro és Xbox
 Series X árelőzményét, lemondani. Összesen 19 euró.
 
-**ENTSO-E (európai áramfogyasztás) — regisztráció függőben.** Szeptember
-2-án a transparency.entsoe.eu karbantartás alatt volt. Menete:
-regisztráció, majd email a `transparency@entsoe.eu` címre „Restful API
-access" tárggyal, a regisztrált email cím megadásával. Ember hagyja jóvá,
-napokig tarthat. **Az adat visszamenőleges, tehát nem sürgős**, csak a
-hozzáférés megszerzése lassú.
+**ENTSO-E (európai áramfogyasztás) — MEGVAN, 2026. szeptember 3.**
+A token megérkezett. A My Account → Web API Access oldalon generálható
+újra, ha elveszne. GitHub-secret neve: `ENTSOE_TOKEN`.
+
+Ez a forrás a GitHub és a Stack Overflow kiesése után **felértékelődött**:
+óránkénti, minden EU-tagállamra, visszamenőleges, állami
+hálózatüzemeltetőktől. Pontosan abból a családból való, ami bevált.
 
 ---
 
@@ -303,25 +394,43 @@ számokat adnánk össze, a milliós Steam-adat agyonnyomná a többit. A mérta
 közép az arányok helyes átlaga (egy duplázódás és egy felezés kioltja
 egymást).
 
-### A két index
+### A négy panel (átépítve 2026. szeptember 2-án)
 
-| Index | Komponensek | Irány nov. 19-én |
+A `summarise.py` azóta átalakult: két index helyett **négy panel** van,
+és az `indices.py` külön modulban számol.
+
+| Panel | Mit mér | Irány nov. 19-én |
 |---|---|---|
-| **Attention Index** | `twitch_top100_total`, `steam_basket_total` | fel |
-| **Work Index** | `hn_items_per_hour`, `traffic_workday_delay_pct` | le |
+| **Attention** | GTA VI nézők, csatornák, trailer megtekintés/óra | fel |
+| **Displacement** | Steam-játékok, Twitch GTA-n kívüli nézők | **le** |
+| **Work & Mobility** | forgalom hat városban, Hacker News | le |
+| **Infrastructure** | PSN és Xbox incidensek | fel |
 
-A `traffic_workday_delay_pct` a hat város dugóindexének átlaga, **plusz
-100-zal eltolva**, mert nullához viszonyítani nem lehet arányt.
+**A Displacement a legfontosabb javítás.** Korábban a Steam-kosár az
+Attention Indexben volt, „fel" iránnyal — csakhogy a Steam pont azt méri,
+hogy *más* játékokkal kevesebbet játszanak. Ha november 19-én beüt a
+hatás, a Twitch felmegy, a Steam lemegy, és a két komponens **kioltotta
+volna egymást**. Az index nem mozdult volna. Ez a legrosszabb fajta hiba:
+nem hibaüzenetet ad, hanem hihető nullát.
 
-### Ellenőrzés (elvégezve)
+**Placebo-csütörtökök.** Ugyanaz a számítás minden korábbi csütörtökre,
+így nem azt mondjuk, hogy „az index 180 volt", hanem hogy „az eltérés
+nagyobb volt, mint a korábbi csütörtökök 99%-án". Ez majdnem ingyen van,
+mert az adat úgyis ott lesz, és sokkal erősebb mondat.
 
-Négy hét szintetikus adat **erős napi ciklussal és hétvégi többlettel**:
+**`frozen_metrics`.** Ha egy forrás soha nem mozdul (a YouTube
+csatornastatisztikát erősen cache-eli, a feliratkozószám százezerre
+kerekített), az örökre nulla eltérést ad, és lefelé húzza a panel
+mediánját a „nem történik semmi" felé. Az ilyet a kód automatikusan
+kihagyja és kiírja a nevét.
 
-- **666 normális órán át pontosan 100,0** — a szezonális igazítás működik
-- **háromszoros figyelemcsúcs → pontosan 300,0**
-- munka 60%-ra csökkentve → 73 (a keverék miatt, helyes)
+**Kumulált szám helyett sebesség.** Az összes megtekintés sosem csökken,
+tehát az alapvonaltól magától elsodródik. Helyette óránkénti változás.
 
-Rövid előzménnyel: **üresen hagyja magát, nem hazudik 100-at.**
+**Alapvonal-küszöbök:** `min_samples_hour_of_week` 6,
+`min_samples_hour_of_day` 10. Ezért mutat az oldal szeptemberben még
+`null` értékeket — **ez helyes viselkedés**, az első indexek október
+elején jelennek meg.
 
 ### Fokozatos leépülés
 
@@ -437,20 +546,22 @@ riasztás után az ember minden riasztást figyelmen kívül hagy.
 
 ## 10. Következő lépések
 
-### Azonnal (szeptember 3., reggel)
+### Azonnal (szeptember 3-4.)
 
-1. **`backfill.py` + `backfill.yml` feltöltése**, majd Actions → backfill →
-   Run workflow (dátum: 2023-01-01). Ellenőrizni a `data/backfill/` három
-   fájlját, hogy van-e bennük `error`. Az MTA-nál a `fields_found` mezőt
-   külön megnézni.
-2. **BigQuery lekérdezés futtatása** (`github-query.sql`) a Google Cloud
-   konzolban, az `attention-heist` projektben. Futtatás előtt ellenőrizni,
-   hogy 1 TB alatt van a beolvasandó adat. Eredmény CSV-ben mentve, majd
-   átküldve nekem.
-3. **Forgalmi ellenőrzés:** egy reggeli és egy éjszakai `latest.json`.
-   `points_ok` legyen 3, `road_class` 0–3 között, és a `delay_pct` **mozduljon
-   el** a két időpont között. Ha egy város mindig ugyanazt adja, cserélni kell
-   a pontokat.
+1. **ENTSO-E token újragenerálása** (a régi képernyőképen látszott), majd
+   felvenni GitHub-secretként `ENTSOE_TOKEN` néven.
+2. **`index.html` feltöltése a repóba.** Jelenleg nincs fenn, ezért az
+   oldalnak nincs URL-je. Utána GitHub Pages: Settings → Pages → Deploy
+   from a branch → main → / (root). Ideiglenes cím:
+   `https://kalmindr.github.io/gta-blackout/`
+3. **Az `index.html` hozzáigazítása az új adatszerkezethez.** A `summarise.py`
+   azóta átépült: az index már nem `attention_index` néven a gyökérben van,
+   hanem egy `indices` blokkban (`attention`, `displacement`, `work`,
+   `infrastructure`), plusz van `panels` és `placebo`. Az oldal még a régi
+   helyen keres.
+4. **Forgalmi ellenőrzés.** Varsó 212%-os késést adott szeptember 3-án
+   reggel — vagy baleset, vagy elcsúszott pont. New York továbbra is
+   gyanúsan gyakran 0,0%. Ha ismétlődik, cserélni kell a koordinátákat.
 
 ### Rövid távon (szeptember)
 
@@ -460,7 +571,10 @@ riasztás után az ember minden riasztást figyelmen kívül hagy.
 - Cloudflare Worker az email-gyűjtéshez, majd `SIGNUP_ENDPOINT` kitöltése.
 - **Az oldal publikálása szeptember közepén.**
 - eBay kulcsok beállítása, amint megjön a jóváhagyás.
-- ENTSO-E hozzáférés megkérése, amint az oldal elérhető.
+- **ENTSO-E gyűjtő megírása** a most megszerzett tokennel.
+- **Chicago napi utasszám** (data.cityofchicago.org, nyílt adat, ingyenes,
+  kulcs nélkül). Egy második, független metróhálózat sokkal erősebb
+  állítást enged: ha két város egyszerre esik, az nem véletlen.
 
 ### Október — az első sajtómomentum
 
@@ -520,7 +634,30 @@ magától, annak a többi számát is elhiszik.
 
 ---
 
-## 11. Az oldal három élete
+## 11. Külső javaslatok — mit vettünk át és mit nem
+
+Egy ChatGPT-review átnézte a projektet 2026. szeptember 2-án. A döntés
+megszületett, ne kelljen újra végigvitatni.
+
+**Átvéve:** a Steam-előjel javítása (ebből lett a Displacement panel),
+YouTube kumulált szám helyett óránkénti sebesség, Twitch GTA-kategória
+külön követése, placebo-csütörtökök, helyi idő a városoknál, valamint
+mért/modellezett/bevallott címkék (`evidence` mező — a JSON-ban benne
+van, az oldalon még nincs kirajzolva).
+
+**Kihagyva:** Cloudflare Radar (licencfeltételek), Bluesky (folyamatos
+kapcsolatot igényel, nem fér az óránkénti ütemezésbe), és a javasolt
+méretű vállalati panel (5–20 cég, 78 nap alatt nem reális).
+
+**Nyitva hagyva:** a vállalati panel *kicsinyített* változata. Egy-két
+ügyfél, egyetlen aggregált szám. Ez saját, első kézből származó adat
+lenne, amit senki más nem tud reprodukálni.
+
+**A reviewer klasszikus hibája**, amire figyelni kell a jövőben is: tíz új
+adatforrást javasolt egy szó nélkül arról, ki csinálja meg 78 nap alatt.
+Minden javaslat helyes külön-külön, együtt viszont megölik a projektet.
+
+## 12. Az oldal három élete
 
 A legtöbb ilyen projekt csak a középsőt építi meg, és november 20-án
 meghal.
@@ -540,7 +677,7 @@ oldallal, az is nyer valamit.
 
 ---
 
-## 12. Amit egy új beszélgetésben tudni kell rólam
+## 13. Amit egy új beszélgetésben tudni kell rólam
 
 - **Nem vagyok programozó.** Lépésről lépésre kell elmagyarázni, hova
   kattintsak.
