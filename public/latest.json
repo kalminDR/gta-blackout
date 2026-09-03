@@ -1,60 +1,61 @@
 {
- "generated_at_utc": "2026-09-03T05:27:44+00:00",
+ "generated_at_utc": "2026-09-03T06:22:19+00:00",
  "coverage": {
   "first_snapshot": "2026-09-02T09:14:59+00:00",
-  "last_snapshot": "2026-09-03T05:27:28+00:00",
-  "snapshot_count": 26,
-  "days_of_history": 0.8,
+  "last_snapshot": "2026-09-03T06:22:04+00:00",
+  "snapshot_count": 27,
+  "days_of_history": 0.9,
   "unreadable_files": [],
   "hours_since_last_snapshot": 0.0
  },
  "latest": {
-  "t": "2026-09-03T05:27:28+00:00",
-  "twitch_top100_total": 405954,
-  "twitch_gta5": 11104,
-  "twitch_top_game": "Tales of Fear: Episode Zero",
-  "twitch_top_game_viewers": 56464,
+  "t": "2026-09-03T06:22:04+00:00",
+  "twitch_top100_total": 309883,
+  "twitch_gta5": 12730,
+  "twitch_top_game": "Just Chatting",
+  "twitch_top_game_viewers": 34741,
   "twitch_by_language": {
-   "de": 2782,
-   "en": 332176,
-   "es": 7403,
-   "ja": 32628,
-   "pt": 6401,
-   "ru": 13158,
-   "zh": 11406
+   "de": 4383,
+   "en": 248114,
+   "es": 4193,
+   "fr": 1718,
+   "ja": 17184,
+   "pt": 6460,
+   "ru": 12372,
+   "zh": 15459
   },
-  "steam_gta5": 29717,
-  "steam_gta5_enhanced": 42307,
-  "steam_cs2": 479184,
-  "steam_dota2": 402910,
-  "steam_pubg": 214169,
-  "steam_apex": 86924,
-  "steam_bg3": 31027,
-  "steam_rdr2": 27316,
-  "steam_basket_total": 1313554,
+  "steam_gta5": 32006,
+  "steam_gta5_enhanced": 41806,
+  "steam_cs2": 499466,
+  "steam_dota2": 412240,
+  "steam_pubg": 258942,
+  "steam_apex": 92628,
+  "steam_bg3": 26996,
+  "steam_rdr2": 26438,
+  "steam_basket_total": 1390522,
   "steam_rank_gta5": 7,
   "steam_rank_gta5_enh": 20,
-  "hn_max_item_id": 49546251,
+  "hn_max_item_id": 49546530,
   "yt_subscribers": 13700000,
-  "yt_QdBZY2fkU-0_views": 294342159,
-  "yt_QdBZY2fkU-0_likes": 12472870,
-  "traffic_budapest_delay_pct": 25.8,
+  "yt_QdBZY2fkU-0_views": 294346541,
+  "yt_QdBZY2fkU-0_likes": 12472910,
+  "traffic_budapest_delay_pct": 29.6,
   "traffic_budapest_points_ok": 3,
-  "traffic_budapest_seconds_measured": 178,
+  "traffic_budapest_seconds_measured": 179,
   "traffic_budapest_road_class": 2,
-  "traffic_london_delay_pct": 0.0,
+  "traffic_london_delay_pct": 45.7,
   "traffic_london_points_ok": 3,
   "traffic_london_seconds_measured": 138,
   "traffic_london_road_class": 3,
-  "traffic_berlin_delay_pct": 42.6,
+  "traffic_berlin_delay_pct": 79.1,
   "traffic_berlin_points_ok": 3,
-  "traffic_berlin_seconds_measured": 333,
+  "traffic_berlin_seconds_measured": 335,
   "traffic_berlin_road_class": 1,
-  "traffic_warsaw_delay_pct": 66.1,
+  "traffic_warsaw_delay_pct": 101.4,
   "traffic_warsaw_points_ok": 3,
   "traffic_warsaw_seconds_measured": 218,
   "traffic_warsaw_road_class": 1,
-  "traffic_newyork_delay_pct": 24.4,
+  "traffic_newyork_delay_pct": 12.8,
   "traffic_newyork_points_ok": 3,
   "traffic_newyork_seconds_measured": 344,
   "traffic_newyork_road_class": 3,
@@ -88,7 +89,71 @@
   "bestbuy_xbox_series_x_price": null,
   "psn_incidents": 1,
   "xbox_service_issues": 0,
-  "hn_items_per_hour": null
+  "hn_items_per_hour": 307
  },
- "changes": {}
+ "changes": {
+  "steam_gta5": {
+   "vs_24h": {
+    "then": 41797,
+    "absolute": -9791,
+    "percent": -23.4
+   }
+  },
+  "steam_gta5_enhanced": {
+   "vs_24h": {
+    "then": 47374,
+    "absolute": -5568,
+    "percent": -11.8
+   }
+  },
+  "steam_cs2": {
+   "vs_24h": {
+    "then": 703138,
+    "absolute": -203672,
+    "percent": -29.0
+   }
+  },
+  "steam_dota2": {
+   "vs_24h": {
+    "then": 461754,
+    "absolute": -49514,
+    "percent": -10.7
+   }
+  },
+  "steam_pubg": {
+   "vs_24h": {
+    "then": 338704,
+    "absolute": -79762,
+    "percent": -23.5
+   }
+  },
+  "steam_apex": {
+   "vs_24h": {
+    "then": 112003,
+    "absolute": -19375,
+    "percent": -17.3
+   }
+  },
+  "steam_bg3": {
+   "vs_24h": {
+    "then": 26302,
+    "absolute": 694,
+    "percent": 2.6
+   }
+  },
+  "steam_rdr2": {
+   "vs_24h": {
+    "then": 29873,
+    "absolute": -3435,
+    "percent": -11.5
+   }
+  },
+  "steam_basket_total": {
+   "vs_24h": {
+    "then": 1760945,
+    "absolute": -370423,
+    "percent": -21.0
+   }
+  }
+ }
 }
