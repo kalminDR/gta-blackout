@@ -95,6 +95,17 @@ nav a{text-decoration:none}
 .clock b{font-family:Anton,sans-serif; font-weight:400; letter-spacing:.1em;
   font-size:1.05rem; color:var(--cyan); font-variant-numeric:tabular-nums}
 
+.ev{display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:14px; overflow:hidden; margin:1.6rem 0 0}
+.ev .row{background:rgba(11,4,32,.72); padding:1.05rem 1.2rem;
+  display:grid; grid-template-columns:1fr auto; gap:.4rem 1.5rem; align-items:baseline}
+.ev .row h3{font-family:"Space Grotesk"; font-weight:500; font-size:.92rem;
+  letter-spacing:0; text-transform:none}
+.ev .row .fig{font-family:Anton,sans-serif; font-size:1.5rem; color:var(--cyan);
+  font-variant-numeric:tabular-nums; white-space:nowrap}
+.ev .row p{grid-column:1/-1; margin:.2rem 0 0; font-size:.82rem; color:var(--dim)}
+@media (max-width:32rem){ .ev .row{grid-template-columns:1fr} }
+
 .panels{display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
   border-radius:14px; overflow:hidden; margin:3rem 0 0;
   grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr))}
@@ -192,6 +203,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
   <header>
     <div class="mark">Grand <i>Theft</i> Attention</div>
     <nav>
+      <a href="#evidence">Evidence</a>
       <a href="#yourday">Your day</a>
       <a href="#readout">Readout</a>
       <a href="#method">Method</a>
@@ -206,17 +218,20 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <p class="count-label" id="count-label">Views of a game nobody can play</p>
     <p class="count-note" id="count-note"></p>
 
-    <h1 class="thesis">The <span>GTA VI</span> Attention Shift</h1>
+    <h1 class="thesis">19 November Should Be an <span>Ordinary Thursday</span></h1>
 
     <p class="count-note" style="margin-top:1.1rem">
-      An independent measurement project tracking the PlayStation 5 and Xbox
-      Series X|S release of <strong>Grand Theft Auto VI</strong>. Since 2 September
-      2026, an automated collector has taken an hourly reading from nine public
-      sources; on <strong>Thursday 19 November</strong>, the data will show what
-      changed, what did not, and what can only be estimated.
+      Rockstar Games releases <strong>Grand Theft Auto VI</strong> on Thursday
+      19 November, a normal working day, on PlayStation 5 and Xbox Series X|S.
+      Grand Theft Attention is measuring whether the attention around one game
+      becomes visible in the rest of that day. It is independent and is not
+      affiliated with Rockstar Games or Take-Two Interactive.
     </p>
 
     <div class="clock"><span>Release in</span><b id="clock">—</b></div>
+    <p class="count-note" style="margin-top:.7rem; font-size:.9rem">
+      This is the time left until the forecast becomes an observation.
+    </p>
 
     <figure class="chart">
       <svg id="spark" viewBox="0 0 1000 210" preserveAspectRatio="none" role="img"
@@ -225,17 +240,30 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     </figure>
   </div>
 
+  <section id="evidence">
+    <div class="head"><h2>The evidence before release</h2><p id="obs-window"></p></div>
+    <div class="prose">
+      <p>
+        Before release, the attention is already measurable at a scale that
+        makes the question worth asking. These figures do not tell us that
+        offices will be quieter or trains emptier. They tell us something
+        simpler: <strong>a very large audience is already waiting, watching and
+        betting on what comes next.</strong>
+      </p>
+    </div>
+    <div class="ev" id="ev"></div>
+  </section>
+
   <div class="panels" id="panels"></div>
 
   <section id="yourday">
     <div class="head"><h2>Will you be at work?</h2><p id="tally-total"></p></div>
     <div class="prose">
       <p>
-        We are asking readers what they plan to do on 19 November. It takes one
-        tap, we ask only for country and industry, and we ask for nothing that
-        identifies anyone.
-        <strong>This is a self-selected count, not a representative survey</strong> —
-        it records what people who chose to answer say about themselves.
+        What are you doing on 19 November? Add yourself to the count. We ask
+        only for country and industry, and nothing that identifies you.
+        <strong>This is a self-selected community count, not a representative
+        survey.</strong>
       </p>
 
       <div class="answers" id="answers"></div>
@@ -259,11 +287,11 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
   <section id="readout">
     <div class="head"><h2>Live data</h2><p id="freshness"></p></div>
     <p class="prose" style="margin-bottom:1.5rem">
-      Each row shows the latest reading, its source and the baseline used for
-      comparison. Until roughly mid-October, several index fields will remain
-      blank because there is not enough history to calculate them honestly.
-      <strong>We publish missing values rather than manufacture precision.</strong>
-      Every hourly reading is committed to a public repository with a timestamp.
+      Every live panel is built from hourly readings and compared with a
+      baseline where one exists. <strong>If the data cannot support a number, we
+      show a blank rather than manufacture precision.</strong> Until roughly
+      mid-October, there is not enough history for the indices to mean anything.
+      The blanks are deliberate.
     </p>
     <table>
       <thead><tr><th scope="col">Measure</th><th scope="col">Now</th><th scope="col">vs baseline</th><th scope="col">Clock</th></tr></thead>
@@ -271,26 +299,55 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     </table>
   </section>
 
-  <section id="method">
-    <div class="head"><h2>What we measure and why</h2></div>
+  <section id="lookfor">
+    <div class="head"><h2>What we will look for</h2></div>
     <div class="prose">
       <p>
-        We track attention, play, movement, service health, resale prices and
-        prediction-market odds. Nine public sources are read every hour. The
-        launch is compared with New York transit and Wikipedia baselines since
-        2023.
+        On and around 19 November, we will look for changes in ordinary
+        routines. Some will be direct: Twitch viewing, other games on Steam,
+        road congestion, transit ridership, service health and online activity
+        during working hours. Some will be reported by readers themselves:
+        taking annual leave, calling in sick, or turning up to work and
+        expecting to get less done.
       </p>
       <p>
-        <strong>New York's subway carries about 4.5 million people on an ordinary
-        November Thursday; a drop of roughly 90,000 would be unmistakable.</strong>
+        <strong>Those are not the same kind of evidence.</strong> We can measure
+        traffic and player counts. We can count self-reports. We cannot see
+        every absence or know why a particular person stayed home. No public
+        dataset records GTA-related sick leave.
       </p>
       <p>
-        Some results are measured directly. Nobody publishes daily data on who
-        took the day off, so that figure is estimated. We tested GitHub and Stack
-        Overflow as productivity measures, rejected both, and publish the
-        evidence.
+        If commuting is quieter, if other games lose players, or if services
+        come under unusual load, those are signals. They are not proof of
+        motive on their own. The point is to see how many independent signals
+        move together, and to say plainly where observation ends and inference
+        begins.
       </p>
-      <p><a href="https://github.com/kalminDR/gta-blackout">Read the code and the raw data</a></p>
+    </div>
+  </section>
+
+  <section id="method">
+    <div class="head"><h2>Method</h2></div>
+    <div class="prose">
+      <p>
+        Since 2 September 2026, an automated collector has taken hourly
+        readings from public sources covering Twitch, Steam, road congestion,
+        PlayStation Network and Xbox Live service health, official YouTube
+        counters, Hacker News, console resale prices and prediction markets.
+        Historical baselines come from New York transit ridership and Wikipedia
+        editing across six languages, back to 2023.
+      </p>
+      <p>
+        <strong>New York's subway carries about 4.5 million people on an
+        ordinary November Thursday; comparable Thursdays vary by under one
+        percent, so a drop of roughly 90,000 riders would be clearly
+        detectable.</strong>
+      </p>
+      <p>
+        We tested GitHub and Stack Overflow as productivity measures, rejected
+        both, and publish the evidence. Every reading is timestamped in a
+        <a href="https://github.com/kalminDR/gta-blackout">public repository</a>.
+      </p>
     </div>
   </section>
 
@@ -298,10 +355,10 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <div class="head"><h2>Get the results</h2></div>
     <div class="prose">
       <p>
-        Two emails, then silence. In October, we publish the forecast before
-        GTA VI arrives. In late November, we send the results.
-        <strong>The first matters because a prediction made in advance cannot be
-        rewritten to flatter the outcome.</strong>
+        Two emails, then silence. In October, we publish our forecast before
+        release, while there is nothing to fit the story to. In late November,
+        we send the results. <strong>Publishing first means we cannot rewrite it
+        afterwards to flatter the outcome.</strong>
       </p>
       <form id="signup" novalidate>
         <input type="email" id="email" name="email" placeholder="you@example.com"
@@ -315,12 +372,21 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
 
   <footer>
     <p>
-      Grand Theft Auto VI can make people plan months ahead, coordinate with
-      friends and change their routines without managers, deadlines or reminders.
-      Some of those people will not finish a mandatory thirty-minute course.
-      <a href="https://eureka.works">[eureka]</a>, which builds serious games and
-      gamified training, runs the project. The problem is not that a game earns
-      attention. It is that most training does not.
+      One game can make people plan ahead, coordinate with friends, rearrange
+      schedules and give hours of concentrated attention without a manager,
+      deadline or reminder. Organisations routinely struggle to get the same
+      adults through thirty minutes of mandatory training.
+    </p>
+    <p>
+      That contrast is why <a href="https://eureka.works">[eureka]</a>, the
+      learning-and-development consultancy behind Grand Theft Attention, built
+      this project. We make serious games and gamified training because
+      attention is not a side issue. We are interested in what earns it, keeps
+      it and changes when people give it voluntarily.
+    </p>
+    <p style="color:var(--text)">
+      The problem is not that a game earns people's attention. It is that most
+      training does not.
     </p>
     <p>
       Not affiliated with, endorsed by, or connected to Rockstar Games or
@@ -342,6 +408,19 @@ const $ = id => document.getElementById(id);
 const nf = new Intl.NumberFormat("en-US");
 const num = v => (typeof v === "number" && isFinite(v)) ? v : null;
 const LABEL_FIX = {Newyork:"New York", Losangeles:"Los Angeles"};
+
+// The analytical names are engineering vocabulary. These are what a reader
+// is actually looking at; the underlying structure is unchanged.
+const PANEL_COPY = {
+  attention: ["Where the attention went",
+    "Viewing and other direct signs of attention around Grand Theft Auto VI as release approaches and the game goes live."],
+  displacement: ["What people stopped playing",
+    "Whether activity in other games moves away from its normal pattern when Grand Theft Auto VI arrives."],
+  work: ["Did the ordinary Thursday change?",
+    "Commuting and weekday activity against their usual baselines, without pretending we can see every person who stayed home or know why."],
+  infrastructure: ["What happened to the systems underneath",
+    "Service health, console resale markets and other infrastructure signals, watched for unusual demand, disruption or strain."],
+};
 const pretty = s => Object.keys(LABEL_FIX).reduce((a,k)=>a.replace(k,LABEL_FIX[k]), s||"");
 
 function tick(){
@@ -464,6 +543,34 @@ async function load(){
       nf.format(views) + " video views and counting.";
   }
 
+  // Every figure here is injected rather than typed into the prose: they
+  // move hourly, and a number written into HTML is wrong within the hour.
+  const obs = data.observed || {};
+  const pm = (L.polymarket_total_volume != null) ? L.polymarket_total_volume : null;
+  const gta5 = obs.gta5_steam_players || null;
+  const money = function(n){
+    return "$" + (n >= 1e6 ? (n/1e6).toFixed(1) + " million" : nf.format(Math.round(n)));
+  };
+
+  const rows = [];
+  rows.push(["Across the five official videos",
+    views ? nf.format(views) + " views" : "no reading",
+    "Before anyone can play. Trailer 1 and Trailer 2 account for most of them. " +
+    "A still image of the cover art has drawn 15 million views on its own."]);
+  if (pm) rows.push(["Across the prediction markets we track",
+    "at least " + money(pm),
+    "Traded on questions ranging from the release date and price to how many " +
+    "people will watch the next trailer."]);
+  if (gta5) rows.push(["Grand Theft Auto V, released in 2013",
+    nf.format(gta5.min) + "–" + nf.format(gta5.max),
+    "Concurrent Steam players during our observation period so far. Steam is " +
+    "one observable platform, not the game's total audience."]);
+  $("ev").innerHTML = rows.map(function(r){
+    return '<div class="row"><h3>'+r[0]+'</h3><div class="fig">'+r[1]+'</div><p>'+r[2]+'</p></div>';
+  }).join("");
+  $("obs-window").textContent = obs.days
+    ? "observed over " + obs.days + (obs.days === 1 ? " day" : " days") + " so far" : "";
+
   $("stamp").textContent = "Last count " + ago(L.t) +
     " · reading " + nf.format(cov.snapshot_count || 0);
   const dh = cov.days_of_history || 0;
@@ -482,8 +589,10 @@ async function load(){
       ? "a launch pushes this up" : "a launch pushes this down";
     const pc = (typeof p.placebo_percentile === "number")
       ? '<br><span class="pc">above ' + p.placebo_percentile + '% of past Thursdays</span>' : "";
-    return '<div class="panel"><h3>'+p.name+'</h3>'+
+    const copy = PANEL_COPY[k] || [p.name, ""];
+    return '<div class="panel"><h3>'+copy[0]+'</h3>'+
       '<div class="v'+(v===null?" pending":"")+'">'+(v===null?"building baseline":Math.round(v))+'</div>'+
+      '<div class="m">'+copy[1]+'</div>'+
       '<div class="m">'+p.sources_available+' of '+p.sources_expected+' sources · '+dir+pc+'</div></div>';
   }).join("");
 

@@ -170,6 +170,12 @@ def flatten(snap):
     # --- Hacker News: raw counter now, rate computed later
     row["hn_max_item_id"] = as_number(dig(src, "hackernews", "max_item_id"))
 
+    # Money staked on this game. Always a lower bound: it is the volume across
+    # the markets our search finds, not the size of the whole market, and the
+    # page must say so.
+    row["polymarket_total_volume"] = as_number(dig(src, "polymarket", "total_volume"))
+    row["polymarket_market_count"] = as_number(dig(src, "polymarket", "market_count"))
+
     # --- YouTube: the hype curve
     row["yt_subscribers"] = as_number(
         dig(src, "youtube", "rockstar_channel", "subscribers"))
@@ -359,6 +365,37 @@ def build_changes(points):
     return changes
 
 
+def observed_ranges(points):
+    """Ranges the page can quote instead of hard-coding a number.
+
+    A sentence like "still draws 70,000 to 150,000 players" must be tied to
+    a stated observation window, otherwise it reads as a permanent property
+    of the game and quietly goes stale. The page injects these and says how
+    long we have been watching.
+    """
+    def span(*keys):
+        vals = []
+        for p in points:
+            parts = [p.get(k) for k in keys]
+            if all(isinstance(v, (int, float)) and v > 0 for v in parts):
+                vals.append(sum(parts))
+        if not vals:
+            return None
+        return {"min": int(min(vals)), "max": int(max(vals)),
+                "median": int(median(vals)), "readings": len(vals)}
+
+    first = parse_time(points[0].get("t")) if points else None
+    last = parse_time(points[-1].get("t")) if points else None
+    return {
+        "from": points[0].get("t") if points else None,
+        "to": points[-1].get("t") if points else None,
+        "days": (round((last - first).total_seconds() / 86400, 1)
+                 if first and last else None),
+        "gta5_steam_players": span("steam_gta5", "steam_gta5_enhanced"),
+        "trailer_views": span("yt_QdBZY2fkU-0_views"),
+    }
+
+
 def main():
     files = sorted(glob.glob(os.path.join(DATA_DIR, "*", "*.json")))
     if not files:
@@ -410,6 +447,7 @@ def main():
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
                    "latest": points[-1],
+                   "observed": observed_ranges(points),
                    "panels": panels,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
