@@ -365,6 +365,47 @@ def build_changes(points):
     return changes
 
 
+def day_shape(points):
+    """What an ordinary day looks like in our own data, hour by hour.
+
+    Two curves: how busy the roads are, and how many people are playing or
+    watching games. On a normal day they run against each other - roads peak
+    when people travel to work, games peak in the evening. That contrast is
+    the whole question in one picture, and on 19 November we find out whether
+    the shape holds.
+
+    Each curve is scaled to its own maximum, because the point is the shape
+    and not the units.
+    """
+    roads, games = {}, {}
+    for p in points:
+        t = parse_time(p.get("t"))
+        if not t:
+            continue
+        # Average the cities that reported, so one quiet city cannot flatten
+        # the curve and one accident cannot spike it.
+        city = [p.get(k + "_travel_index") for k in CITY_KEYS.values()]
+        city = [v for v in city if isinstance(v, (int, float)) and v > 0]
+        if city:
+            roads.setdefault(t.hour, []).append(sum(city) / len(city))
+        g = [p.get(k) for k in ("steam_basket_total", "twitch_top100_total")]
+        if all(isinstance(v, (int, float)) and v > 0 for v in g):
+            games.setdefault(t.hour, []).append(sum(g))
+
+    def curve(buckets):
+        if len(buckets) < 6:      # too few hours covered to draw a day
+            return None
+        med = {h: median(v) for h, v in buckets.items()}
+        top = max(med.values()) or 1
+        return [round(med[h] / top, 3) if h in med else None for h in range(24)]
+
+    return {
+        "roads": curve(roads),
+        "games": curve(games),
+        "hours_covered": sorted(set(list(roads) + list(games))),
+    }
+
+
 def observed_ranges(points):
     """Ranges the page can quote instead of hard-coding a number.
 
@@ -461,6 +502,7 @@ def main():
              for p in points]
     with open(os.path.join(OUT_DIR, "chart.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
+                   "day_shape": day_shape(points),
                    "panels": {k: v for k, v in indices.PANEL_NAMES.items()},
                    "placebo": {name: indices.placebo(points, name)
                                for name in indices.PANEL_NAMES},

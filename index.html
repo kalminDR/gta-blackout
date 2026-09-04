@@ -119,6 +119,12 @@ nav a{text-decoration:none}
 .panel .pc{color:var(--pink); font-weight:700}
 
 figure.chart{margin:2.75rem 0 0; padding:0}
+.daychart{margin:1.6rem 0 1.6rem}
+.daychart svg{height:clamp(170px,26vw,260px)}
+.daychart figcaption{justify-content:space-between}
+.legend{display:flex; gap:1.3rem; font-size:.74rem; color:var(--dim); margin-top:.6rem}
+.legend i{display:inline-block; width:.75rem; height:.75rem; border-radius:2px;
+  margin-right:.4rem; vertical-align:-1px; font-style:normal}
 .chart svg{width:100%; height:clamp(120px,20vw,210px); display:block; overflow:visible}
 .chart figcaption{display:flex; justify-content:space-between; gap:1rem;
   font-size:.7rem; color:var(--dim); border-top:1px solid var(--line);
@@ -221,11 +227,16 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <h1 class="thesis">19 November Should Be an <span>Ordinary Thursday</span></h1>
 
     <p class="count-note" style="margin-top:1.1rem">
-      Rockstar Games releases <strong>Grand Theft Auto VI</strong> on Thursday
-      19 November, a normal working day, on PlayStation 5 and Xbox Series X|S.
-      Grand Theft Attention is measuring whether the attention around one game
-      becomes visible in the rest of that day. It is independent and is not
-      affiliated with Rockstar Games or Take-Two Interactive.
+      Grand Theft Auto VI arrives on a Thursday. Not a holiday. Not a weekend.
+      A working day, with payroll running, schools open and the trains on their
+      normal timetable.
+    </p>
+    <p class="count-note" style="margin-top:.9rem">
+      And several million people have spent years waiting for it.
+      <strong>We want to know whether that shows up anywhere else</strong> — on
+      the roads, in the offices, in the games people abandon, in the money.
+      Nobody has ever measured what an event like this does to an ordinary day.
+      So we are counting, every hour, from now until it happens.
     </p>
 
     <div class="clock"><span>Release in</span><b id="clock">—</b></div>
@@ -303,12 +314,29 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <div class="head"><h2>What we will look for</h2></div>
     <div class="prose">
       <p>
-        On and around 19 November, we will look for changes in ordinary
-        routines. Some will be direct: Twitch viewing, other games on Steam,
-        road congestion, transit ridership, service health and online activity
-        during working hours. Some will be reported by readers themselves:
-        taking annual leave, calling in sick, or turning up to work and
-        expecting to get less done.
+        The interesting question is not how many people will play it. Of course
+        millions will. <strong>The question is whether a single game can bend a
+        working day out of shape</strong> — enough that it shows up in traffic,
+        in offices, in what people stop doing, and eventually in money.
+      </p>
+      <p>
+        Every day has a shape. Roads fill in the morning, games fill in the
+        evening, and the pattern repeats so reliably that you can predict it.
+        Below is that shape, drawn from our own readings. On 19 November we find
+        out whether it holds.
+      </p>
+      <figure class="chart daychart">
+        <svg id="dayshape" viewBox="0 0 1000 260" role="img" aria-labelledby="dst">
+          <title id="dst">The shape of an ordinary day: road traffic and gaming activity by hour</title>
+        </svg>
+        <figcaption><span id="day-note"></span><span>hours, UTC</span></figcaption>
+      </figure>
+      <p>
+        So we watch for changes in ordinary routines. Some are direct: Twitch
+        viewing, other games on Steam, road congestion, transit ridership,
+        service health, online activity during working hours. Some are reported
+        by readers themselves: taking annual leave, calling in sick, or turning
+        up and expecting to get less done.
       </p>
       <p>
         <strong>Those are not the same kind of evidence.</strong> We can measure
@@ -450,7 +478,9 @@ async function drawChart(){
   let pts = [];
   try {
     const r = await fetch("public/chart.json",{cache:"no-store"});
-    pts = ((await r.json()).points || []).filter(p => typeof p.attention === "number");
+    const cj = await r.json();
+    drawDayShape(cj.day_shape);
+    pts = (cj.points || []).filter(function(p){ return typeof p.attention === "number"; });
   } catch(e){ /* fall through to the empty state */ }
 
   if (!pts.length){
@@ -489,6 +519,73 @@ async function drawChart(){
     '<line x1="'+lastX+'" y1="'+P+'" x2="'+lastX+'" y2="'+(H-P)+'" stroke="rgba(255,255,255,.18)"/>'+
     '<line x1="'+(W-P)+'" y1="'+P+'" x2="'+(W-P)+'" y2="'+(H-P)+'" stroke="#FF2E88" stroke-width="2"/>'+
     '<text x="'+(W-P-10)+'" y="'+(H-P-6)+'" font-size="12" fill="#FF2E88" text-anchor="end" font-family="Space Grotesk">19 November</text>';
+}
+
+/* --------------------------------------------------- the shape of a day */
+// Two curves over twenty-four hours, drawn from our own readings: how busy
+// the roads are, and how many people are playing or watching. Each is scaled
+// to its own maximum, because the point is the shape, not the units. It is
+// the whole question in one picture - this is what an ordinary day looks
+// like, and on 19 November we find out whether it holds.
+function drawDayShape(shape){
+  const svg = $("dayshape");
+  if (!svg || !shape) return;
+  const W = 1000, H = 260, L = 8, R = 8, T = 16, B = 30;
+
+  function path(curve, close){
+    if (!curve) return "";
+    const pts = [];
+    for (let hh = 0; hh < 24; hh++){
+      if (curve[hh] === null || curve[hh] === undefined) continue;
+      const x = L + (hh / 23) * (W - L - R);
+      const y = H - B - curve[hh] * (H - T - B);
+      pts.push([x, y]);
+    }
+    if (pts.length < 2) return "";
+    // A light Catmull-Rom pass, so a 24-point line reads as a day rather
+    // than as a saw blade.
+    let d = "M" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
+    for (let i = 0; i < pts.length - 1; i++){
+      const p0 = pts[i === 0 ? 0 : i - 1], p1 = pts[i], p2 = pts[i + 1];
+      const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
+      d += " C" + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + " " + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1)
+        + " " + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + " " + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1)
+        + " " + p2[0].toFixed(1) + " " + p2[1].toFixed(1);
+    }
+    if (close) d += " L" + pts[pts.length-1][0].toFixed(1) + " " + (H-B) +
+                    " L" + pts[0][0].toFixed(1) + " " + (H-B) + " Z";
+    return d;
+  }
+
+  const nowH = new Date().getUTCHours();
+  const nowX = L + (nowH / 23) * (W - L - R);
+  const ticks = [0, 6, 12, 18, 23].map(function(hh){
+    const x = L + (hh / 23) * (W - L - R);
+    return '<line x1="'+x+'" y1="'+T+'" x2="'+x+'" y2="'+(H-B)+'" stroke="rgba(255,255,255,.07)"/>'+
+      '<text x="'+x+'" y="'+(H-10)+'" font-size="12" fill="#9C86C7" text-anchor="middle" '+
+      'font-family="Space Grotesk">'+(hh<10?"0":"")+hh+':00</text>';
+  }).join("");
+
+  svg.innerHTML =
+    '<defs>'+
+      '<linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">'+
+        '<stop offset="0%" stop-color="#22E6E0" stop-opacity=".34"/>'+
+        '<stop offset="100%" stop-color="#22E6E0" stop-opacity="0"/></linearGradient>'+
+      '<linearGradient id="gg" x1="0" y1="0" x2="0" y2="1">'+
+        '<stop offset="0%" stop-color="#FF2E88" stop-opacity=".34"/>'+
+        '<stop offset="100%" stop-color="#FF2E88" stop-opacity="0"/></linearGradient>'+
+    '</defs>' + ticks +
+    (shape.roads ? '<path d="'+path(shape.roads,true)+'" fill="url(#gr)"/>'+
+      '<path d="'+path(shape.roads)+'" fill="none" stroke="#22E6E0" stroke-width="2.5" stroke-linecap="round"/>' : '') +
+    (shape.games ? '<path d="'+path(shape.games,true)+'" fill="url(#gg)"/>'+
+      '<path d="'+path(shape.games)+'" fill="none" stroke="#FF2E88" stroke-width="2.5" stroke-linecap="round"/>' : '') +
+    '<line x1="'+nowX+'" y1="'+T+'" x2="'+nowX+'" y2="'+(H-B)+'" stroke="rgba(255,255,255,.5)" stroke-dasharray="2 4"/>'+
+    '<text x="'+(nowX+8)+'" y="'+(T+12)+'" font-size="12" fill="#F4ECFF" font-family="Space Grotesk">now</text>';
+
+  const el = $("day-note");
+  if (el) el.innerHTML =
+    '<span class="legend"><span><i style="background:#22E6E0"></i>roads</span>'+
+    '<span><i style="background:#FF2E88"></i>playing and watching</span></span>';
 }
 
 function ago(iso){
