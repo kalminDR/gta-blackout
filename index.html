@@ -12,7 +12,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstile" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -516,12 +515,45 @@ load(); drawChart();
 setInterval(load, 5*60*1000);
 
 /* ------------------------------------------------------------- turnstile */
-// Two widgets, one per form, rendered explicitly so each has its own token.
-let tsReport = null, tsSignup = null;
+// Invisible by default and run on demand. The earlier version showed a
+// checkbox and asked the reader to wait for it before answering, which is
+// backwards: they came to press one button. Now the challenge runs after
+// the press, and only appears at all if Cloudflare wants a look.
+let tsReport = null, tsSignup = null, tsReady = false;
+let pending = null;          // {kind, answer, button} while a token is fetched
+
+function turnstileFailed(text){
+  const msg = $(pending && pending.kind === "signup" ? "msg" : "rp-msg");
+  msg.className = "msg err";
+  msg.textContent = text;
+  if (pending && pending.button){
+    pending.button.setAttribute("aria-pressed", "false");
+    $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = false; });
+  }
+  pending = null;
+  submitting = false;
+}
+
 window.onTurnstile = function(){
   if (!window.turnstile) return;
-  tsReport = turnstile.render("#ts-report", {sitekey: TURNSTILE_SITE_KEY, theme: "dark"});
-  tsSignup = turnstile.render("#ts-signup", {sitekey: TURNSTILE_SITE_KEY, theme: "dark"});
+  const common = {
+    sitekey: TURNSTILE_SITE_KEY,
+    appearance: "interaction-only",   // stays hidden unless a challenge is needed
+    execution: "execute",             // nothing happens until we ask
+    "error-callback": function(){
+      turnstileFailed("The check could not run. An ad blocker or a strict privacy " +
+                      "setting will usually be the cause.");
+      return true;
+    },
+    "expired-callback": function(){ /* execute() will fetch a fresh one */ },
+  };
+  tsReport = turnstile.render("#ts-report", Object.assign({}, common, {
+    callback: function(token){ if (pending && pending.kind === "report") sendReport(token); },
+  }));
+  tsSignup = turnstile.render("#ts-signup", Object.assign({}, common, {
+    callback: function(token){ if (pending && pending.kind === "signup") sendSignup(token); },
+  }));
+  tsReady = true;
 };
 
 /* ----------------------------------------------------------- self-report */
@@ -561,7 +593,7 @@ function renderAnswers(labels){
            (labels[k] || k)+'</button>';
   }).join("");
   $("answers").querySelectorAll("button").forEach(function(b){
-    b.addEventListener("click", function(){ submitReport(b.dataset.answer, b); });
+    b.addEventListener("click", function(){ startReport(b.dataset.answer, b); });
   });
 }
 
@@ -581,78 +613,97 @@ function renderTally(counts){
 }
 
 let submitting = false;
-async function submitReport(answer, button){
+
+function startReport(answer, button){
   if (submitting) return;
+  submitting = true;
+  pending = {kind:"report", answer:answer, button:button};
+
   const msg = $("rp-msg");
   msg.className = "msg";
+  msg.textContent = "Counting you…";
+  button.setAttribute("aria-pressed", "true");
+  $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = true; });
 
-  const token = (window.turnstile && tsReport !== null) ? turnstile.getResponse(tsReport) : "";
-  if (!token){
-    msg.className = "msg err";
-    msg.textContent = "Give the checkbox above a moment to finish, then tap again.";
+  if (!tsReady || !window.turnstile){
+    turnstileFailed("The verification script did not load. An ad blocker is the " +
+                    "usual reason; the count needs it to keep out bots.");
     return;
   }
+  turnstile.execute(tsReport);
+}
 
-  submitting = true;
-  $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = true; });
-  button.setAttribute("aria-pressed", "true");
-  msg.textContent = "Counting you…";
-
+async function sendReport(token){
+  const p = pending, msg = $("rp-msg");
   try {
     const r = await fetch(API + "/report", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({
-        answer: answer,
+        answer: p.answer,
         country: $("rp-country").value || null,
         industry: $("rp-industry").value || null,
         token: token,
       }),
     });
-    const out = await r.json();
-    if (!r.ok) throw new Error(out.error || r.status);
+    const out = await r.json().catch(function(){ return {}; });
+    if (!r.ok) throw new Error(out.error || ("HTTP " + r.status));
+    msg.className = "msg";
     msg.textContent = "Counted. Thank you.";
     renderTally(out.counts);
+    pending = null; submitting = false;
   } catch(e){
-    msg.className = "msg err";
-    msg.textContent = "That did not go through: " + String(e.message || e);
-    $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = false; });
-    button.setAttribute("aria-pressed", "false");
-    if (window.turnstile && tsReport !== null) turnstile.reset(tsReport);
+    // Say what actually went wrong. The previous version reset the widget on
+    // any failure, which looked like the page throwing the answer away.
+    turnstileFailed("Not counted: " + String(e.message || e));
   }
-  submitting = false;
+}
+
+async function sendSignup(token){
+  const msg = $("msg");
+  try {
+    const r = await fetch(API + "/signup", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({email: pending.email, token: token}),
+    });
+    const out = await r.json().catch(function(){ return {}; });
+    if (!r.ok) throw new Error(out.error || ("HTTP " + r.status));
+    $("signup").reset();
+    msg.className = "msg";
+    msg.textContent = "You are on the list. Two emails, then silence.";
+    pending = null; submitting = false;
+  } catch(e){
+    turnstileFailed("Not added: " + String(e.message || e));
+  }
 }
 
 fillSelects();
 renderAnswers({day_off:"Taking the day off", sick:"Calling in sick",
   in_not_working:"Going in, not expecting to get much done", working:"Working normally"});
 
-$("signup").addEventListener("submit", async function(ev){
+$("signup").addEventListener("submit", function(ev){
   ev.preventDefault();
+  if (submitting) return;
   const msg = $("msg"), email = $("email").value.trim();
   msg.className = "msg";
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
-    msg.className = "msg err"; msg.textContent = "That does not look like an email address."; return;
-  }
-  const token = (window.turnstile && tsSignup !== null) ? turnstile.getResponse(tsSignup) : "";
-  if (!token){
     msg.className = "msg err";
-    msg.textContent = "Give the checkbox above a moment to finish, then try again.";
+    msg.textContent = "That does not look like an email address.";
     return;
   }
+  submitting = true;
+  pending = {kind:"signup", email:email};
   msg.textContent = "Sending…";
-  try {
-    const r = await fetch(API + "/signup",{method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({email:email, token:token})});
-    const out = await r.json();
-    if (!r.ok) throw new Error(out.error || r.status);
-    $("signup").reset();
-    msg.textContent = "You are on the list. Two emails, then silence.";
-  } catch(e){
-    msg.className = "msg err"; msg.textContent = "That did not go through: " + String(e.message || e);
-    if (window.turnstile && tsSignup !== null) turnstile.reset(tsSignup);
+  if (!tsReady || !window.turnstile){
+    turnstileFailed("The verification script did not load. An ad blocker is the usual reason.");
+    return;
   }
+  turnstile.execute(tsSignup);
 });
 </script>
+
+<!-- Loaded last on purpose. With async in the head this script can finish
+     before the code above has defined onTurnstile, and the callback is then
+     lost: the widget never renders and every answer fails silently. -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstile" async defer></script>
 </body>
 </html>
