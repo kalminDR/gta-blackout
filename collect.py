@@ -814,6 +814,31 @@ def collect_polymarket():
     }
 
 
+# ------------------------------------------------------- the community count
+
+def collect_selfreport():
+    """The running total of what readers say they will do on 19 November.
+
+    This is the one dataset we gather ourselves rather than read from
+    somebody else's API, so it is worth stating what it is: a self-selected
+    count of people who chose to answer, not a representative survey.
+
+    Fetching it here, once an hour, is deliberate. The Workers free plan
+    allows 100,000 requests a day, and a single press mention could spend
+    that on page views alone if the site called the endpoint directly. This
+    way the figure travels with the rest of the snapshot and the site reads
+    it from a static file; only the person who has just answered gets a
+    live reply from the endpoint itself.
+    """
+    base = env("SELFREPORT_URL")
+    if not base:
+        return {"skipped": "no SELFREPORT_URL"}
+    try:
+        return get_json(base.rstrip("/") + "/counts")
+    except Exception as e:
+        return {"error": str(e)[:200]}
+
+
 # ---------------------------------------------------------------- runner
 
 SOURCES = {
@@ -827,6 +852,7 @@ SOURCES = {
     "console_prices": collect_console_prices,
     "retail_stock": collect_retail_stock,
     "polymarket": collect_polymarket,
+    "selfreport": collect_selfreport,
 }
 
 
