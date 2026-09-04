@@ -12,6 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstile" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -135,6 +136,33 @@ tr.grp td{background:rgba(255,46,136,.14); color:var(--text);
   font-family:Anton,sans-serif; font-size:.74rem; letter-spacing:.14em; text-transform:uppercase}
 .down{color:var(--pink)}
 
+.answers{display:grid; gap:.6rem; margin:1.4rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
+.answers button{
+  font:inherit; font-weight:500; font-size:.95rem; text-align:left;
+  padding:.9rem 1rem; border-radius:10px; cursor:pointer;
+  background:rgba(255,255,255,.05); color:var(--text);
+  border:1px solid rgba(255,255,255,.2)}
+.answers button:hover{border-color:var(--cyan); background:rgba(34,230,224,.08)}
+.answers button[aria-pressed=true]{background:var(--pink); border-color:var(--pink); color:#12001F}
+.answers button:disabled{opacity:.45; cursor:default}
+
+.who{display:flex; flex-wrap:wrap; gap:.8rem; margin-top:1rem}
+.who label{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim)}
+.who select{display:block; margin-top:.3rem; font:inherit; font-size:.9rem;
+  padding:.55rem .7rem; min-width:12rem;
+  background:rgba(255,255,255,.05); color:var(--text);
+  border:1px solid rgba(255,255,255,.2); border-radius:8px}
+.ts{margin-top:1rem; min-height:0}
+
+.tally{margin-top:1.6rem}
+.tally .bar{display:grid; grid-template-columns:1fr auto; gap:.6rem 1rem;
+  align-items:baseline; padding:.5rem 0; border-top:1px solid var(--line)}
+.tally .track{grid-column:1/-1; height:5px; border-radius:3px;
+  background:rgba(255,255,255,.09); overflow:hidden}
+.tally .fill{height:100%; background:var(--cyan)}
+.tally .pcv{font-family:Anton,sans-serif; font-size:1.05rem; color:var(--cyan)}
+
 form{display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1.2rem; max-width:var(--measure)}
 input[type=email]{flex:1 1 16rem; font:inherit; font-size:.95rem; padding:.75rem .9rem;
   background:rgba(255,255,255,.05); color:var(--text);
@@ -165,6 +193,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
   <header>
     <div class="mark">Grand <i>Theft</i> Attention</div>
     <nav>
+      <a href="#yourday">Your day</a>
       <a href="#readout">Readout</a>
       <a href="#method">Method</a>
       <a href="#watch">Results</a>
@@ -198,6 +227,35 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
   </div>
 
   <div class="panels" id="panels"></div>
+
+  <section id="yourday">
+    <div class="head"><h2>Will you be at work?</h2><p id="tally-total"></p></div>
+    <div class="prose">
+      <p>
+        We are asking readers what they plan to do on 19 November. It takes one
+        tap, we ask only for country and industry, and we ask for nothing that
+        identifies anyone.
+        <strong>This is a self-selected count, not a representative survey</strong> —
+        it records what people who chose to answer say about themselves.
+      </p>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="who">
+        <label>Country
+          <select id="rp-country"><option value="">Prefer not to say</option></select>
+        </label>
+        <label>Industry
+          <select id="rp-industry"><option value="">Prefer not to say</option></select>
+        </label>
+      </div>
+
+      <div id="ts-report" class="ts"></div>
+      <p class="msg" id="rp-msg" role="status"></p>
+
+      <div class="tally" id="tally"></div>
+    </div>
+  </section>
 
   <section id="readout">
     <div class="head"><h2>Live data</h2><p id="freshness"></p></div>
@@ -251,6 +309,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
                autocomplete="email" aria-label="Email address" required>
         <button type="submit">Send me both</button>
       </form>
+      <div id="ts-signup" class="ts"></div>
       <p class="msg" id="msg" role="status"></p>
     </div>
   </section>
@@ -277,7 +336,8 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
 "use strict";
 const RELEASE = new Date("2026-11-19T00:00:00Z");
 const START_COUNTING = "2026-09-02T09:14:59Z";
-const SIGNUP_ENDPOINT = "";        // fill in once the Cloudflare Worker exists
+const API = "https://super-queen-8302.dr-kalmar-peter.workers.dev";
+const TURNSTILE_SITE_KEY = "0x4AAAAAAEnNWFsM_qQFgIvh";
 
 const $ = id => document.getElementById(id);
 const nf = new Intl.NumberFormat("en-US");
@@ -411,6 +471,12 @@ async function load(){
   $("freshness").textContent = dh + (dh === 1 ? " day" : " days") + " of history so far";
   $("built").textContent = "Page built from the reading taken at " + new Date(L.t).toUTCString() + ".";
 
+  // The count travels inside the hourly snapshot rather than being fetched
+  // from the endpoint on every page view: the Workers free plan allows
+  // 100,000 requests a day, and page views would spend that on their own.
+  const sr = (data.latest || {}).selfreport || (L.selfreport || null);
+  if (sr && typeof sr.total === "number") renderTally(sr);
+
   $("panels").innerHTML = Object.keys(PANELS).map(function(k){
     const p = PANELS[k], v = num(p.index);
     const dir = (p.effect_direction||"").indexOf("higher") === 0
@@ -449,6 +515,117 @@ async function load(){
 load(); drawChart();
 setInterval(load, 5*60*1000);
 
+/* ------------------------------------------------------------- turnstile */
+// Two widgets, one per form, rendered explicitly so each has its own token.
+let tsReport = null, tsSignup = null;
+window.onTurnstile = function(){
+  if (!window.turnstile) return;
+  tsReport = turnstile.render("#ts-report", {sitekey: TURNSTILE_SITE_KEY, theme: "dark"});
+  tsSignup = turnstile.render("#ts-signup", {sitekey: TURNSTILE_SITE_KEY, theme: "dark"});
+};
+
+/* ----------------------------------------------------------- self-report */
+const ANSWER_ORDER = ["day_off", "sick", "in_not_working", "working"];
+const INDUSTRIES = {
+  technology:"Technology", finance:"Finance", healthcare:"Healthcare",
+  education:"Education", government:"Government", retail:"Retail",
+  manufacturing:"Manufacturing", media:"Media", logistics:"Logistics",
+  hospitality:"Hospitality", construction:"Construction",
+  professional_services:"Professional services", student:"Student", other:"Other",
+};
+// Codes only; the browser turns them into names in the reader's own language,
+// which keeps two hundred country names out of the page source.
+const COUNTRIES = ("AE AR AT AU BE BG BR CA CH CL CN CO CZ DE DK EE EG ES FI FR GB GR HK HR HU ID IE IL IN " +
+  "IS IT JP KR LT LU LV MA MX MY NL NO NZ PE PH PL PT RO RS RU SA SE SG SI SK TH TR TW UA US VN ZA").split(" ");
+
+function fillSelects(){
+  const cs = $("rp-country");
+  let names = null;
+  try { names = new Intl.DisplayNames(["en"], {type:"region"}); } catch(e){}
+  COUNTRIES.map(function(c){ return [c, names ? names.of(c) : c]; })
+    .sort(function(a,b){ return a[1].localeCompare(b[1]); })
+    .forEach(function(pair){
+      const o = document.createElement("option");
+      o.value = pair[0]; o.textContent = pair[1]; cs.appendChild(o);
+    });
+  const is = $("rp-industry");
+  Object.keys(INDUSTRIES).forEach(function(k){
+    const o = document.createElement("option");
+    o.value = k; o.textContent = INDUSTRIES[k]; is.appendChild(o);
+  });
+}
+
+function renderAnswers(labels){
+  $("answers").innerHTML = ANSWER_ORDER.map(function(k){
+    return '<button type="button" data-answer="'+k+'" aria-pressed="false">'+
+           (labels[k] || k)+'</button>';
+  }).join("");
+  $("answers").querySelectorAll("button").forEach(function(b){
+    b.addEventListener("click", function(){ submitReport(b.dataset.answer, b); });
+  });
+}
+
+function renderTally(counts){
+  if (!counts || !counts.total){
+    $("tally-total").textContent = "no answers yet";
+    $("tally").innerHTML = ""; return;
+  }
+  $("tally-total").textContent = nf.format(counts.total) +
+    (counts.total === 1 ? " answer so far" : " answers so far");
+  $("tally").innerHTML = ANSWER_ORDER.map(function(k){
+    const pc = counts.share && typeof counts.share[k] === "number" ? counts.share[k] : 0;
+    return '<div class="bar"><div>'+(counts.labels ? counts.labels[k] : k)+'</div>'+
+      '<div class="pcv">'+pc.toFixed(0)+'%</div>'+
+      '<div class="track"><div class="fill" style="width:'+pc+'%"></div></div></div>';
+  }).join("");
+}
+
+let submitting = false;
+async function submitReport(answer, button){
+  if (submitting) return;
+  const msg = $("rp-msg");
+  msg.className = "msg";
+
+  const token = (window.turnstile && tsReport !== null) ? turnstile.getResponse(tsReport) : "";
+  if (!token){
+    msg.className = "msg err";
+    msg.textContent = "Give the checkbox above a moment to finish, then tap again.";
+    return;
+  }
+
+  submitting = true;
+  $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = true; });
+  button.setAttribute("aria-pressed", "true");
+  msg.textContent = "Counting you…";
+
+  try {
+    const r = await fetch(API + "/report", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({
+        answer: answer,
+        country: $("rp-country").value || null,
+        industry: $("rp-industry").value || null,
+        token: token,
+      }),
+    });
+    const out = await r.json();
+    if (!r.ok) throw new Error(out.error || r.status);
+    msg.textContent = "Counted. Thank you.";
+    renderTally(out.counts);
+  } catch(e){
+    msg.className = "msg err";
+    msg.textContent = "That did not go through: " + String(e.message || e);
+    $("answers").querySelectorAll("button").forEach(function(b){ b.disabled = false; });
+    button.setAttribute("aria-pressed", "false");
+    if (window.turnstile && tsReport !== null) turnstile.reset(tsReport);
+  }
+  submitting = false;
+}
+
+fillSelects();
+renderAnswers({day_off:"Taking the day off", sick:"Calling in sick",
+  in_not_working:"Going in, not expecting to get much done", working:"Working normally"});
+
 $("signup").addEventListener("submit", async function(ev){
   ev.preventDefault();
   const msg = $("msg"), email = $("email").value.trim();
@@ -456,18 +633,24 @@ $("signup").addEventListener("submit", async function(ev){
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
     msg.className = "msg err"; msg.textContent = "That does not look like an email address."; return;
   }
-  if (!SIGNUP_ENDPOINT){
-    msg.className = "msg err"; msg.textContent = "Signup is not connected yet. It opens in the next few days."; return;
+  const token = (window.turnstile && tsSignup !== null) ? turnstile.getResponse(tsSignup) : "";
+  if (!token){
+    msg.className = "msg err";
+    msg.textContent = "Give the checkbox above a moment to finish, then try again.";
+    return;
   }
   msg.textContent = "Sending…";
   try {
-    const r = await fetch(SIGNUP_ENDPOINT,{method:"POST",
-      headers:{"Content-Type":"application/json"}, body:JSON.stringify({email:email})});
-    if (!r.ok) throw new Error(r.status);
+    const r = await fetch(API + "/signup",{method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:email, token:token})});
+    const out = await r.json();
+    if (!r.ok) throw new Error(out.error || r.status);
     $("signup").reset();
     msg.textContent = "You are on the list. Two emails, then silence.";
   } catch(e){
-    msg.className = "msg err"; msg.textContent = "That did not go through. Try again in a moment.";
+    msg.className = "msg err"; msg.textContent = "That did not go through: " + String(e.message || e);
+    if (window.turnstile && tsSignup !== null) turnstile.reset(tsSignup);
   }
 });
 </script>
