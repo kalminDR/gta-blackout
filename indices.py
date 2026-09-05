@@ -235,6 +235,14 @@ def _num(v):
     return None
 
 
+def _local_day(t, tz):
+    """The calendar date on the metric's own clock."""
+    try:
+        return t.astimezone(_zone(tz or "UTC")).date().isoformat()
+    except Exception:
+        return t.date().isoformat()
+
+
 def collect_observations(points, metric):
     """Every usable (time, value) pair for one metric, with its hour keys."""
     obs = []
@@ -244,7 +252,10 @@ def collect_observations(points, metric):
         if t is None or v is None:
             continue
         how, hod = hour_keys(t, metric.tz)
-        obs.append({"t": t, "v": v, "how": how, "hod": hod})
+        # The local date is part of the key so a baseline can require
+        # distinct days rather than distinct readings.
+        obs.append({"t": t, "v": v, "how": how, "hod": hod,
+                    "day": _local_day(t, metric.tz)})
     return obs
 
 
@@ -259,15 +270,29 @@ def baseline_for(obs, target, exclude_self=True):
     a single extreme hour partly normalises itself away and the effect looks
     smaller than it is.
     """
-    same_week = [o["v"] for o in obs
-                 if o["how"] == target["how"]
-                 and not (exclude_self and o["t"] == target["t"])]
+    def by_day(matching):
+        """One value per calendar day, so a burst of readings in a single
+        hour cannot masquerade as a baseline.
+
+        This mattered in practice: on 2 September the collector was run
+        seven times inside forty-four minutes while it was being set up,
+        which cleared a six-sample threshold on its own and produced index
+        values that were really comparing that morning with itself.
+        """
+        days = {}
+        for o in matching:
+            days.setdefault(o["day"], []).append(o["v"])
+        return [median(v) for v in days.values()]
+
+    same_week = by_day([o for o in obs
+                        if o["how"] == target["how"]
+                        and not (exclude_self and o["t"] == target["t"])])
     if len(same_week) >= MIN_SAMPLES_HOUR_OF_WEEK:
         return median(same_week), "hour_of_week"
 
-    same_hour = [o["v"] for o in obs
-                 if o["hod"] == target["hod"]
-                 and not (exclude_self and o["t"] == target["t"])]
+    same_hour = by_day([o for o in obs
+                        if o["hod"] == target["hod"]
+                        and not (exclude_self and o["t"] == target["t"])])
     if len(same_hour) >= MIN_SAMPLES_HOUR_OF_DAY:
         return median(same_hour), "hour_of_day"
 
