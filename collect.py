@@ -579,6 +579,12 @@ def collect_console_prices():
                 "client_id_length": len(cid),
                 "client_id_prefix": cid[:12],
                 "client_secret_length": len(secret),
+                # eBay's Dev ID is a UUID and is ALSO exactly 36 characters,
+                # so length alone cannot tell it apart from the Cert ID.
+                # A production Cert ID always starts with "PRD-". Four
+                # characters of a public constant prefix leak nothing.
+                "client_secret_prefix": secret[:4],
+                "secret_looks_like_cert_id": secret.upper().startswith("PRD-"),
                 "looks_like_sandbox": "SBX" in cid.upper()}
 
     out = {}
