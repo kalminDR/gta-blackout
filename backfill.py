@@ -308,6 +308,112 @@ def fetch_gdelt_geography():
 
 # -------------------------------------------------------------- main
 
+# Electricity demand, going back far enough to have something to compare to.
+#
+# The hourly collector only knows the present. Without years of the same weeks
+# behind it, a reading on 19 November is a number with nothing beside it. What
+# makes the claim testable is that the same Thursday in the same season has
+# been recorded four times already.
+#
+# Only the autumn window is fetched, not whole years. A launch on 19 November
+# is compared against the Thursdays around it, not against July, and pulling
+# four full years for nine countries would produce a file too large to keep in
+# a repository for no analytical gain.
+ENTSOE_WINDOWS = [
+    (date(2022, 10, 1), date(2022, 12, 15)),
+    (date(2023, 10, 1), date(2023, 12, 15)),
+    (date(2024, 10, 1), date(2024, 12, 15)),
+    (date(2025, 10, 1), date(2025, 12, 15)),
+]
+
+# Days per request. ENTSO-E accepts a year for load data, but shorter chunks
+# fail smaller: one bad month leaves a hole instead of losing the country.
+ENTSOE_CHUNK_DAYS = 30
+
+
+def _hourly_means(points):
+    """Collapse whatever resolution a country reports down to hourly means.
+
+    Some operators publish every fifteen minutes and some every hour. Storing
+    both raw would mean every later comparison had to re-learn which is which,
+    and would quadruple the file for four times no information. The hour is
+    the unit every comparison in this project uses, so the conversion happens
+    once, here.
+    """
+    buckets = {}
+    for t, mw in points:
+        hour = t.replace(minute=0, second=0, microsecond=0)
+        buckets.setdefault(hour, []).append(mw)
+    return {h: round(sum(v) / len(v), 1) for h, v in buckets.items()}
+
+
+def fetch_entsoe(token):
+    """Hourly load per country across the autumn windows, several years deep."""
+    from collect import ENTSOE_ZONES, _entsoe_points, get_text
+
+    series, notes, calls = {}, {}, 0
+    today = datetime.now(timezone.utc).date()
+
+    # The current year runs from before the live collector started up to
+    # yesterday, so the two meet without a gap.
+    windows = list(ENTSOE_WINDOWS) + [(date(today.year, 8, 1),
+                                       today - timedelta(days=1))]
+
+    for code, eic in ENTSOE_ZONES.items():
+        hours, problems = {}, []
+        for win_start, win_end in windows:
+            if win_start >= win_end:
+                continue
+            cursor = win_start
+            while cursor < win_end:
+                stop = min(cursor + timedelta(days=ENTSOE_CHUNK_DAYS), win_end)
+                url = ("https://web-api.tp.entsoe.eu/api"
+                       "?documentType=A65&processType=A16"
+                       "&outBiddingZone_Domain=" + urllib.parse.quote(eic) +
+                       "&periodStart=" + cursor.strftime("%Y%m%d") + "0000" +
+                       "&periodEnd=" + stop.strftime("%Y%m%d") + "0000" +
+                       "&securityToken=" + urllib.parse.quote(token))
+                try:
+                    pts, reason = _entsoe_points(get_text(url))
+                    calls += 1
+                    if reason:
+                        problems.append(f"{cursor}..{stop}: {reason[:80]}")
+                    else:
+                        hours.update(_hourly_means(pts))
+                except Exception as e:
+                    problems.append(f"{cursor}..{stop}: "
+                                    + str(e)[:80].replace(token, "<token>"))
+                # Well inside the published rate limit, and gentler on a
+                # service that is publishing this for free.
+                time.sleep(0.4)
+                cursor = stop
+
+        if hours:
+            ordered = sorted(hours)
+            series[code] = {
+                "first": ordered[0].isoformat(),
+                "last": ordered[-1].isoformat(),
+                "hours": len(ordered),
+                # Timestamp and value together, so a gap stays a gap rather
+                # than silently shifting every later reading by an hour.
+                "points": [[h.isoformat(), hours[h]] for h in ordered],
+            }
+        if problems:
+            notes[code] = problems[:12]
+
+    return {
+        "source": "ENTSO-E Transparency Platform, A65 actual total load",
+        "resolution": "hourly mean",
+        "unit": "MW",
+        "windows": [[a.isoformat(), b.isoformat()] for a, b in windows],
+        "countries_ok": sorted(series),
+        "countries_missing": sorted(set(ENTSOE_ZONES) - set(series)),
+        "requests": calls,
+        "problems": notes,
+        "data": series,
+    }
+
+
 def main():
     start = date.fromisoformat(sys.argv[1]) if len(sys.argv) > 1 else date(2023, 1, 1)
     end = datetime.now(timezone.utc).date() - timedelta(days=1)
@@ -319,6 +425,10 @@ def main():
         "wikipedia": lambda: fetch_wikipedia(start, end),
         "wikipedia_pageviews": lambda: fetch_wikipedia_pageviews(start, end),
         "gdelt_geography": lambda: fetch_gdelt_geography(),
+        "entsoe_load": lambda: (
+            fetch_entsoe(os.environ.get("ENTSOE_TOKEN", "").strip())
+            if os.environ.get("ENTSOE_TOKEN", "").strip()
+            else {"skipped": "no ENTSOE_TOKEN in environment"}),
     }
 
     print(f"Backfilling {start} to {end}\n", file=sys.stderr)

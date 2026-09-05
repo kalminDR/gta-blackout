@@ -133,5 +133,78 @@ def run():
     return all(ok)
 
 
+def run_backfill():
+    """The multi-year fetch, with the network replaced by a fixture.
+
+    The point of interest is not that it collects numbers but that a country
+    which returns nothing stays absent instead of quietly becoming a zero.
+    """
+    import json
+    import re
+    import collect
+    import backfill
+
+    def fake_get_text(url, headers=None):
+        if "10YGB" in url:                       # one zone deliberately dark
+            return ('<?xml version="1.0"?><Acknowledgement_MarketDocument '
+                    'xmlns="urn:x"><Reason><code>999</code>'
+                    '<text>No matching data found</text></Reason>'
+                    '</Acknowledgement_MarketDocument>')
+        start = datetime.strptime(
+            re.search(r"periodStart=(\d{8})", url).group(1), "%Y%m%d"
+        ).replace(tzinfo=timezone.utc)
+        pts = "".join(f"<Point><position>{i+1}</position>"
+                      f"<quantity>{4000+i}</quantity></Point>" for i in range(48))
+        return (f'<?xml version="1.0"?><GL_MarketDocument xmlns="{NS}">'
+                f'<TimeSeries><Period><timeInterval>'
+                f'<start>{start.strftime("%Y-%m-%dT%H:%MZ")}</start><end>x</end>'
+                f'</timeInterval><resolution>PT60M</resolution>{pts}'
+                f'</Period></TimeSeries></GL_MarketDocument>')
+
+    real_get, real_sleep = collect.get_text, backfill.time.sleep
+    collect.get_text, backfill.time.sleep = fake_get_text, lambda s: None
+    try:
+        res = backfill.fetch_entsoe("SECRET-TOKEN-VALUE")
+    finally:
+        collect.get_text, backfill.time.sleep = real_get, real_sleep
+
+    blob = json.dumps(res)
+    ok = [
+        check("backfill: eight countries returned data",
+              len(res["countries_ok"]) == 8, str(res["countries_ok"])),
+        check("backfill: the dark zone is recorded missing, not faked",
+              res["countries_missing"] == ["GB"], str(res["countries_missing"])),
+        check("backfill: the dark zone carries its reason",
+              "GB" in res["problems"] and "999" in res["problems"]["GB"][0]),
+        check("backfill: points are [timestamp, mw] pairs",
+              len(res["data"]["HU"]["points"][0]) == 2),
+        check("backfill: timestamps strictly increasing",
+              all(a[0] < b[0] for a, b in zip(res["data"]["HU"]["points"],
+                                              res["data"]["HU"]["points"][1:]))),
+        check("backfill: the token is never written to the output",
+              "SECRET-TOKEN-VALUE" not in blob),
+        check("backfill: five windows, the last one reaching the present",
+              len(res["windows"]) == 5, res["windows"][-1][1]),
+    ]
+    return all(ok)
+
+
+def hourly_means():
+    """Quarter-hourly countries must collapse to the same unit as hourly ones."""
+    import backfill
+    pts = [(datetime(2025, 11, 20, 18, m, tzinfo=timezone.utc), 1000.0 + m)
+           for m in (0, 15, 30, 45)]
+    pts.append((datetime(2025, 11, 20, 19, 0, tzinfo=timezone.utc), 2000.0))
+    got = backfill._hourly_means(pts)
+    return all([
+        check("hourly mean: four quarters become one hour", len(got) == 2, str(len(got))),
+        check("hourly mean: the mean is the mean",
+              got[datetime(2025, 11, 20, 18, 0, tzinfo=timezone.utc)] == 1022.5),
+    ])
+
+
 if __name__ == "__main__":
-    sys.exit(0 if run() else 1)
+    results = [run(), hourly_means(), run_backfill()]
+    print()
+    print("ALL PASSED" if all(results) else "SOMETHING FAILED")
+    sys.exit(0 if all(results) else 1)
