@@ -32,7 +32,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 UA = "attention-heist/1.0 (research project; contact: hello@eureka.works)"
 TIMEOUT = 25
@@ -57,6 +57,29 @@ def get_json(url, headers=None, data=None, method="GET"):
         # away leaves a bare "401 Unauthorized", which says nothing about
         # whether the key is wrong, the scope is wrong, or the account is
         # not approved yet.
+        try:
+            detail = e.read().decode("utf-8", errors="replace")[:400]
+        except Exception:
+            detail = ""
+        raise RuntimeError(f"HTTP {e.code}: {detail or e.reason}") from None
+
+
+def get_text(url, headers=None):
+    """Same client as get_json, but for APIs that answer in XML.
+
+    ENTSO-E is one of them. It also answers errors in XML, with the reason
+    inside the body, so the body is kept on failure for the same reason it is
+    kept everywhere else here: "HTTP 401" alone never tells you whether the
+    token is wrong, expired, or simply not yet activated.
+    """
+    h = {"User-Agent": UA, "Accept": "application/xml"}
+    if headers:
+        h.update(headers)
+    req = urllib.request.Request(url, headers=h, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            return r.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as e:
         try:
             detail = e.read().decode("utf-8", errors="replace")[:400]
         except Exception:
@@ -738,6 +761,142 @@ def collect_gdelt():
 POLYMARKET_TERMS = ["gta", "grand theft auto"]
 
 
+# Electricity demand, from the transmission operators themselves.
+#
+# This is the closest thing to a national attendance register that exists.
+# Nobody files a report saying they stayed in; the grid simply notices. When a
+# country sits down in front of a screen at the same time, demand shifts, and
+# the shift is recorded hourly by state operators with no interest whatsoever
+# in this game.
+#
+# There is a documented precedent for the size of the effect. The British grid
+# has measured demand surges around televised football for decades -- the 1990
+# World Cup semi-final against West Germany produced roughly 2,800 MW, a group
+# match in 2018 around 600 MW. That gives us a ruler the reader already
+# understands, which is worth more than any index.
+#
+# The honest caveat, stated here rather than discovered in November: a launch
+# effect is likely to be far smaller than a penalty shootout, plausibly inside
+# the operators' own forecast error. It may not show up at all. The shape of
+# the evening peak may move even when its height does not, and if neither
+# moves we will publish that too.
+ENTSOE_ZONES = {
+    # The eight largest European console markets, plus home.
+    "GB": "10YGB----------A",
+    "DE": "10Y1001A1001A83F",
+    "FR": "10YFR-RTE------C",
+    "ES": "10YES-REE------0",
+    "IT": "10YIT-GRTN-----B",
+    "NL": "10YNL----------L",
+    "PL": "10YPL-AREA-----S",
+    "SE": "10YSE-1--------K",
+    "HU": "10YHU-MAVIR----U",
+}
+
+# Minutes per period, by the resolution code ENTSO-E reports.
+ENTSOE_RESOLUTION = {"PT15M": 15, "PT30M": 30, "PT60M": 60, "P1D": 1440}
+
+
+def _entsoe_points(xml):
+    """Pull (timestamp, megawatts) out of a GL_MarketDocument.
+
+    Namespaces on these documents change between schema versions, so tags are
+    matched on their local name. A document that carries a Reason instead of a
+    TimeSeries is an error dressed as a success -- ENTSO-E returns HTTP 200
+    with "No matching data found" inside -- so that case is detected and
+    reported rather than silently becoming an empty reading.
+    """
+    import xml.etree.ElementTree as ET
+
+    def local(el):
+        return el.tag.rsplit("}", 1)[-1]
+
+    root = ET.fromstring(xml)
+    if local(root).startswith("Acknowledgement"):
+        bits = []
+        for el in root.iter():
+            if local(el) in ("code", "text") and el.text:
+                bits.append(el.text.strip())
+        return [], "; ".join(bits)[:200] or "acknowledgement, no data"
+
+    out = []
+    for period in root.iter():
+        if local(period) != "Period":
+            continue
+        start, minutes = None, 60
+        for child in period:
+            name = local(child)
+            if name == "timeInterval":
+                for sub in child:
+                    if local(sub) == "start" and sub.text:
+                        start = datetime.fromisoformat(
+                            sub.text.strip().replace("Z", "+00:00"))
+            elif name == "resolution" and child.text:
+                minutes = ENTSOE_RESOLUTION.get(child.text.strip(), 60)
+        if start is None:
+            continue
+        for point in period:
+            if local(point) != "Point":
+                continue
+            pos, qty = None, None
+            for f in point:
+                if local(f) == "position" and f.text:
+                    pos = int(f.text)
+                elif local(f) in ("quantity", "price.amount") and f.text:
+                    qty = as_float(f.text)
+            if pos is not None and qty is not None:
+                out.append((start + timedelta(minutes=minutes * (pos - 1)), qty))
+    out.sort()
+    return out, None
+
+
+def collect_entsoe():
+    """Actual total load per country, most recent settled hour.
+
+    Publication lags real time, and by a different amount in each country, so
+    the lag is recorded alongside the reading. A number without its age is not
+    usable for an hourly comparison.
+    """
+    token = env("ENTSOE_TOKEN")
+    if not token:
+        return {"skipped": "no ENTSOE_TOKEN"}
+
+    now = datetime.now(timezone.utc)
+    # A twelve-hour window: wide enough to survive the slowest publisher,
+    # narrow enough that one country's outage cannot dominate the response.
+    start = (now - timedelta(hours=12)).strftime("%Y%m%d%H00")
+    end = (now + timedelta(hours=1)).strftime("%Y%m%d%H00")
+
+    out = {}
+    for code, eic in ENTSOE_ZONES.items():
+        url = ("https://web-api.tp.entsoe.eu/api"
+               "?documentType=A65&processType=A16"
+               "&outBiddingZone_Domain=" + urllib.parse.quote(eic) +
+               "&periodStart=" + start + "&periodEnd=" + end +
+               "&securityToken=" + urllib.parse.quote(token))
+        try:
+            points, reason = _entsoe_points(get_text(url))
+            if reason:
+                out[code] = {"no_data": reason}
+                continue
+            if not points:
+                out[code] = {"no_data": "document parsed, no points"}
+                continue
+            t, mw = points[-1]
+            out[code] = {
+                "load_mw": round(mw, 1),
+                "t": t.isoformat(),
+                "lag_hours": round((now - t).total_seconds() / 3600, 2),
+                "points_in_window": len(points),
+            }
+        except Exception as e:
+            # The token is in the URL, so it would appear in any message that
+            # echoes it back. Strip it before the error is ever written down.
+            msg = str(e)[:300].replace(token, "<token>")
+            out[code] = {"error": msg}
+    return out
+
+
 def collect_polymarket():
     """Open prediction markets about Grand Theft Auto VI.
 
@@ -857,6 +1016,7 @@ SOURCES = {
     "steam_charts": collect_steam_charts,
     "console_prices": collect_console_prices,
     "retail_stock": collect_retail_stock,
+    "entsoe": collect_entsoe,
     "polymarket": collect_polymarket,
     "selfreport": collect_selfreport,
 }

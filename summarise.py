@@ -231,6 +231,22 @@ def flatten(snap):
         # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
 
+    # --- Electricity demand: did a country stay in
+    #
+    # Absolute megawatts are not comparable between countries -- Germany's
+    # ordinary evening dwarfs Hungary's -- so the level is stored raw and the
+    # index layer does the comparing, each country against its own past. The
+    # lag is stored beside it because a reading whose age is unknown cannot be
+    # placed on an hourly timeline at all.
+    power = src.get("entsoe") or {}
+    if isinstance(power, dict):
+        for code, entry in power.items():
+            if not isinstance(entry, dict) or len(code) != 2:
+                continue
+            short = code.lower()
+            row[f"power_{short}_load_mw"] = as_number(entry.get("load_mw"))
+            row[f"power_{short}_lag_hours"] = as_number(entry.get("lag_hours"))
+
     # --- Hardware scarcity: resale price, then actual retail stock
     for market, short in (("EBAY_US", "us"), ("EBAY_GB", "uk"), ("EBAY_DE", "de")):
         for prod in ("ps5_pro", "ps5", "xbox_series_x"):
