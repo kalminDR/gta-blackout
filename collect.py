@@ -382,38 +382,95 @@ def collect_youtube():
 # So: three points per city, placed on major commuter arteries, and the
 # city's figure is the median of the three. One dud point can no longer
 # ruin a city, and a segment that shifts is outvoted by the other two.
+# Where a city's commute is measured.
+#
+# The first version used three points per city and produced a measurement
+# that was deaf and noisy at the same time. Six of eighteen points sat on
+# segments shorter than a minute of driving -- one was six seconds long --
+# and a six-second stretch of road cannot be congested: there is not enough
+# road for a queue to form on. Those points read exactly zero delay most of
+# the time and then jumped to 700% when a single van stopped. Every Los
+# Angeles point had landed on a frontage road rather than the freeway it was
+# named after.
+#
+# So this list is no longer a set of answers. It is a set of candidates: six
+# per city, each recorded with the length and class of the road it actually
+# hit. After a few days of readings the ones measuring real arterial road get
+# kept and the rest are dropped, on evidence rather than on my guess about
+# where a coordinate lands. Coordinates cannot be verified from here, which
+# is precisely why the choice is left to the data.
 CITY_POINTS = {
     "Budapest": {
-        "hungaria_korut": (47.5300, 19.0800),
-        "ulloi_ut":       (47.4650, 19.1200),
-        "budaorsi_ut":    (47.4650, 18.9900),
+        "ulloi_ut":         (47.4650, 19.1200),   # 154 s, FRC2 - the one that worked
+        "hungaria_korut":   (47.5060, 19.0960),
+        "vaci_ut":          (47.5450, 19.0700),
+        "m0_south":         (47.4090, 19.0450),
+        "m1_m7_bevezeto":   (47.4530, 18.9750),
+        "robert_karoly":    (47.5390, 19.0620),
     },
     "London": {
-        "a40_westway":       (51.5200, -0.2100),
-        "a406_north_circ":   (51.5750, -0.2300),
-        "a2_old_kent_road":  (51.4850, -0.0650),
+        "a2_old_kent_road": (51.4850, -0.0650),   # 72 s, FRC3 - the least bad
+        "a40_westway":      (51.5230, -0.2270),
+        "a406_north_circ":  (51.5920, -0.2680),
+        "a13_east":         (51.5100, 0.0250),
+        "a12_eastway":      (51.5450, -0.0200),
+        "a3_wandsworth":    (51.4480, -0.1900),
     },
     "Berlin": {
-        "a100_stadtring":   (52.4900, 13.3300),
-        "frankfurter_allee": (52.5150, 13.4700),
-        "kaiserdamm":       (52.5100, 13.2950),
+        "frankfurter_allee": (52.5150, 13.4700),  # 159 s, FRC1 - the best point we have
+        "a100_stadtring":    (52.4870, 13.3160),
+        "kaiserdamm":        (52.5075, 13.2870),
+        "a111_north":        (52.5850, 13.2900),
+        "tempelhofer_damm":  (52.4650, 13.3860),
+        "prenzlauer_allee":  (52.5450, 13.4270),
     },
     "Warsaw": {
-        "wislostrada":        (52.2450, 21.0300),
-        "s8_trasa_torunska":  (52.2900, 20.9900),
+        "wislostrada":         (52.2450, 21.0300),  # 131 s, FRC1
         "aleje_jerozolimskie": (52.2280, 20.9800),
+        "s8_trasa_ak":         (52.2570, 20.9530),
+        "trasa_lazienkowska":  (52.2280, 21.0450),
+        "s2_pow_south":        (52.1600, 21.0300),
+        "pulawska":            (52.1800, 21.0230),
     },
     "New York": {
-        "fdr_drive":       (40.7500, -73.9700),
+        "lie_i495_queens": (40.7350, -73.8700),   # 217 s, FRC3 - the best point we have
         "cross_bronx_i95": (40.8430, -73.9200),
-        "lie_i495_queens": (40.7350, -73.8700),
+        "fdr_drive":       (40.7720, -73.9450),
+        "bqe_i278":        (40.6970, -73.9720),
+        "west_side_hwy":   (40.7780, -73.9880),
+        "van_wyck_i678":   (40.6800, -73.8100),
     },
     "Los Angeles": {
-        "i405_sepulveda": (34.0900, -118.4500),
-        "i10_santa_monica": (34.0300, -118.3400),
-        "us101_hollywood": (34.0950, -118.3300),
+        # Every previous point here returned FRC4, a local connecting road.
+        # These are pushed onto the freeway carriageways themselves.
+        "i405_sepulveda":   (34.0430, -118.4380),
+        "i10_santa_monica": (34.0290, -118.3800),
+        "us101_hollywood":  (34.1000, -118.3260),
+        "i110_harbor":      (33.9800, -118.2780),
+        "i5_golden_state":  (34.1300, -118.2700),
+        "i210_pasadena":    (34.1490, -118.0700),
     },
 }
+
+# Map zoom used for segment matching. Higher numbers match finer, shorter
+# stretches; 10 was returning six-second slivers. Lower zoom biases towards
+# the longer segments of the bigger roads, which is what a commute is.
+TRAFFIC_ZOOM = 8
+
+# A segment shorter than this cannot hold a queue, so its delay reading
+# carries no information about congestion. Enforced when the city figure is
+# assembled rather than here, so the raw reading is still recorded and the
+# threshold can be revisited without losing history.
+MIN_SEGMENT_METRES = 700
+
+
+
+def _segment_metres(free_flow_speed_kmh, free_flow_seconds):
+    """Length of the road segment a reading covers, in metres."""
+    speed, seconds = as_float(free_flow_speed_kmh), as_float(free_flow_seconds)
+    if not speed or not seconds:
+        return None
+    return round(speed * 1000 / 3600 * seconds)
 
 
 def collect_traffic():
@@ -428,7 +485,7 @@ def collect_traffic():
         readings = []
         for name, (lat, lon) in points.items():
             url = ("https://api.tomtom.com/traffic/services/4/flowSegmentData/"
-                   f"absolute/10/json?point={lat},{lon}&key={key}")
+                   f"absolute/{TRAFFIC_ZOOM}/json?point={lat},{lon}&key={key}")
             try:
                 d = get_json(url)["flowSegmentData"]
                 readings.append({
@@ -440,6 +497,13 @@ def collect_traffic():
                     # Road class: 0 is a motorway, higher is more local.
                     # Lets us spot a point that has drifted onto a side street.
                     "road_class": d.get("frc"),
+                    # How much road this point actually watches. Travel time
+                    # alone is ambiguous -- sixty seconds is 1.7 km on a
+                    # motorway and 300 m in a city centre -- so the length is
+                    # derived and stored, and it is what decides whether a
+                    # point is worth keeping.
+                    "segment_metres": _segment_metres(
+                        d.get("freeFlowSpeed"), d.get("freeFlowTravelTime")),
                 })
             except Exception as e:
                 readings.append({"point": name, "error": str(e)[:100]})

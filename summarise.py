@@ -45,6 +45,11 @@ STEAM_KEYS = {
 # only hands us the daily peak, so the rank itself is the live signal.
 STEAM_RANK_APPIDS = {271590: "steam_rank_gta5", 3240220: "steam_rank_gta5_enh"}
 
+# A segment shorter than this cannot hold a queue; a road class this local
+# is not a commuter route. Both mirror the collector's own thresholds.
+MIN_SEGMENT_METRES = 700
+MIN_ROAD_CLASS = 4
+
 CITY_KEYS = {
     "Budapest": "traffic_budapest",
     "London": "traffic_london",
@@ -207,16 +212,39 @@ def flatten(snap):
         # of main road, and a median cannot hide a real jam behind two
         # free-flowing stretches.
         cur_total, free_total, ok, road_classes = 0, 0, 0, []
+        rejected = 0
         for r in readings:
             if not isinstance(r, dict):
                 continue
             cur = as_number(r.get("current_travel_time"))
             free = as_number(r.get("free_flow_travel_time"))
+            rc = road_class_number(r.get("road_class"))
+
+            # How much road this point watches. Older snapshots predate the
+            # field, so it is derived when absent rather than treated as a
+            # failure -- the history stays usable.
+            metres = as_number(r.get("segment_metres"))
+            if metres is None:
+                speed = as_number(r.get("free_flow_speed"))
+                if speed and free:
+                    metres = speed * 1000 / 3600 * free
+
+            # A point is dropped, not averaged in, when it cannot carry the
+            # signal. Two ways to fail: too short to hold a queue, or sitting
+            # on a local road that no commuter uses. Averaging a dead point
+            # into the city figure is worse than having one point fewer,
+            # because it pulls every reading towards zero delay and then
+            # spikes when a single vehicle stops on eighty metres of tarmac.
+            too_short = metres is not None and metres < MIN_SEGMENT_METRES
+            too_local = rc is not None and rc >= MIN_ROAD_CLASS
+            if too_short or too_local:
+                rejected += 1
+                continue
+
             if cur and free:
                 cur_total += cur
                 free_total += free
                 ok += 1
-            rc = road_class_number(r.get("road_class"))
             if rc is not None:
                 road_classes.append(rc)
 
@@ -227,6 +255,7 @@ def flatten(snap):
         # of near-zero numbers is meaningless.
         row[f"{key}_travel_index"] = round(cur_total / free_total * 100, 1) if free_total else None
         row[f"{key}_points_ok"] = ok or None
+        row[f"{key}_points_rejected"] = rejected or None
         row[f"{key}_seconds_measured"] = free_total or None
         # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
