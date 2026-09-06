@@ -189,12 +189,47 @@ This matters because it is the best story on the list and the weakest evidence.
    *negative* on the same test. Four of eight measurements positive: a coin.
 3. Third attempt, weather-immune: **evening peak divided by the same day's late
    afternoon.** A cold day lifts both hours, so the ratio cancels weather and
-   season. On ordinary weekdays this is stable to **1.8–2.5%** across three
-   years and seven countries. That is the detection floor.
+   season. This one is sound and is now implemented in `power.py`, pinned to
+   the largest of 18:00–21:00 local over 16:00 local, with a regression test
+   that fails if the hours are moved.
 
-The World Cup result on that measure is genuinely inconsistent: Spain +4.1σ on a
-group match, but France **−1.9σ** on its own semi-final, while Italy — which did
-not qualify — jumped +4.1σ the same evening.
+**The detection floor is per country, and wider than this file used to say.**
+Measured from the backfill, coefficient of variation of the ratio on
+non-holiday weekdays, computed within each October–December window separately:
+
+| DE | FR | ES | SE | IT | PL | NL | HU |
+|---|---|---|---|---|---|---|---|
+| 2.2–2.6% | 1.8–3.0% | 2.2–2.9% | 2.2–3.6% | 2.9–4.6% | 3.2–4.1% | 3.7–8.0% | 6.0–7.0% |
+
+The earlier "1.8–2.5% across seven countries" holds for the best four and is
+too optimistic for the rest. **Hungary is the least sensitive instrument of the
+eight** — it needs a 20% swing to reach three standard deviations. That is
+worth saying out loud, because Hungary is the country a Hungarian reader looks
+at first, and it is the one least able to see anything.
+
+### The World Cup evidence was the weekend, not the football
+
+This file recorded Spain +4.1σ on a group match and Italy +4.1σ the same
+evening, and called the pattern inexplicable. It is explicable. **That match
+was a Sunday, and those figures come from scoring a Sunday against a weekday
+baseline.**
+
+The ratio is structurally higher at weekends in every country — Italy by
+**+3.6 weekday standard deviations**, which is the entire supposed signal.
+Compared Sunday to Sunday, the like-for-like test, Spain is **+0.5σ** and Italy
+**−0.1σ**. Nothing happened. The Italy puzzle dissolves: Italy has by far the
+largest weekend effect of the eight and was not playing.
+
+France on its own semi-final survives, because that was a Wednesday scored
+against weekdays: **−1.7σ**, reproduced by `power.py` and locked in
+`test_power.py`.
+
+So the count is worse than "three attempts, two confounded". The method is
+sound; **the evidence that it can detect a big television audience is gone.**
+There are now zero positive detections of football, not two. Never compare a
+day to a different weekday class — the same mistake would make 19 November 2026
+look like a result whatever happened, and it is a Thursday, so it must be
+scored against Thursdays.
 
 **Working hypothesis, to be stated on the site as a hypothesis:** people watch
 big football in pubs and at each other's houses, and a national grid is blind to
@@ -202,8 +237,17 @@ a crowd that gathers in one place. A game cannot be played in a pub. If that
 reasoning is right, a launch should show up more clearly than a match — but it
 is reasoning, not evidence, and **if November shows nothing, publish that.**
 
+The correction above strengthens this rather than weakening it: with the Spain
+and Italy readings gone, football has never once moved a national grid on this
+measure. If a game launch does, that is a cleaner story than a smaller version
+of an effect football already showed. It also raises the stake honestly — we
+are now betting on an effect that has never been observed.
+
 Consequence: electricity is a **second** witness under claim 02, behind traffic.
-Not the headline.
+Not the headline. The baseline comes from the backfill's four October–December
+windows, never from the live series — six weeks of live collection starting in
+September would bake the Dutch summer solar distortion into what the site calls
+normal. See the note in `power.py`.
 
 ### Twitch amplitude, and a gift
 
@@ -293,8 +337,14 @@ stills, characters, logos, or the Pricedown typeface.
 - **Run `python3 state.py` before making any claim about project status.**
 - Python edits: parse with `ast` afterwards. String patches use
   `assert old in s` guards to catch double-application.
-- Tests: `test_indices.py` (16 checks), `test_entsoe.py` (23 checks, network
-  replaced by fixtures). Run both after touching collection or aggregation.
+- Tests: `test_indices.py`, `test_entsoe.py` (network replaced by fixtures),
+  `test_power.py` (the evening ratio, including a regression lock on the hours).
+  Run all three after touching collection or aggregation. The counts move; the
+  suites print their own totals, so read those rather than trusting a number
+  written here.
+- A test helper that lets a caller force the verdict will eventually be used to
+  force it. `test_power.py` had an `ok=` parameter for one run, and two checks
+  passed while asserting nothing. One way to state an expectation, no override.
 - `collect.py --check` exercises the collectors.
 - **Never invent a number.** A missing country stays missing; a dead measurement
   point is dropped, not averaged in; an index without enough baseline prints
