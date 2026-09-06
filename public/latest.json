@@ -1,12 +1,12 @@
 {
- "generated_at_utc": "2026-09-06T19:44:03+00:00",
+ "generated_at_utc": "2026-09-06T19:14:46+00:00",
  "coverage": {
   "first_snapshot": "2026-09-02T09:14:59+00:00",
   "last_snapshot": "2026-09-06T19:13:16+00:00",
   "snapshot_count": 116,
   "days_of_history": 4.4,
   "unreadable_files": [],
-  "hours_since_last_snapshot": 0.5
+  "hours_since_last_snapshot": 0.0
  },
  "latest": {
   "t": "2026-09-06T19:13:16+00:00",
@@ -95,31 +95,22 @@
   "traffic_losangeles_road_class": 0.0,
   "power_de_load_mw": 47167.2,
   "power_de_lag_hours": 0.98,
-  "power_de_t": "2026-09-06T18:15:00+00:00",
   "power_es_load_mw": 32636.0,
   "power_es_lag_hours": 0.73,
-  "power_es_t": "2026-09-06T18:30:00+00:00",
   "power_fr_load_mw": 45063.2,
   "power_fr_lag_hours": 0.48,
-  "power_fr_t": "2026-09-06T18:45:00+00:00",
   "power_gb_load_mw": null,
   "power_gb_lag_hours": null,
-  "power_gb_t": null,
   "power_hu_load_mw": 4931.1,
   "power_hu_lag_hours": 0.73,
-  "power_hu_t": "2026-09-06T18:30:00+00:00",
   "power_it_load_mw": 10354.0,
   "power_it_lag_hours": 0.73,
-  "power_it_t": "2026-09-06T18:30:00+00:00",
   "power_nl_load_mw": 9814.8,
   "power_nl_lag_hours": 0.98,
-  "power_nl_t": "2026-09-06T18:15:00+00:00",
   "power_pl_load_mw": 17239.7,
   "power_pl_lag_hours": 0.98,
-  "power_pl_t": "2026-09-06T18:15:00+00:00",
   "power_se_load_mw": 15814.0,
   "power_se_lag_hours": 0.73,
-  "power_se_t": "2026-09-06T18:30:00+00:00",
   "price_us_ps5_pro": 1299.99,
   "listings_us_ps5_pro": 100,
   "price_us_ps5": 544.5,
@@ -510,42 +501,56 @@
  "evening": {
   "DE": {
    "day": "2026-09-06",
-   "ratio": 1.1804,
+   "ratio": 1.1697,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "ES": {
    "day": "2026-09-06",
-   "ratio": 1.118,
+   "ratio": 1.1327,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "FR": {
    "day": "2026-09-06",
-   "ratio": 1.1064,
+   "ratio": 1.0901,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "HU": {
    "day": "2026-09-06",
-   "ratio": 1.3396,
+   "ratio": 1.493,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "IT": {
    "day": "2026-09-06",
-   "ratio": 0.8332,
+   "ratio": 0.691,
+   "z": null,
+   "detects_pct": null,
+   "reason": "no season-matched baseline"
+  },
+  "NL": {
+   "day": "2026-09-06",
+   "ratio": 2.7942,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "PL": {
    "day": "2026-09-06",
-   "ratio": 1.0992,
+   "ratio": 1.0927,
+   "z": null,
+   "detects_pct": null,
+   "reason": "no season-matched baseline"
+  },
+  "SE": {
+   "day": "2026-09-06",
+   "ratio": 1.3351,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
