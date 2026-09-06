@@ -2,6 +2,15 @@
  "published_at": "2026-09-06",
  "release_day": "2026-11-19",
  "commitment": "We expect to be wrong about at least one of these. When we are, it stays on this page marked failed, with the reading that failed it. We will not quietly edit them.",
+ "corrections": [
+  {
+   "date": "2026-09-06",
+   "prediction": "steam",
+   "what": "The rule said 'the seven tracked games other than Grand Theft Auto V'. There are eight tracked games and two of them are Grand Theft Auto V -- the original and Enhanced -- so the set is six, not seven.",
+   "why": "An arithmetic slip in the description, found while writing the scorer. The set itself is unchanged: every tracked game that is not GTA V, which is what the rule always meant and what claim 03 requires. Including a GTA title in 'everything else went quiet' would be wrong whichever way it moved. The six are now named in code as STEAM_DISPLACED so no one has to count them again.",
+   "harder_or_easier": "Neither. The same six counts were always going to be summed."
+  }
+ ],
  "predictions": [
   {
    "id": "subway",
@@ -10,7 +19,15 @@
    "rule": "New York subway ridership on Thursday 19 November 2026 is lower than on 5 and 12 November 2026, and at least 3% below the mean of those three Thursdays. Thanksgiving, 26 November, is excluded.",
    "threshold_from": "November Thursdays excluding Thanksgiving are the most uniform days in the whole record: standard deviation 0.68% in 2023, 0.99% in 2024, 0.45% in 2025, and no November Thursday in three years fell more than 1.12% below its month's mean. Three per cent is between three and six standard deviations of ordinary variation.",
    "base_rate": "Never. The third Thursday of November came in at -0.18%, -0.73% and +0.18% against its own month in 2023, 2024 and 2025.",
-   "caveat": "12 November is preload day. If the preload itself keeps people at home, the comparison days are depressed and this test becomes harder to pass, not easier."
+   "caveat": "12 November is preload day. If the preload itself keeps people at home, the comparison days are depressed and this test becomes harder to pass, not easier.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "the MTA series does not yet carry 2026-11-05, 2026-11-12, 2026-11-19",
+   "evidence": {
+    "have": [
+     "2026-09-03"
+    ]
+   }
   },
   {
    "id": "traffic",
@@ -19,7 +36,13 @@
    "rule": "In at least four of the six cities, the evening peak road delay on 19 November 2026 is the lowest recorded on any Thursday between 1 October and 17 December 2026.",
    "threshold_from": "A rank test, which needs no history: it asks only that this Thursday beat the other Thursdays we are already measuring. The traffic collector was rebuilt on 6 September and has three days behind it, so a magnitude threshold would have to be invented. This one does not.",
    "base_rate": "About 1 in 1,135. With eleven Thursdays in the window, one city is lowest by chance one time in eleven; four of six cities at once is 0.09%, assuming the cities move independently when nothing is happening.",
-   "caveat": "Six cities are not fully independent -- weather systems and school holidays cross borders -- so the true chance is somewhat higher than 1 in 1,135."
+   "caveat": "Six cities are not fully independent -- weather systems and school holidays cross borders -- so the true chance is somewhat higher than 1 in 1,135.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "no launch-evening reading for berlin, budapest, london, losangeles, newyork, warsaw",
+   "evidence": {
+    "cities_scored": []
+   }
   },
   {
    "id": "power",
@@ -28,16 +51,45 @@
    "rule": "On 19 November 2026, at least three of the eight grids show an evening ratio -- the evening peak over the same day's 16:00 reading -- at least two standard deviations from that country's own autumn normal for a weekday.",
    "threshold_from": "Measured on 213 ordinary autumn weekdays in the backfill. One grid clearing two standard deviations happens on 24.4% of them, which is no prediction at all. Two happens on 4.7%. Three happens on 1.4%.",
    "base_rate": "1.4% of ordinary autumn weekdays -- about one Thursday in seventy.",
-   "caveat": "This is the boldest of the six and the one most likely to fail. Football has never once moved a national grid on this measure: the two World Cup readings this project treated as evidence for years turned out to be a Sunday scored against weekdays. We are predicting an effect that has never been observed. Each grid also differs enormously in what it could see at all -- Germany can distinguish a 4.8% change in its evening, Hungary nothing under 13.0%."
+   "caveat": "This is the boldest of the six and the one most likely to fail. Football has never once moved a national grid on this measure: the two World Cup readings this project treated as evidence for years turned out to be a Sunday scored against weekdays. We are predicting an effect that has never been observed. Each grid also differs enormously in what it could see at all -- Germany can distinguish a 4.8% change in its evening, Hungary nothing under 13.0%.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "no country has a complete launch-day evening yet",
+   "evidence": {
+    "days_available": [
+     "2026-09-06"
+    ]
+   }
   },
   {
    "id": "steam",
    "claim": "quiet",
    "says": "Every other game will empty out at the same moment",
-   "rule": "During the launch evening, the seven tracked games other than Grand Theft Auto V record their lowest combined player count, for that hour of that weekday, of any Thursday between 1 October and 17 December 2026.",
+   "rule": "During the launch evening, the six tracked games other than Grand Theft Auto V record their lowest combined player count, for that hour of that weekday, of any Thursday between 1 October and 17 December 2026.",
+   "scored_on": [
+    "steam_cs2",
+    "steam_dota2",
+    "steam_pubg",
+    "steam_apex",
+    "steam_bg3",
+    "steam_rdr2"
+   ],
    "threshold_from": "A rank test on the same-hour, same-weekday comparison. Raw player counts are useless for this: the basket swings threefold across an ordinary day, so any threshold not tied to the hour measures the time of day and nothing else.",
    "base_rate": "About 1 in 11, the number of Thursdays in the window.",
-   "caveat": "Steam player counts rise through the autumn into winter, so an October Thursday starts with an advantage. That makes a November low harder to achieve, not easier."
+   "caveat": "Steam player counts rise through the autumn into winter, so an October Thursday starts with an advantage. That makes a November low harder to achieve, not easier.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "no complete launch-evening basket reading",
+   "evidence": {
+    "games_required": [
+     "steam_cs2",
+     "steam_dota2",
+     "steam_pubg",
+     "steam_apex",
+     "steam_bg3",
+     "steam_rdr2"
+    ]
+   }
   },
   {
    "id": "twitch",
@@ -46,7 +98,11 @@
    "rule": "Between 19 and 20 November 2026, the global Twitch top-100 viewer total holds at or above twice its same-hour, same-weekday median for at least four consecutive hourly readings.",
    "threshold_from": "ZEVENT, one of the largest scheduled events on Twitch, landed in the first week of collection: 540,000 concurrent viewers on a single channel, lifting the global top-100 total to 2.12 times the running median at its peak. It held twice the median for two consecutive hours and never longer.",
    "base_rate": "Not once in 105 readings did anything but ZEVENT come near, and ZEVENT itself managed two hours, not four.",
-   "caveat": "ZEVENT's multiple was measured against a running median over four days, because that is all the history there was. The prediction is stated against the same-hour, same-weekday median, which will exist by November. The two are not exactly comparable, and ZEVENT will be rescored on the better baseline when it exists."
+   "caveat": "ZEVENT's multiple was measured against a running median over four days, because that is all the history there was. The prediction is stated against the same-hour, same-weekday median, which will exist by November. The two are not exactly comparable, and ZEVENT will be rescored on the better baseline when it exists.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "no Twitch readings on 19 or 20 November",
+   "evidence": {}
   },
   {
    "id": "servers",
@@ -55,7 +111,11 @@
    "rule": "PlayStation Network reports at least one service incident outside Russia between 19 and 20 November 2026.",
    "threshold_from": "Sony has listed the Russian PlayStation Store as degraded continuously since 2022, which is why Russia is excluded: counting it would have made this prediction true in advance, by a war. With Russia removed the count has been zero in every reading taken.",
    "base_rate": "Zero incidents in 101 readings so far. That record is only four days long and will be months long by November; the rate will be republished then rather than quietly left as it is.",
-   "caveat": "Xbox is not part of this one. Its status page has already shown two incidents in the same 101 readings, so a prediction that included it would be far easier to satisfy."
+   "caveat": "Xbox is not part of this one. Its status page has already shown two incidents in the same 101 readings, so a prediction that included it would be far easier to satisfy.",
+   "verdict": null,
+   "provisional": false,
+   "not_scored_because": "no PlayStation status readings on 19 or 20 November",
+   "evidence": {}
   }
  ]
 }
