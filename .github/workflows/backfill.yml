@@ -26,6 +26,8 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch history
+        env:
+          ENTSOE_TOKEN: ${{ secrets.ENTSOE_TOKEN }}
         run: python backfill.py "${{ inputs.start_date }}"
 
       - name: Commit history
