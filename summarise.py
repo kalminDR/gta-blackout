@@ -21,6 +21,7 @@ import glob
 import indices
 import power
 import predictions
+import score
 import json
 import os
 import sys
@@ -596,8 +597,38 @@ def main():
     # do not depend on the data, but they travel with it so the page never has
     # to be edited by hand to show them -- and so a change to them shows up in
     # the same commit history as the readings that will judge them.
+    published = predictions.as_published()
+
+    # And the verdicts, recomputed from the readings on every run rather than
+    # written once after the event. Recomputing means the page can be watched
+    # arriving at its answer, and means a verdict is never a thing somebody
+    # typed: it is what the data says today, including "not enough data", which
+    # every one of the six says until 19 November.
+    #
+    # A scorer that cannot measure returns no verdict and a reason. It never
+    # returns "failed" -- an outage must not read as evidence that nothing
+    # happened.
+    try:
+        mta_rows = []
+        mta_path = os.path.join(DATA_DIR, "backfill", "mta_ridership.json")
+        if os.path.exists(mta_path):
+            with open(mta_path, encoding="utf-8") as f:
+                mta_rows = json.load(f).get("data") or []
+        verdicts = score.score_all(points, snapshots=snapshots, mta=mta_rows)
+    except Exception as e:
+        verdicts = {}
+        print(f"warning: scoring unavailable: {str(e)[:120]}", file=sys.stderr)
+
+    for item in published["predictions"]:
+        result = verdicts.get(item["id"])
+        if result:
+            item["verdict"] = result["verdict"]
+            item["provisional"] = result["provisional"]
+            item["not_scored_because"] = result["reason"]
+            item["evidence"] = result["evidence"]
+
     with open(os.path.join(OUT_DIR, "predictions.json"), "w", encoding="utf-8") as f:
-        json.dump(predictions.as_published(), f, ensure_ascii=False, indent=1)
+        json.dump(published, f, ensure_ascii=False, indent=1)
 
     series_kb = os.path.getsize(os.path.join(OUT_DIR, "series.json")) / 1024
     print(f"{len(points)} snapshots over {span_days} days "

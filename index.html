@@ -82,7 +82,9 @@ nav a{text-decoration:none}
 .mark.predicted{color:#ffd166}
 .mark.measured{color:#7ee787}
 .mark.estimated{color:#9db4ff}
-.verdict-pending{font-size:.72rem; letter-spacing:.1em; opacity:.5}
+.verdict-pending{font-size:.72rem; letter-spacing:.1em; opacity:.5; max-width:22rem; text-align:right}
+/* A correction has to be as visible as the thing it corrects, or the promise not to edit quietly is worth nothing. */
+.rule.corrected{border-left:2px solid var(--amber); padding-left:.75rem; margin-top:.75rem; opacity:.85}
 .commit{margin-top:1.4rem; padding:1rem 1.2rem; border-left:3px solid #ffd166;
         font-size:.92rem; line-height:1.6}
 
@@ -1058,11 +1060,35 @@ function renderPredictions(doc){
   $("pred-list").innerHTML = doc.predictions.map(function(p, i){
     // A verdict exists only once there is a day to judge. Until then the
     // marking carries the honesty: this is a claim, not a reading.
-    const verdict = p.verdict
-      ? '<span class="mark ' + (p.verdict === "passed" ? "measured" : "predicted")
-        + '">' + p.verdict.toUpperCase() + "</span>"
-      : (judged ? '<span class="verdict-pending">waiting for the readings</span>'
-                : '<span class="mark predicted">PREDICTED</span>');
+    // Four states, not two. A rule whose window is still open is not
+    // undecided for want of data -- it is leading or trailing, and saying
+    // which is more honest than a blank. And "waiting for the readings"
+    // must never stand in for "we could not measure": when a scorer cannot
+    // reach a verdict it says what is missing, and the page prints that.
+    let verdict;
+    if (p.verdict){
+      verdict = '<span class="mark ' + (p.verdict === "passed" ? "measured" : "predicted")
+              + '">' + p.verdict.toUpperCase() + "</span>";
+    } else if (p.provisional){
+      verdict = '<span class="mark predicted">SO FAR</span>';
+    } else if (judged){
+      verdict = '<span class="verdict-pending">'
+              + esc(p.not_scored_because || "waiting for the readings") + "</span>";
+    } else {
+      verdict = '<span class="mark predicted">PREDICTED</span>';
+    }
+
+    // A correction is never invisible. That is the whole of the promise.
+    const fixes = (doc.corrections || []).filter(function(c){
+      return c.prediction === p.id;
+    });
+    const corrected = fixes.length
+      ? '<p class="rule corrected"><b>Corrected ' + esc(fixes[0].date) + ":</b> "
+        + esc(fixes[0].what) + " " + esc(fixes[0].why)
+        + (fixes[0].harder_or_easier
+            ? " <b>Harder or easier to satisfy:</b> " + esc(fixes[0].harder_or_easier)
+            : "") + "</p>"
+      : "";
 
     return '<article class="pred">'
       + '<div class="top"><span class="num">0' + (i + 1) + "</span>" + verdict + "</div>"
@@ -1072,7 +1098,9 @@ function renderPredictions(doc){
       + "<p><b>Threshold:</b> " + esc(p.threshold_from) + "</p>"
       + "<p><b>How often this fires on an ordinary day:</b> " + esc(p.base_rate) + "</p>"
       + (p.caveat ? "<p><b>What could make this wrong:</b> " + esc(p.caveat) + "</p>" : "")
-      + "</details></article>";
+      + (p.not_scored_because && p.provisional
+          ? "<p><b>Not settled yet:</b> " + esc(p.not_scored_because) + "</p>" : "")
+      + "</details>" + corrected + "</article>";
   }).join("");
 
   $("pred-commitment").textContent = doc.commitment || "";
