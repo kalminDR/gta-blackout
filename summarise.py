@@ -280,6 +280,13 @@ def flatten(snap):
             short = code.lower()
             row[f"power_{short}_load_mw"] = as_number(entry.get("load_mw"))
             row[f"power_{short}_lag_hours"] = as_number(entry.get("lag_hours"))
+            # When the grid was actually at that load, which is not when we
+            # asked. ENTSO-E publishes 45 to 60 minutes behind, so a reading
+            # fetched at 14:14 UTC is the load at 13:30. The evening ratio
+            # compares named hours -- the peak against 16:00 local -- and
+            # filing each reading under the hour we happened to collect it
+            # shifts every one of them into the wrong bucket.
+            row[f"power_{short}_t"] = entry.get("t")
 
     # --- Hardware scarcity: resale price, then actual retail stock
     for market, short in (("EBAY_US", "us"), ("EBAY_GB", "uk"), ("EBAY_DE", "de")):
@@ -504,13 +511,17 @@ def main():
         print("No snapshots found - has collect.py run yet?", file=sys.stderr)
         return 1
 
-    points, unreadable = [], []
+    points, unreadable, snapshots = [], [], []
     for path in files:
         try:
             with open(path, encoding="utf-8") as f:
                 snap = json.load(f)
             if snap.get("collected_at_utc"):
                 points.append(flatten(snap))
+                # Kept whole as well as flattened: the electricity window is
+                # twelve hours per reading and does not belong in the series,
+                # which is one row per snapshot.
+                snapshots.append(snap)
         except Exception as e:
             unreadable.append({"file": path, "error": str(e)[:120]})
 
@@ -550,7 +561,7 @@ def main():
     # the weeks we have been collecting. So it is computed here, over the
     # finished series, and travels beside it.
     try:
-        evening = power.verdicts_from_series(points)
+        evening = power.verdicts_from_snapshots(snapshots)
     except Exception as e:                       # a missing backfill is not
         evening = {}                             # a reason to lose the page
         print(f"warning: evening ratio unavailable: {str(e)[:120]}",

@@ -34,6 +34,12 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 
+# Collapsing quarter-hourly points to hourly means is the same job in
+# the backfill and here, and it must stay the same job: a live reading
+# and a historical one that disagree about what an hour is cannot be
+# compared. One function, tested in test_entsoe.py.
+from backfill import _hourly_means
+
 UA = "attention-heist/1.0 (research project; contact: hello@eureka.works)"
 TIMEOUT = 25
 
@@ -947,11 +953,21 @@ def collect_entsoe():
                 out[code] = {"no_data": "document parsed, no points"}
                 continue
             t, mw = points[-1]
+            # The twelve-hour window is fetched anyway, and until now all but
+            # its last point was thrown away. That cost us hours: publication
+            # lags by 45 to 60 minutes and the lag drifts, so an hourly poll
+            # that keeps one point lands twice in some clock hours and never
+            # in others. On the first live evening two of eight countries had
+            # no 16:00 reading at all and dropped out of the comparison.
+            # Keeping the window costs no extra call and no extra quota, and
+            # every hour then arrives twelve times over.
             out[code] = {
                 "load_mw": round(mw, 1),
                 "t": t.isoformat(),
                 "lag_hours": round((now - t).total_seconds() / 3600, 2),
                 "points_in_window": len(points),
+                "hourly": [[h.isoformat(), v]
+                           for h, v in sorted(_hourly_means(points).items())],
             }
         except Exception as e:
             # The token is in the URL, so it would appear in any message that

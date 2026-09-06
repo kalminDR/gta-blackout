@@ -96,7 +96,9 @@ and on the assistant drifting into its own interests instead of his. **Take the
 correction, fix it, do not get defensive, and do not over-apologise.** Say what
 was wrong and move on.
 
-Write to him in Hungarian.
+Write to him in English. This was Hungarian until 6 September 2026 and
+he changed it; this line is the setting, so change it here rather than
+remembering a preference that dies with the session.
 
 ### The failure mode to avoid
 
@@ -260,6 +262,32 @@ scheduled events on the platform: 540k concurrent viewers on one channel,
 lifting the global top-100 total to 2.19× the running median. That is a real
 measured yardstick for "what a huge event looks like", and it is the best
 available human comparison for November.
+
+### ENTSO-E readings are 45-60 minutes old, and the lag drifts
+
+Found on the first live evening, 6 September 2026, which is the reason to
+watch the first run of anything. Two faults, one cause.
+
+**The reading is not from the hour you fetched it.** A snapshot collected at
+14:14 UTC carries the load at 13:30. The evening ratio compares named hours,
+so filing each reading under its collection hour shifted every one of them a
+bucket late and made the first live ratio wrong in all eight countries. The
+measurement carries its own `t`; use that, never `collected_at_utc`. The
+flattened series now carries `power_XX_t` beside the load for exactly this.
+
+**An hourly poll misses hours.** Because the lag drifts between 45 and 60
+minutes, some clock hours get two readings and some get none. On that first
+evening the Netherlands and Sweden had no 16:00 reading at all and dropped
+out of the comparison — silently, and correctly, since the alternative is
+inventing one. On 19 November that would quietly delete countries from the
+evidence.
+
+The fix costs nothing: the collector already requests a **twelve-hour
+window** and was discarding all but its last point. It now keeps the hourly
+means of the whole window, so every hour arrives about a dozen times and the
+most settled version wins. No extra call, no extra quota. Snapshots taken
+before 6 September have no window and cannot be back-filled — that data was
+never saved.
 
 ### GB does not publish electricity to ENTSO-E
 
