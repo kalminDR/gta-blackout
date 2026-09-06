@@ -277,17 +277,59 @@ about gaps.
 
 ## 6. Open items
 
-**The six predictions are not on the site yet.** This is the biggest remaining
-piece and the one that creates the press moment: dated, falsifiable statements
-published before the event, which afterwards visibly pass or fail. Thresholds
-are now derivable from the numbers in section 5. The drafted set covers Twitch
-persistence, the subway rank-and-magnitude test, Steam displacement, traffic
-rank, console service failures beyond the Russian baseline, and self-reports.
+**The six predictions are published**, as of 6 September 2026, in
+`predictions.py` and on the page under `#predictions`. Each carries its rule,
+where its threshold came from, and how often that rule fires on an ordinary
+day — that last number being the one that matters. `PUBLISHED_AT` is a
+constant, never a clock: if it moved with every run, "written down in advance"
+would be a phrase the file re-earned every hour.
 
-A commitment to publish alongside them: *we expect to be wrong about at least
-one of these, and we will not quietly edit them.* Being publicly wrong about two
-of six is more credible than being right about all six, and it is the version a
+Two of the drafted six were dropped and two were rewritten, all four on
+measurement:
+
+- **Self-reports** dropped. The endpoint has not returned a single response,
+  so any threshold would have been invented — and a prediction about our own
+  self-selected sample is the one a sceptic discounts first.
+- **Console prices** never made it in. eBay began authenticating on
+  6 September and has four daily medians behind it. Claim 04 therefore has no
+  prediction, and the page says so.
+- **The subway rule was broken.** As inherited it compared 19 November to the
+  whole Oct–Dec window; 24 and 31 December 2026 are both Thursdays and run
+  25–60% below normal, so no ordinary day could ever be "the lowest" and the
+  window mean was dragged down by holidays. Now stated against November
+  Thursdays alone, which are the most uniform days in the entire record
+  (sd 0.68%, 0.99%, 0.45% in 2023–25; no November Thursday ever more than
+  1.12% below its month).
+- **The electricity rule was already true.** "At least one of eight grids
+  moves two standard deviations" fires on **24.4%** of ordinary autumn
+  weekdays. Two of eight: 4.7%. Three of eight: 1.4%. It now asks for three.
+
+That second one is the Russian PlayStation Store all over again, and it is why
+every threshold now has its base rate measured against the backfill and
+published beside it. **Any new prediction must carry that number.**
+
+The commitment published with them: *we expect to be wrong about at least one
+of these, and we will not quietly edit them.* Being publicly wrong about two of
+six is more credible than being right about all six, and it is the version a
 journalist can write about twice.
+
+**Still to build: the scorer.** The six are published but nothing yet evaluates
+them. After 19 November each needs its verdict computed from the readings and
+written into `predictions.json` as `verdict: passed|failed`; the page already
+renders both, and renders "waiting for the readings" in between.
+
+### Holidays in the New York series, learned the hard way
+
+Every Thursday dip beyond 5% in four years of subway data is an identifiable
+holiday, not noise: Thanksgiving (−60%), Christmas and New Year (−16 to −63%),
+4 July (−47%), Juneteenth (−21%), Presidents' Day week (−7%), Passover and
+Easter (−5 to −12%), the Jewish High Holidays in early October (−14 to −16%),
+and late August (−5 to −9%). One outlier is not a holiday at all: 8 June 2023,
+−15.7%, the Canadian wildfire smoke emergency.
+
+**Consequence:** any rule built on an Oct–Dec window must survive early-October
+High Holidays whose date moves year to year. November Thursdays alone avoid all
+of it, which is why the subway prediction lives there.
 
 **The D1 schema is not in the repository.** `worker.js` is, as of
 2026-09-06 — but the three tables it writes to (`reports`, `tallies`,
@@ -338,8 +380,9 @@ stills, characters, logos, or the Pricedown typeface.
 - Python edits: parse with `ast` afterwards. String patches use
   `assert old in s` guards to catch double-application.
 - Tests: `test_indices.py`, `test_entsoe.py` (network replaced by fixtures),
-  `test_power.py` (the evening ratio, including a regression lock on the hours).
-  Run all three after touching collection or aggregation. The counts move; the
+  `test_power.py` (the evening ratio, including a regression lock on the hours),
+  `test_predictions.py` (the six, and a re-derivation of the two thresholds
+  that were rewritten). Run all four after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to

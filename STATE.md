@@ -1,12 +1,12 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-06 12:34 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-06 12:47 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **1 planned sources have no code at all**: chicago
-- **108 snapshots** over 98.0 hours (4.1 days); last one 1.3 h ago
+- **108 snapshots** over 98.0 hours (4.1 days); last one 1.6 h ago
 
 ## Sources
 
@@ -29,7 +29,7 @@ Newest snapshot: `data/2026-09-06/1114.json`
 
 ## Planned but not built
 
-- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py but not registered as a source
+- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, test_predictions.py but not registered as a source
 - **`chicago`** — Did people commute: a second, independent transit system — **no code anywhere in the repo**
 - **`wikipedia`** — Attention: edits and pageviews, six languages — referenced in backfill.py but not registered as a source
 
@@ -93,7 +93,7 @@ Baseline needs 6 samples per hour-of-week bucket. **1 of 168 buckets qualify** (
 
 ## Front end
 
-- 40 element ids in the HTML, 27 referenced by script
+- 44 element ids in the HTML, 30 referenced by script
 - Reads the current `indices` shape: yes
 - No orphaned ids
 

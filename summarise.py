@@ -20,6 +20,7 @@ Run:  python summarise.py
 import glob
 import indices
 import power
+import predictions
 import json
 import os
 import sys
@@ -579,6 +580,13 @@ def main():
                    "placebo": {name: indices.placebo(points, name)
                                for name in indices.PANEL_NAMES},
                    "points": chart}, f, ensure_ascii=False, separators=(",", ":"))
+
+    # The six predictions, republished on every run. They are fixed text and
+    # do not depend on the data, but they travel with it so the page never has
+    # to be edited by hand to show them -- and so a change to them shows up in
+    # the same commit history as the readings that will judge them.
+    with open(os.path.join(OUT_DIR, "predictions.json"), "w", encoding="utf-8") as f:
+        json.dump(predictions.as_published(), f, ensure_ascii=False, indent=1)
 
     series_kb = os.path.getsize(os.path.join(OUT_DIR, "series.json")) / 1024
     print(f"{len(points)} snapshots over {span_days} days "
