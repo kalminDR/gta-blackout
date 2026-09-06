@@ -44,9 +44,14 @@ medians behind it. A threshold drawn from four readings would be a number we
 made up, and this project does not do that. Claim 04 keeps its witnesses and
 gets no verdict.
 
-Self-reports are also absent, for the same reason -- the endpoint has not
-returned a single response yet -- and because a prediction about our own
-self-selected sample is the one a sceptical reader should discount first.
+Self-reports are also absent, but for one reason rather than two. The
+sceptic's reason stands: a prediction about our own self-selected sample is
+the one a reader should discount first. The other reason given here was that
+the endpoint had never returned a response, and that was simply wrong -- it
+had two, and still does. What had never happened was us fetching them:
+SELFREPORT_URL was not in the workflow's env block, so the collector skipped
+the source every hour while the answers sat in D1. Found on 6 September 2026
+by reading the tally table rather than the status line.
 """
 
 RELEASE_DAY = "2026-11-19"

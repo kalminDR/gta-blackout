@@ -315,9 +315,14 @@ would be a phrase the file re-earned every hour.
 Two of the drafted six were dropped and two were rewritten, all four on
 measurement:
 
-- **Self-reports** dropped. The endpoint has not returned a single response,
-  so any threshold would have been invented — and a prediction about our own
-  self-selected sample is the one a sceptic discounts first.
+- **Self-reports** dropped, on one reason not two. A prediction about our own
+  self-selected sample is the one a sceptic discounts first, and that stands.
+  The second reason given — "the endpoint has not returned a single response" —
+  was false: it had two. What had never happened was *us fetching them*, because
+  `SELFREPORT_URL` was missing from the workflow's `env:` block. The status line
+  said "skipped: no SELFREPORT_URL" for four days and was read as "nobody has
+  answered". **A skipped source is not an empty source**, and `state.py` cannot
+  tell you which — only the far end can.
 - **Console prices** never made it in. eBay began authenticating on
   6 September and has four daily medians behind it. Claim 04 therefore has no
   prediction, and the page says so.
@@ -398,12 +403,42 @@ and late August (−5 to −9%). One outlier is not a holiday at all: 8 June 202
 High Holidays whose date moves year to year. November Thursdays alone avoid all
 of it, which is why the subway prediction lives there.
 
-**The D1 schema is not in the repository.** `worker.js` is, as of
-2026-09-06 — but the three tables it writes to (`reports`, `tallies`,
-`subscribers`) exist only inside the D1 database. The worker cannot be
-redeployed from source alone. The DDL must be exported from the live
-database, never reconstructed from the queries: a guessed schema that
-almost matches is worse than none.
+### The D1 schema, and the four rows whose absence is silent
+
+`schema.sql` was exported from the live database on 6 September 2026 —
+`SELECT sql FROM sqlite_master` in the Cloudflare console, not reconstructed
+from the queries in `worker.js`. Together with `worker.js` the Worker is now
+redeployable from source. `test_schema.py` runs every statement the Worker
+issues against it, so the two cannot drift apart.
+
+Reconstruction would have been wrong and would have looked right. The queries
+show table and column names but not types, not `id INTEGER PRIMARY KEY
+AUTOINCREMENT`, and not that `subscribers.email` is the primary key — which is
+the only reason `ON CONFLICT(email) DO NOTHING` works in `handleSignup`.
+
+**The four `tallies` rows are part of the schema, not data.** `handleReport`
+counts with `UPDATE tallies SET n = n + 1 WHERE answer = ?`. Against a missing
+row that matches nothing, changes nothing and raises nothing: the vote still
+lands in `reports`, the counter never moves, and `/counts` under-reports for
+ever while looking healthy. `schema.sql` seeds all four at zero and
+`test_schema.py` demonstrates the silent divergence rather than describing it.
+
+### A skipped source is not an empty source
+
+Checking the tally table also answered a question nobody had thought to ask.
+`state.py` had reported `selfreport: skipped: no SELFREPORT_URL` for four
+days, and that was read — by this file and by `predictions.py` — as "nobody
+has answered yet". The D1 table had two answers in it the whole time.
+
+The collector had never fetched them, because `SELFREPORT_URL` was missing
+from the workflow's `env:` block. **`state.py` cannot tell a source with no
+data from a source it never asked.** Only the far end can, and the far end is
+a console this project's operator has to open.
+
+The workflow now passes `SELFREPORT_URL` as a repository *variable*, not a
+secret — the browser calls that endpoint, so the URL is public by
+construction. Until the variable is set the collector reports "skipped"
+exactly as before.
 
 **`chicago`** — a second, independent transit system — is in the plan with no
 code. It matters because New York is currently a single point of failure for
@@ -450,8 +485,9 @@ stills, characters, logos, or the Pricedown typeface.
   `test_power.py` (the evening ratio, including a regression lock on the hours),
   `test_predictions.py` (the six, and a re-derivation of the two thresholds
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
-  absent data never reads as "failed").
-  Run all five after touching collection or aggregation. The counts move; the
+  absent data never reads as "failed"), `test_schema.py` (the D1 schema against
+  the statements `worker.js` actually issues).
+  Run all six after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
