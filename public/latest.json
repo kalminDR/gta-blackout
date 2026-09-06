@@ -1,12 +1,12 @@
 {
- "generated_at_utc": "2026-09-06T11:15:51+00:00",
+ "generated_at_utc": "2026-09-06T11:48:51+00:00",
  "coverage": {
   "first_snapshot": "2026-09-02T09:14:59+00:00",
   "last_snapshot": "2026-09-06T11:14:05+00:00",
   "snapshot_count": 108,
   "days_of_history": 4.1,
   "unreadable_files": [],
-  "hours_since_last_snapshot": 0.0
+  "hours_since_last_snapshot": 0.6
  },
  "latest": {
   "t": "2026-09-06T11:14:05+00:00",
@@ -69,7 +69,7 @@
   "traffic_berlin_delay_pct": 18.7,
   "traffic_berlin_travel_index": 118.7,
   "traffic_berlin_points_ok": 6,
-  "traffic_berlin_points_rejected": null,
+  "traffic_berlin_points_rejected": 0,
   "traffic_berlin_seconds_measured": 801,
   "traffic_berlin_road_class": 0.5,
   "traffic_warsaw_delay_pct": 20.1,
@@ -81,13 +81,13 @@
   "traffic_newyork_delay_pct": 0.0,
   "traffic_newyork_travel_index": 100.0,
   "traffic_newyork_points_ok": 6,
-  "traffic_newyork_points_rejected": null,
+  "traffic_newyork_points_rejected": 0,
   "traffic_newyork_seconds_measured": 803,
   "traffic_newyork_road_class": 0.0,
   "traffic_losangeles_delay_pct": 0.0,
   "traffic_losangeles_travel_index": 100.0,
   "traffic_losangeles_points_ok": 6,
-  "traffic_losangeles_points_rejected": null,
+  "traffic_losangeles_points_rejected": 0,
   "traffic_losangeles_seconds_measured": 278,
   "traffic_losangeles_road_class": 0.0,
   "power_de_load_mw": 34791.5,
@@ -132,7 +132,7 @@
   "bestbuy_ps5_price": null,
   "bestbuy_xbox_series_x_online": null,
   "bestbuy_xbox_series_x_price": null,
-  "psn_incidents": 1,
+  "psn_incidents": 0,
   "xbox_service_issues": 0,
   "hn_items_per_hour": 358.26,
   "yt_rockstar_views_per_hour": 0.0,
@@ -469,7 +469,7 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 1,
+    "value": 0,
     "deviation_log2": null,
     "baseline_quality": null
    },
@@ -903,6 +903,13 @@
     "percent": 200.0
    }
   },
+  "traffic_newyork_points_rejected": {
+   "vs_24h": {
+    "then": 1,
+    "absolute": -1,
+    "percent": -100.0
+   }
+  },
   "traffic_newyork_seconds_measured": {
    "vs_24h": {
     "then": 284,
@@ -917,11 +924,11 @@
     "percent": -100.0
    }
   },
-  "psn_incidents": {
+  "traffic_losangeles_points_rejected": {
    "vs_24h": {
-    "then": 1,
-    "absolute": 0,
-    "percent": 0.0
+    "then": 3,
+    "absolute": -3,
+    "percent": -100.0
    }
   },
   "hn_items_per_hour": {

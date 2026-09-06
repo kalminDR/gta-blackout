@@ -1,12 +1,12 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-06 11:24 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-06 11:48 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **1 planned sources have no code at all**: chicago
-- **108 snapshots** over 98.0 hours (4.1 days); last one 0.2 h ago
+- **108 snapshots** over 98.0 hours (4.1 days); last one 0.6 h ago
 
 ## Sources
 
@@ -44,33 +44,30 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Metrics needing attention
 
-A metric that never errors but never moves is the dangerous kind: it reads as data and is not.
+A metric that never errors but never moves is the dangerous kind: it reads as data and is not. Judged on the last 24 readings — one full daily cycle — not on the whole history, so a fault that has since been repaired does not keep raising its hand.
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
 | 🔴 | `bestbuy_*` (6 metrics) | 0/108 | never returned a number — source not authenticating |
 | 🔴 | `baseline_quality` | 0/108 | never returned a number |
 | 🔴 | `deviations` | 0/108 | never returned a number |
+| 🔴 | `polymarket_market_count` | 68/108 | frozen at 6 for all 24 readings |
 | 🔴 | `power_gb_lag_hours` | 0/108 | never returned a number |
 | 🔴 | `power_gb_load_mw` | 0/108 | never returned a number |
-| 🔴 | `psn_incidents` | 101/108 | frozen at 1 for all 101 readings |
-| 🔴 | `steam_rank_gta5_enh` | 102/108 | frozen at 20 for all 102 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 103/108 | zero in 60 of 103 readings |
-| 🔴 | `traffic_london_delay_pct` | 96/108 | zero in 79 of 96 readings |
-| 🔴 | `traffic_losangeles_points_rejected` | 93/108 | frozen at 3 for all 93 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 96/108 | zero in 39 of 96 readings |
-| 🔴 | `traffic_newyork_points_rejected` | 99/108 | frozen at 1 for all 99 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 96/108 | zero in 47 of 96 readings |
-| 🔴 | `xbox_service_issues` | 101/108 | zero in 99 of 101 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 92/108 | zero in 87 of 92 readings |
-| 🔴 | `yt_subscribers` | 104/108 | frozen at 1.37e+07 for all 104 readings |
-| 🔴 | `yt_subscribers_per_hour` | 92/108 | frozen at 0 for all 92 readings; zero in 92 of 92 readings |
-| 🟠 | `traffic_berlin_points_rejected` | 6/108 | missing 97 of 103 since it started |
-| 🟠 | `traffic_losangeles_delay_pct` | 9/108 | missing 94 of 103 since it started |
-| 🟠 | `traffic_losangeles_seconds_measured` | 9/108 | missing 94 of 103 since it started |
-| 🟠 | `traffic_losangeles_travel_index` | 9/108 | missing 94 of 103 since it started |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 73/108 | missing 26 of 99 since it started |
-| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 47/108 | missing 16 of 63 since it started |
+| 🔴 | `steam_rank_gta5_enh` | 102/108 | frozen at 20 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 103/108 | zero in 16 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 96/108 | zero in 17 of 24 readings |
+| 🔴 | `traffic_newyork_delay_pct` | 96/108 | zero in 10 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 96/108 | zero in 10 of 24 readings |
+| 🔴 | `twitch_gta5` | 105/108 | zero in 17 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 92/108 | zero in 22 of 24 readings |
+| 🔴 | `yt_subscribers` | 104/108 | frozen at 1.37e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 92/108 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 54/108 | missing 9 of 24 since it started |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 73/108 | missing 17 of 22 since it started |
+| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 47/108 | missing 15 of 23 since it started |
+
+**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_losangeles_delay_pct`, `traffic_losangeles_seconds_measured`, `traffic_losangeles_travel_index`.
 
 ## Indices
 
@@ -85,14 +82,14 @@ Baseline needs 6 samples per hour-of-week bucket. **1 of 168 buckets qualify** (
 
 ## Historical backfill
 
-| File | Rows | From | To |
-|---|---|---|---|
-| `entsoe_load.json` |  |  |  |
-| `gdelt_geography.json` |  |  |  |
-| `mta_ridership.json` | 10600 | 2023-01-01 | 2026-09-03 |
-| `stackexchange.json` |  |  |  |
-| `wikipedia.json` |  |  |  |
-| `wikipedia_pageviews.json` |  |  |  |
+| File | Readings | From | To | Size |
+|---|---|---|---|---|
+| `entsoe_load.json` | 64,297 in 8 series | 2022-10-01 | 2026-09-04 | 2380 KB |
+| `gdelt_geography.json` | 86 | 2026-06-09 | 2026-09-06 | 4 KB |
+| `mta_ridership.json` | 10,600 | 2023-01-01 | 2026-09-03 | 550 KB |
+| `stackexchange.json` | 176 in 2 series | 2023-01-01 | 2026-09-05 | 9 KB |
+| `wikipedia.json` | 8,034 in 6 series | 2023-01-01 | 2026-08-31 | 284 KB |
+| `wikipedia_pageviews.json` | 8,564 in 7 series | 2023-01-01 | 2026-09-05 | 268 KB |
 
 ## Front end
 

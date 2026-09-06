@@ -255,7 +255,10 @@ def flatten(snap):
         # of near-zero numbers is meaningless.
         row[f"{key}_travel_index"] = round(cur_total / free_total * 100, 1) if free_total else None
         row[f"{key}_points_ok"] = ok or None
-        row[f"{key}_points_rejected"] = rejected or None
+        # Zero rejections is a measurement, not an absence: it says the gate
+        # looked and found nothing wrong. Writing it as null made a working
+        # quality gate read as a dead metric in the status report.
+        row[f"{key}_points_rejected"] = rejected
         row[f"{key}_seconds_measured"] = free_total or None
         # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
