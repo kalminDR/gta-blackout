@@ -58,6 +58,53 @@ RELEASE_DAY = "2026-11-19"
 # without saying so.
 PUBLISHED_AT = "2026-09-06"
 
+# Changes made after publication, each with its date and its reason.
+#
+# The commitment published with the six is that we will not *quietly* edit
+# them. That is not a promise never to correct an error -- it is a promise
+# that a correction is never invisible. Anything altered after PUBLISHED_AT
+# appears here and on the page, beside the prediction it changed.
+#
+# A correction may fix a mistake in how a rule is described. It may never
+# make a rule easier to satisfy. If one of these turns out to be unwinnable
+# as written, it fails as written.
+CORRECTIONS = [
+    {
+        "date": "2026-09-06",
+        "prediction": "steam",
+        "what": "The rule said 'the seven tracked games other than Grand "
+                "Theft Auto V'. There are eight tracked games and two of "
+                "them are Grand Theft Auto V -- the original and Enhanced -- "
+                "so the set is six, not seven.",
+        "why": "An arithmetic slip in the description, found while writing "
+               "the scorer. The set itself is unchanged: every tracked game "
+               "that is not GTA V, which is what the rule always meant and "
+               "what claim 03 requires. Including a GTA title in 'everything "
+               "else went quiet' would be wrong whichever way it moved. The "
+               "six are now named in code as STEAM_DISPLACED so no one has "
+               "to count them again.",
+        "harder_or_easier": "Neither. The same six counts were always going "
+                            "to be summed.",
+    },
+]
+
+# The games the Steam prediction is scored on: every tracked title that is
+# not Grand Theft Auto V.
+#
+# This exists because the rule used to name its set only in English, and the
+# English was wrong. A prediction whose scored set has to be inferred at
+# scoring time is not the falsifiable thing this file claims to be -- the
+# next person to read it would have had to guess, and "seven" would have led
+# them to guess wrong.
+STEAM_DISPLACED = [
+    "steam_cs2",
+    "steam_dota2",
+    "steam_pubg",
+    "steam_apex",
+    "steam_bg3",
+    "steam_rdr2",
+]
+
 # Each prediction carries: the sentence, the claim it serves, the exact rule
 # in machine-checkable words, where its threshold came from, and how often the
 # rule fires on an ordinary day. That last field is the one that matters --
@@ -142,10 +189,11 @@ PREDICTIONS = [
         "id": "steam",
         "claim": "quiet",
         "says": "Every other game will empty out at the same moment",
-        "rule": "During the launch evening, the seven tracked games other than "
+        "rule": "During the launch evening, the six tracked games other than "
                 "Grand Theft Auto V record their lowest combined player count, "
                 "for that hour of that weekday, of any Thursday between "
                 "1 October and 17 December 2026.",
+        "scored_on": STEAM_DISPLACED,
         "threshold_from":
             "A rank test on the same-hour, same-weekday comparison. Raw "
             "player counts are useless for this: the basket swings threefold "
@@ -219,4 +267,5 @@ def as_published():
     return {"published_at": PUBLISHED_AT,
             "release_day": RELEASE_DAY,
             "commitment": COMMITMENT,
+            "corrections": CORRECTIONS,
             "predictions": PREDICTIONS}

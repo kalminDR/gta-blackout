@@ -341,10 +341,49 @@ of these, and we will not quietly edit them.* Being publicly wrong about two of
 six is more credible than being right about all six, and it is the version a
 journalist can write about twice.
 
-**Still to build: the scorer.** The six are published but nothing yet evaluates
-them. After 19 November each needs its verdict computed from the readings and
-written into `predictions.json` as `verdict: passed|failed`; the page already
-renders both, and renders "waiting for the readings" in between.
+**The scorer is built** — `score.py`, wired into `summarise.py`, so every run
+recomputes all six verdicts from the readings and writes them into
+`predictions.json`. Recomputed, never typed: a verdict is what the data says
+today, including "not enough data", which is what all six say until November.
+
+**The rule that governs that file: `failed` means we measured and it did not
+happen. It never means we could not measure.** A collector outage on
+19 November must not print as evidence that nothing happened — that is a false
+result wearing the clothes of a real one, and it is the worst thing this
+project could publish. Every scorer establishes its readings are present
+before forming any opinion; missing data yields no verdict and a reason naming
+what is missing. `test_score.py` asserts there is no path from absent data to
+"failed", for all six, including partial data: five of the six Steam games
+summed is a smaller number that would look like displacement, so an incomplete
+basket is discarded rather than summed.
+
+**Two of the six cannot be settled on the day.** Traffic and Steam are rank
+tests over Thursdays between 1 October and 17 December, so a December Thursday
+can still come in lower. They report `provisional` and show where they stand;
+the page renders that as SO FAR. Saying so is better than implying the day
+settles it.
+
+### Corrections to published predictions
+
+The commitment is that we will not *quietly* edit them. That is not a promise
+never to correct an error — it is a promise that no correction is invisible.
+`predictions.CORRECTIONS` carries each one with its date and reason, and the
+page prints it beside the prediction it changed, in amber.
+
+**A correction may fix how a rule is described. It may never make a rule
+easier to satisfy.** If one turns out to be unwinnable as written, it fails as
+written.
+
+One so far, 6 September 2026: the Steam rule said "the seven tracked games
+other than Grand Theft Auto V". There are eight tracked games and two of them
+are GTA V — the original and Enhanced — so the set is six. The set never
+changed; the count describing it was wrong. Found while writing the scorer,
+which is the point of writing scorers.
+
+That prediction also had no machine-readable set at all — only English. The
+six are now `predictions.STEAM_DISPLACED`. **Any prediction scored on a set of
+metrics must name that set in code**, or the next person to score it has to
+guess, and "seven" would have made them guess wrong.
 
 ### Holidays in the New York series, learned the hard way
 
@@ -410,7 +449,9 @@ stills, characters, logos, or the Pricedown typeface.
 - Tests: `test_indices.py`, `test_entsoe.py` (network replaced by fixtures),
   `test_power.py` (the evening ratio, including a regression lock on the hours),
   `test_predictions.py` (the six, and a re-derivation of the two thresholds
-  that were rewritten). Run all four after touching collection or aggregation. The counts move; the
+  that were rewritten), `test_score.py` (the verdicts, and the invariant that
+  absent data never reads as "failed").
+  Run all five after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
