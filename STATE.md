@@ -1,12 +1,12 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-06 11:48 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-06 12:34 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **1 planned sources have no code at all**: chicago
-- **108 snapshots** over 98.0 hours (4.1 days); last one 0.6 h ago
+- **108 snapshots** over 98.0 hours (4.1 days); last one 1.3 h ago
 
 ## Sources
 

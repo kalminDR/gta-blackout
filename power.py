@@ -183,3 +183,115 @@ def autumn_baselines(backfill=None, months=(10, 11, 12)):
         if base:
             out[code] = base
     return out
+
+
+# How far from its own ordinary evening a reading must sit before it is
+# allowed to say anything. Two standard deviations: about one ordinary
+# evening in twenty clears it by chance, which is the right amount of
+# scepticism for a second witness that is not carrying the claim on its own.
+SPEAKS_AT_SIGMA = 2.0
+
+# The windows the backfill actually holds, as month sets. A day is compared to
+# the window its own month falls in -- an autumn evening against autumn
+# evenings -- because the ratio drifts with the season even though it cancels
+# the weather.
+SEASON_WINDOWS = ((10, 11, 12), (8, 9))
+
+
+def season_for(month):
+    for window in SEASON_WINDOWS:
+        if month in window:
+            return window
+    return None
+
+
+def season_baseline(points, day, backfill_points=None):
+    """The baseline one particular day should be judged against.
+
+    Two things are matched, and both are load-bearing.
+
+    Season, because the ratio drifts through the year even though it cancels
+    weather. And weekday class, because the ratio is structurally higher at
+    weekends everywhere -- in Italy by 3.6 weekday standard deviations. That
+    second one is not a refinement. Scoring a Sunday against weekdays is what
+    turned an ordinary Sunday in November 2022 into the +4.1 sigma this
+    project recorded for two years as evidence that the method works. Enforced
+    here rather than left to the caller, because the caller is the one who
+    got it wrong.
+    """
+    months = season_for(day.month)
+    if not months:
+        return None
+    src = backfill_points if backfill_points is not None else points
+    ratios = ratios_for(src, months=months, weekdays_only=False)
+    weekend = day.weekday() >= 5
+    return baseline({d: v for d, v in ratios.items()
+                     if d != day and (d.weekday() >= 5) == weekend})
+
+
+def verdict(live_points, backfill_points, day=None):
+    """What one country's grid has to say, or why it cannot say it.
+
+    Returns None when there is no complete evening to judge. Otherwise a dict
+    carrying the reading, how far it sits from an ordinary evening of the same
+    kind, and -- always -- the smallest change this particular grid could have
+    distinguished at all. That last number is why a quiet Germany is evidence
+    and a quiet Hungary is not, and it travels with every reading so the page
+    cannot show one without the other.
+    """
+    live = ratios_for(live_points, weekdays_only=False)
+    if not live:
+        return None
+    day = day or max(live)
+    ratio = live.get(day)
+    if ratio is None:
+        return None
+    base = season_baseline(live_points, day, backfill_points)
+    if not base:
+        return {"day": day.isoformat(), "ratio": round(ratio, 4),
+                "z": None, "detects_pct": None,
+                "reason": "no season-matched baseline"}
+    z = z_score(ratio, base)
+    # The smallest deviation this grid could tell apart from an ordinary
+    # evening. Expressed as a percentage of that evening, because "13%" is a
+    # thing a reader can picture and "6.5% coefficient of variation" is not.
+    detects = round(SPEAKS_AT_SIGMA * base["cv_pct"], 1) if base["cv_pct"] else None
+    return {
+        "day": day.isoformat(),
+        "ratio": round(ratio, 4),
+        "baseline": round(base["mean"], 4),
+        "z": round(z, 2) if z is not None else None,
+        "deviation_pct": round(100 * (ratio / base["mean"] - 1), 1),
+        "detects_pct": detects,
+        "speaks": bool(z is not None and abs(z) >= SPEAKS_AT_SIGMA),
+        "baseline_days": base["n"],
+        "weekend": day.weekday() >= 5,
+    }
+
+
+def verdicts_from_series(points, backfill=None):
+    """Every country's evening verdict, from the live series.
+
+    `points` is the flattened hourly series -- the same rows the site is built
+    from -- so this reads exactly what was published, not a private copy.
+    """
+    bf = backfill if backfill is not None else load_backfill()
+    live = {}
+    for row in points:
+        ts = row.get("t")
+        if not ts:
+            continue
+        for key, value in row.items():
+            if key.startswith("power_") and key.endswith("_load_mw") \
+                    and isinstance(value, (int, float)):
+                code = key[len("power_"):-len("_load_mw")].upper()
+                live.setdefault(code, []).append([ts, value])
+    out = {}
+    for code, pts in live.items():
+        if code not in bf:
+            # A country with no history to judge it against says nothing.
+            continue
+        v = verdict(pts, bf[code])
+        if v:
+            out[code] = v
+    return out

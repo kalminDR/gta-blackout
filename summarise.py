@@ -19,6 +19,7 @@ Run:  python summarise.py
 
 import glob
 import indices
+import power
 import json
 import os
 import sys
@@ -543,12 +544,24 @@ def main():
 
     panels = indices.summary(points)
 
+    # The evening ratio cannot live in a single snapshot: it needs a whole
+    # local day, and its baseline comes from the backfill rather than from
+    # the weeks we have been collecting. So it is computed here, over the
+    # finished series, and travels beside it.
+    try:
+        evening = power.verdicts_from_series(points)
+    except Exception as e:                       # a missing backfill is not
+        evening = {}                             # a reason to lose the page
+        print(f"warning: evening ratio unavailable: {str(e)[:120]}",
+              file=sys.stderr)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
                    "latest": points[-1],
                    "observed": observed_ranges(points),
                    "panels": panels,
+                   "evening": evening,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
 

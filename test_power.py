@@ -124,5 +124,51 @@ for code, gap in (("IT", 3.0), ("ES", 1.5)):
     check(f"{code}: the weekend alone is worth more than {gap} weekday sd",
           (we["mean"] - wd["mean"]) / wd["sd"] > gap)
 
+print("\n8. The verdict a country hands the page")
+# The invariant the front end depends on: a reading never arrives without the
+# size of what its grid could have detected. Without that number the page
+# cannot tell an informative silence from an ignorant one, and would show
+# Hungary's blindness and Germany's evidence as the same "no change".
+day = datetime.date(2022, 12, 14)
+for code in ("DE", "FR", "HU"):
+    v = power.verdict(bf[code], bf[code], day=day)
+    check(f"{code}: a verdict exists for a real day", v is not None)
+    check(f"{code}: it carries the floor it could have detected",
+          isinstance(v["detects_pct"], float))
+    check(f"{code}: and the day it is about", v["day"], day.isoformat())
+
+de = power.verdict(bf["DE"], bf["DE"], day=day)
+hu = power.verdict(bf["HU"], bf["HU"], day=day)
+check("Germany's floor is lower than Hungary's, which is the whole point",
+      de["detects_pct"] < hu["detects_pct"])
+check("neither of them speaks on an ordinary evening",
+      de["speaks"] is False and hu["speaks"] is False)
+
+print("\n9. Weekday class is matched, not assumed")
+# The guard against repeating the Sunday-versus-weekday error, this time
+# enforced by the code rather than by whoever calls it.
+sunday = datetime.date(2022, 11, 27)
+v_sun = power.verdict(bf["IT"], bf["IT"], day=sunday)
+check("a Sunday is judged as a weekend", v_sun["weekend"])
+check("a Wednesday is judged as a weekday",
+      power.verdict(bf["IT"], bf["IT"], day=day)["weekend"], False)
+check("Italy on that Sunday stays silent, as it should",
+      v_sun["speaks"], False)
+# Scored the wrong way round it would have been a headline.
+wrong = power.baseline({d: r for d, r in
+                        power.ratios_for(bf["IT"], months=(10, 11, 12)).items()})
+check("and scored against weekdays it would have cleared two sigma",
+      abs(power.z_score(v_sun["ratio"], wrong)) > 2.0)
+
+print("\n10. Nothing to judge yields nothing")
+check("a series with no complete evening has no verdict",
+      power.verdict([["2026-09-06T09:15:00+00:00", 40000.0]], bf["DE"]), None)
+check("an empty series has no verdict", power.verdict([], bf["DE"]), None)
+check("a country absent from the backfill is skipped, not invented",
+      power.verdicts_from_series(
+          [{"t": "2026-11-19T15:00:00+00:00", "power_gb_load_mw": 30000.0},
+           {"t": "2026-11-19T19:00:00+00:00", "power_gb_load_mw": 33000.0}]),
+      {})
+
 print(f"\n{passed} checks passed" + (f", {failed} FAILED" if failed else ""))
 sys.exit(1 if failed else 0)
