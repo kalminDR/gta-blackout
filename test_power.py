@@ -165,10 +165,64 @@ check("a series with no complete evening has no verdict",
       power.verdict([["2026-09-06T09:15:00+00:00", 40000.0]], bf["DE"]), None)
 check("an empty series has no verdict", power.verdict([], bf["DE"]), None)
 check("a country absent from the backfill is skipped, not invented",
-      power.verdicts_from_series(
-          [{"t": "2026-11-19T15:00:00+00:00", "power_gb_load_mw": 30000.0},
-           {"t": "2026-11-19T19:00:00+00:00", "power_gb_load_mw": 33000.0}]),
+      power.verdicts_from_snapshots([{"sources": {"entsoe": {"GB": {
+          "hourly": [["2026-11-19T15:00:00+00:00", 30000.0],
+                     ["2026-11-19T19:00:00+00:00", 33000.0]]}}}}]),
       {})
+
+print("\n11. The hour a reading belongs to is the hour it was measured")
+# The bug the first live evening exposed. ENTSO-E publishes 45 to 60 minutes
+# late, so a reading collected at 14:14 UTC is the load at 13:30. Filing it
+# under the collection hour shifted every reading one bucket late and made
+# the first real evening ratio wrong in all eight countries.
+snap = {"collected_at_utc": "2026-11-19T14:14:00+00:00",
+        "sources": {"entsoe": {"DE": {"load_mw": 50000.0, "lag_hours": 0.75,
+                                      "t": "2026-11-19T13:30:00+00:00"}}}}
+merged = power.merge_windows([snap])
+check("a reading with no window is filed by its own timestamp",
+      merged["DE"], [("2026-11-19T13:30:00+00:00", 50000.0)])
+days = power.days_by_local_date([list(p) for p in merged["DE"]])
+check("13:30 UTC in November is the 14:00 local hour, not 15:00",
+      sorted(days[datetime.date(2026, 11, 19)]), [14])
+
+print("\n12. The window fills the hours an hourly poll misses")
+# Two of eight countries had no 16:00 reading on the first live evening,
+# because a drifting lag makes an hourly poll land twice in some clock hours
+# and never in others. The collector already fetches twelve hours per call;
+# keeping them means no hour can be missed.
+def snap_with(window, at):
+    return {"collected_at_utc": at,
+            "sources": {"entsoe": {"DE": {"hourly": window}}}}
+
+early = snap_with([["2026-11-19T14:00:00+00:00", 40000.0],
+                   ["2026-11-19T15:00:00+00:00", 42000.0]],
+                  "2026-11-19T16:00:00+00:00")
+late = snap_with([["2026-11-19T17:00:00+00:00", 48000.0],
+                  ["2026-11-19T18:00:00+00:00", 52000.0],
+                  ["2026-11-19T19:00:00+00:00", 51000.0]],
+                 "2026-11-19T20:00:00+00:00")
+merged = power.merge_windows([early, late])
+check("windows from different snapshots combine into one curve",
+      len(merged["DE"]), 5)
+days = power.days_by_local_date([list(p) for p in merged["DE"]])
+hours = sorted(days[datetime.date(2026, 11, 19)])
+check("and cover every local hour between them", hours, [15, 16, 18, 19, 20])
+check("so the ratio exists: peak 20:00 local over 16:00 local",
+      round(power.evening_ratio(days[datetime.date(2026, 11, 19)]), 4),
+      round(52000.0 / 42000.0, 4))
+
+print("\n13. A settled hour replaces the partial one")
+# Each hour arrives about twelve times, first with only some quarters
+# published. The last snapshot to mention it has the complete version.
+partial = snap_with([["2026-11-19T18:00:00+00:00", 30000.0]],
+                    "2026-11-19T18:15:00+00:00")
+settled = snap_with([["2026-11-19T18:00:00+00:00", 52000.0]],
+                    "2026-11-19T19:15:00+00:00")
+check("the later reading of the same hour wins",
+      power.merge_windows([partial, settled])["DE"],
+      [("2026-11-19T18:00:00+00:00", 52000.0)])
+check("and order does not silently decide it the other way",
+      power.merge_windows([partial, settled])["DE"][0][1], 52000.0)
 
 print(f"\n{passed} checks passed" + (f", {failed} FAILED" if failed else ""))
 sys.exit(1 if failed else 0)

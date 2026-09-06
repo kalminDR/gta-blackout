@@ -269,29 +269,56 @@ def verdict(live_points, backfill_points, day=None):
     }
 
 
-def verdicts_from_series(points, backfill=None):
-    """Every country's evening verdict, from the live series.
+def merge_windows(snapshots):
+    """Assemble each country's hourly curve from the collectors' windows.
 
-    `points` is the flattened hourly series -- the same rows the site is built
-    from -- so this reads exactly what was published, not a private copy.
+    Every snapshot carries the last twelve hours the operator had published,
+    so each clock hour arrives about a dozen times: first as a partial hour
+    with only some quarters settled, then complete. The latest snapshot to
+    mention an hour has the most settled version of it, so later readings
+    replace earlier ones.
+
+    `snapshots` is a list of raw snapshot dicts, newest last.
+    """
+    by_country = {}
+    for snap in snapshots:
+        entsoe = (snap.get("sources") or {}).get("entsoe") or {}
+        if not isinstance(entsoe, dict):
+            continue
+        for code, entry in entsoe.items():
+            if not isinstance(entry, dict) or len(code) != 2:
+                continue
+            hours = by_country.setdefault(code, {})
+            window = entry.get("hourly")
+            if isinstance(window, list):
+                for item in window:
+                    if isinstance(item, (list, tuple)) and len(item) == 2 \
+                            and isinstance(item[1], (int, float)):
+                        hours[item[0]] = item[1]
+            elif isinstance(entry.get("load_mw"), (int, float)) and entry.get("t"):
+                # Snapshots taken before the window was kept. One reading,
+                # filed under the hour it was measured, not collected.
+                hours[entry["t"]] = entry["load_mw"]
+    return {c: sorted(h.items()) for c, h in by_country.items()}
+
+
+def verdicts(live_by_country, backfill=None):
+    """Every country's evening verdict.
+
+    A country with no history to judge it against says nothing rather than
+    being scored against someone else's past.
     """
     bf = backfill if backfill is not None else load_backfill()
-    live = {}
-    for row in points:
-        ts = row.get("t")
-        if not ts:
-            continue
-        for key, value in row.items():
-            if key.startswith("power_") and key.endswith("_load_mw") \
-                    and isinstance(value, (int, float)):
-                code = key[len("power_"):-len("_load_mw")].upper()
-                live.setdefault(code, []).append([ts, value])
     out = {}
-    for code, pts in live.items():
+    for code, pts in (live_by_country or {}).items():
         if code not in bf:
-            # A country with no history to judge it against says nothing.
             continue
-        v = verdict(pts, bf[code])
+        v = verdict([list(p) for p in pts], bf[code])
         if v:
             out[code] = v
     return out
+
+
+def verdicts_from_snapshots(snapshots, backfill=None):
+    """The whole path, from raw snapshots to what claim 02 gets to say."""
+    return verdicts(merge_windows(snapshots), backfill)
