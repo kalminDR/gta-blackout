@@ -96,7 +96,9 @@ and on the assistant drifting into its own interests instead of his. **Take the
 correction, fix it, do not get defensive, and do not over-apologise.** Say what
 was wrong and move on.
 
-Write to him in Hungarian.
+Write to him in English. This was Hungarian until 6 September 2026 and
+he changed it; this line is the setting, so change it here rather than
+remembering a preference that dies with the session.
 
 ### The failure mode to avoid
 
