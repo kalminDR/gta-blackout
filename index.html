@@ -63,6 +63,28 @@ header{display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; align-items:center;
 nav{display:flex; gap:1.2rem; font-size:.78rem; letter-spacing:.09em;
   text-transform:uppercase; color:var(--dim)}
 nav a{text-decoration:none}
+/* The six predictions. Deliberately plainer than the rest of the page: this
+   is the section that has to survive being read by somebody sceptical, so it
+   looks like a record rather than a pitch. */
+.preds{display:grid; gap:1rem; margin-top:1.4rem}
+.pred{border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:1.1rem 1.2rem}
+.pred .top{display:flex; align-items:baseline; gap:.7rem; flex-wrap:wrap}
+.pred .num{font-size:.72rem; letter-spacing:.14em; opacity:.55}
+.pred h3{margin:.3rem 0 .6rem; font-size:1.05rem; line-height:1.35}
+.pred .rule{font-size:.9rem; line-height:1.55; margin:0 0 .8rem}
+.pred details{font-size:.82rem; line-height:1.55; opacity:.85}
+.pred details summary{cursor:pointer; opacity:.7; letter-spacing:.04em}
+.pred details p{margin:.6rem 0 0}
+.pred details b{font-weight:600; opacity:.9}
+.mark{display:inline-block; font-size:.62rem; letter-spacing:.16em;
+      padding:.18rem .5rem; border-radius:3px; border:1px solid currentColor;
+      vertical-align:.1em}
+.mark.predicted{color:#ffd166}
+.mark.measured{color:#7ee787}
+.mark.estimated{color:#9db4ff}
+.verdict-pending{font-size:.72rem; letter-spacing:.1em; opacity:.5}
+.commit{margin-top:1.4rem; padding:1rem 1.2rem; border-left:3px solid #ffd166;
+        font-size:.92rem; line-height:1.6}
 
 .hero{padding:clamp(2.5rem,8vw,6rem) 0 2rem}
 .eyebrow{font-size:.7rem; letter-spacing:.17em; text-transform:uppercase;
@@ -258,6 +280,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <div class="mark">Grand <i>Theft</i> Attention</div>
     <nav>
       <a href="#evidence">Evidence</a>
+      <a href="#predictions">Predictions</a>
       <a href="#yourday">Your day</a>
       <a href="#readout">Readout</a>
       <a href="#method">Method</a>
@@ -297,7 +320,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     </div>
 
     <div class="cta-row">
-      <a class="cta" href="#report">Tell us what you're doing on 19 November &#8594;</a>
+      <a class="cta" href="#yourday">Tell us what you're doing on 19 November &#8594;</a>
       <a class="cta ghost" href="#predictions">Read the six predictions &#8595;</a>
     </div>
     <p class="cta-note">No account. No email. Two taps.</p>
@@ -417,6 +440,25 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
         begins.
       </p>
     </div>
+  </section>
+
+  <section id="predictions">
+    <div class="head">
+      <h2>Six predictions, written down first</h2>
+      <p>published <span id="pred-when"></span> · judged on 19 November 2026</p>
+    </div>
+    <div class="prose">
+      <p>
+        Anyone can explain a Thursday afterwards. These were fixed in advance,
+        each one with the exact rule that decides it and the number that rule
+        had to clear. <strong>Every threshold below came out of the data in
+        this repository</strong>, and each was tested against the autumns we
+        already hold to make sure it does not fire on an ordinary day. Two of
+        the six were rewritten when that test showed they would have.
+      </p>
+    </div>
+    <div class="preds" id="pred-list"></div>
+    <p class="commit" id="pred-commitment"></p>
   </section>
 
   <section id="method">
@@ -638,7 +680,53 @@ NOW_SAY["xbox_service_issues"] = function(v){
   return v > 0 ? "Microsoft is reporting "+v+" service "+(v===1?"problem":"problems")+" right now"
                : "Microsoft reports no trouble right now"; };
 
-function renderClaims(metrics, released, latest){
+// Claim 02's second witness, and the only one that does not come from the
+// deviation engine. The evening ratio -- a country's evening peak over its
+// own late afternoon -- needs a whole day and a baseline drawn from four
+// years of autumns, so it is computed in power.py and arrives ready-made.
+//
+// What matters here is how it is allowed to be quiet. A grid that saw
+// nothing is only evidence if it could have seen something, and these grids
+// differ enormously: Germany can distinguish a 5% change in its evening,
+// Hungary cannot distinguish anything under 13%. Printing both readings as
+// "no change" would imply they carry the same weight. They do not, so the
+// silence is reported with the size of what it could have caught.
+const GRID_NAME = { DE:"Germany", FR:"France", ES:"Spain", IT:"Italy",
+                    NL:"the Netherlands", PL:"Poland", SE:"Sweden", HU:"Hungary" };
+
+function eveningRows(evening){
+  const codes = Object.keys(evening || {}).filter(function(c){ return GRID_NAME[c]; });
+  if (!codes.length) return { rows: [], note: null };
+
+  const rows = [], quiet = [];
+  codes.forEach(function(c){
+    const e = evening[c], name = GRID_NAME[c];
+    if (e.speaks && typeof e.deviation_pct === "number"){
+      const d = e.deviation_pct;
+      rows.push([name + "'s evening",
+        d > 0 ? name + " drew " + Math.abs(d).toFixed(1) + "% more in the evening than an ordinary one"
+              : name + " drew " + Math.abs(d).toFixed(1) + "% less in the evening than an ordinary one"]);
+    } else if (typeof e.detects_pct === "number"){
+      quiet.push(e.detects_pct);
+    }
+  });
+
+  // One line for everything that stayed quiet, carrying the range of what
+  // those grids could have caught. Six numbers on the page would be the
+  // apparatus talking about itself; this is the same fact in a sentence.
+  let note = null;
+  if (quiet.length){
+    const lo = Math.min.apply(null, quiet), hi = Math.max.apply(null, quiet);
+    note = quiet.length + (quiet.length === 1 ? " grid" : " grids")
+         + " saw an ordinary evening"
+         + (lo === hi ? ", and would have caught a change of " + lo + "%"
+                      : "; the sharpest would have caught a change of " + lo
+                        + "%, the bluntest needs " + hi + "%");
+  }
+  return { rows: rows, note: note };
+}
+
+function renderClaims(metrics, released, latest, evening){
   const byKey = {};
   metrics.forEach(function(m){ byKey[m.key] = m; });
 
@@ -656,6 +744,16 @@ function renderClaims(metrics, released, latest){
       silent.push(w.label);
     });
 
+    // The evening ratio joins claim 02 ahead of the baseline-driven
+    // witnesses: it has four years of history behind it and can speak today,
+    // while the others are still learning what an ordinary hour looks like.
+    let eveningNote = null;
+    if (c.id === "home"){
+      const ev = eveningRows(evening);
+      live.unshift.apply(live, ev.rows);
+      eveningNote = ev.note;
+    }
+
     // Listing twenty-five witnesses that all say nothing is not honesty, it
     // is noise. One line stating how many are watching and why none can speak
     // yet says the same thing and can actually be read.
@@ -663,12 +761,15 @@ function renderClaims(metrics, released, latest){
       return '<li><span class="w-name">' + r[0] + '</span><span class="w-say">' + r[1] + "</span></li>";
     }).join("");
     const extra = live.length - Math.min(live.length, 5);
-    if (silent.length || extra){
+    if (silent.length || extra || eveningNote){
       const bits = [];
       if (extra) bits.push(extra + " more reporting");
+      // Kept separate from "still learning": these grids are not short of
+      // history, they looked and found nothing.
+      if (eveningNote) bits.push(eveningNote);
       if (silent.length) bits.push(silent.length + " still learning what normal looks like");
       rows += '<li><span class="w-name">and</span><span class="w-say pending">'
-            + bits.join(", ") + "</span></li>";
+            + bits.join("; ") + "</span></li>";
     }
 
     // A verdict is only meaningful once there is a day to judge.
@@ -917,7 +1018,7 @@ async function load(){
   const sr = (data.latest || {}).selfreport || (L.selfreport || null);
   if (sr && typeof sr.total === "number") renderTally(sr);
 
-  renderClaims(METRICS, new Date() >= RELEASE, L);
+  renderClaims(METRICS, new Date() >= RELEASE, L, data.evening || {});
 
   const html = [];
   Object.keys(PANELS).forEach(function(key){
@@ -942,6 +1043,63 @@ async function load(){
   $("rows").innerHTML = html.join("") ||
     '<tr><td colspan="4">No metrics in this reading.</td></tr>';
 }
+
+// ------------------------------------------------------- the six predictions
+//
+// This is the first place on the page where the three markings in the working
+// notes actually appear. A prediction is PREDICTED: written down, not yet
+// known. After 19 November each one gains a verdict, and a failed one keeps
+// its place with the reading that failed it. That is the whole point of
+// publishing them early, so the rendering never treats a failure as an error.
+function renderPredictions(doc){
+  if (!doc || !Array.isArray(doc.predictions)) return;
+  const judged = new Date() >= RELEASE;
+
+  $("pred-list").innerHTML = doc.predictions.map(function(p, i){
+    // A verdict exists only once there is a day to judge. Until then the
+    // marking carries the honesty: this is a claim, not a reading.
+    const verdict = p.verdict
+      ? '<span class="mark ' + (p.verdict === "passed" ? "measured" : "predicted")
+        + '">' + p.verdict.toUpperCase() + "</span>"
+      : (judged ? '<span class="verdict-pending">waiting for the readings</span>'
+                : '<span class="mark predicted">PREDICTED</span>');
+
+    return '<article class="pred">'
+      + '<div class="top"><span class="num">0' + (i + 1) + "</span>" + verdict + "</div>"
+      + "<h3>" + esc(p.says) + "</h3>"
+      + '<p class="rule">' + esc(p.rule) + "</p>"
+      + "<details><summary>Where the number came from</summary>"
+      + "<p><b>Threshold:</b> " + esc(p.threshold_from) + "</p>"
+      + "<p><b>How often this fires on an ordinary day:</b> " + esc(p.base_rate) + "</p>"
+      + (p.caveat ? "<p><b>What could make this wrong:</b> " + esc(p.caveat) + "</p>" : "")
+      + "</details></article>";
+  }).join("");
+
+  $("pred-commitment").textContent = doc.commitment || "";
+}
+
+// Everything above is written by us, but it goes through the same escaping as
+// anything else that reaches innerHTML. A habit is worth more than a rule
+// that holds only while nobody edits the file.
+function esc(v){
+  return String(v == null ? "" : v).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
+async function loadPredictions(){
+  try {
+    const r = await fetch("predictions.json", {cache: "no-cache"});
+    if (!r.ok) return;
+    const doc = await r.json();
+    renderPredictions(doc);
+    const el = $("pred-when");
+    if (el && doc.published_at) el.textContent = doc.published_at.slice(0, 10);
+  } catch (e) {
+    // A missing file leaves the section empty rather than breaking the page.
+  }
+}
+loadPredictions();
 
 load(); drawChart();
 setInterval(load, 5*60*1000);

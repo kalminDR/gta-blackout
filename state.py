@@ -24,6 +24,7 @@ where intent and reality have come apart.
 import ast
 import json
 import pathlib
+import re
 import statistics
 import sys
 from collections import Counter, defaultdict
@@ -186,16 +187,78 @@ def coverage():
 # ---------------------------------------------------------------------------
 # 4. Metric health -- the silent failures
 # ---------------------------------------------------------------------------
+# How many of the most recent readings count as "now".
+#
+# This exists because the first version of this table judged only the whole
+# history, and so reported repaired faults as live ones: psn_incidents was
+# listed as frozen at 1 across 101 readings on the morning it was already
+# returning 0, and every traffic point was listed as dead on the day the new
+# six-point collector started returning clean readings. A status report that
+# cries wolf about yesterday's bug is worse than none, because the reader
+# learns to skim it.
+#
+# Twenty-four is one full daily cycle. Anything shorter and "it never moves"
+# just means we caught the flat part of the night; the Twitch total swings
+# fivefold between 04:00 and 21:00, so a window that does not close the loop
+# cannot tell a dead metric from a sleeping city.
+RECENT_READINGS = 24
+
+
+# Metrics that count bad events. Zero is their correct resting state, and
+# staying at zero is the measurement succeeding, not failing.
+#
+# The generic "frozen" and "mostly zero" rules are inverted for these. The
+# Russia exclusion is the case that proved it: psn_incidents was rightly
+# flagged while it read a permanent 1, and the moment that was fixed and the
+# metric began reporting the truth -- no incidents -- the same rules flagged
+# it again, harder. A rule that fires both before and after a fix is not
+# measuring anything.
+#
+# What is still caught for these is the failure that matters: returning no
+# number at all. A parse error that silently yields zero would slip through,
+# and that is the accepted cost -- against a table nobody reads because it
+# is four-fifths false alarms, it is the better trade.
+def _expects_zero(key):
+    return key.endswith(("_incidents", "_service_issues", "_points_rejected"))
+
+
+def _judge(vals, n_points, expects_zero=False):
+    """Verdict on one metric over one window. Returns (severity, flags)."""
+    nums = [v for v in vals if isinstance(v, (int, float))]
+    present, nulls = len(nums), len(vals) - len(nums)
+    sev, flags = 0, []
+
+    if present == 0:
+        return 3, ["never returned a number"]
+    if not expects_zero:
+        if len(set(nums)) == 1 and present >= 20:
+            sev = max(sev, 3)
+            flags.append(f"frozen at {nums[0]:g} for all {present} readings")
+        zeros = sum(1 for v in nums if v == 0)
+        if present >= 20 and zeros / present > 0.4:
+            sev = max(sev, 3)
+            flags.append(f"zero in {zeros} of {present} readings")
+    # A late start is not a fault; intermittent failure is.
+    if nulls and present:
+        first = next(i for i, v in enumerate(vals) if isinstance(v, (int, float)))
+        after = sum(1 for v in vals[first:] if not isinstance(v, (int, float)))
+        if after / max(1, n_points - first) > 0.25:
+            sev = max(sev, 2)
+            flags.append(f"missing {after} of {n_points - first} since it started")
+    return sev, flags
+
+
 def metric_health():
     path = ROOT / "public" / "series.json"
     if not path.exists():
-        return []
+        return [], []
     points = json.loads(path.read_text(encoding="utf-8")).get("points", [])
     if not points:
-        return []
+        return [], []
     keys = sorted({k for p in points for k in p if k != "t"})
     n_points = len(points)
-    out = []
+    n_recent = min(RECENT_READINGS, n_points)
+    out, recovered = [], []
     for k in keys:
         vals = [p.get(k) for p in points]
         # Structural keys hold objects, not readings. Judging them as numbers
@@ -207,28 +270,28 @@ def metric_health():
         # the metrics that genuinely stopped moving.
         if k.endswith(("_road_class", "_points_ok")):
             continue
-        nums = [v for v in vals if isinstance(v, (int, float))]
-        present, nulls = len(nums), len(vals) - len([v for v in vals if isinstance(v, (int, float))])
-        sev, flags = 0, []
 
-        if present == 0:
-            sev, flags = 3, ["never returned a number"]
-        else:
-            if len(set(nums)) == 1 and present >= 20:
-                sev = max(sev, 3)
-                flags.append(f"frozen at {nums[0]:g} for all {present} readings")
-            zeros = sum(1 for v in nums if v == 0)
-            if present >= 20 and zeros / present > 0.4:
-                sev = max(sev, 3)
-                flags.append(f"zero in {zeros} of {present} readings")
-            # A late start is not a fault; intermittent failure is.
-            if nulls and present:
-                first = next(i for i, v in enumerate(vals) if isinstance(v, (int, float)))
-                after = sum(1 for v in vals[first:] if not isinstance(v, (int, float)))
-                if after / max(1, n_points - first) > 0.25:
-                    sev = max(sev, 2)
-                    flags.append(f"missing {after} of {n_points - first} since it started")
+        ez = _expects_zero(k)
+        sev, flags = _judge(vals, n_points, ez)
+        recent = vals[-n_recent:]
+        r_sev, r_flags = _judge(recent, n_recent, ez)
+        r_present = len([v for v in recent if isinstance(v, (int, float))])
+
+        # Broken over the whole history but clean over the last day is a
+        # repair, not a fault. It is reported separately and quietly, so the
+        # table above it holds only things that are wrong right now.
+        if flags and not r_flags and r_present:
+            recovered.append((k, r_present, n_recent))
+            continue
+        if r_flags:
+            # Judge on now, and say so. The history is not evidence about
+            # the state of a metric that has since been changed.
+            sev, flags = r_sev, r_flags
+        elif flags and not r_present:
+            # No readings at all in the window: cannot call it either way.
+            flags = flags + [f"nothing in the last {n_recent} readings"]
         if flags:
+            present = len([v for v in vals if isinstance(v, (int, float))])
             out.append((k, present, n_points, sev, flags))
 
     # Collapse whole families that are dark for one shared reason.
@@ -243,7 +306,7 @@ def metric_health():
                               ["never returned a number — source not authenticating"]))
         else:
             collapsed += [r for r in dead if r[0] in names]
-    return sorted(collapsed, key=lambda r: (-r[3], r[0]))
+    return sorted(collapsed, key=lambda r: (-r[3], r[0])), sorted(recovered)
 
 
 # ---------------------------------------------------------------------------
@@ -282,6 +345,72 @@ def index_readiness():
 # ---------------------------------------------------------------------------
 # 6. Historical backfill on disk
 # ---------------------------------------------------------------------------
+# Every backfill file has its own shape, because each was written against a
+# different API. The first version of this function knew only the MTA shape
+# -- rows/first/last at the top level -- and printed an empty cell for
+# everything else. An empty cell reads as "nothing here", so 2.4 MB of
+# ENTSO-E load history, the baseline the whole electricity claim rests on,
+# was invisible in the project's own status report. That is the exact
+# failure this script exists to prevent, committed by this script.
+#
+# So nothing is hardcoded per file now. The walker looks for the thing all of
+# them have in common -- a list of dated readings -- wherever it sits, and
+# says so plainly when it cannot find one.
+
+def _as_date(v):
+    """The leading date of a timestamp, in any of the formats on disk."""
+    if not isinstance(v, str):
+        return None
+    if re.match(r"^\d{4}-\d{2}-\d{2}", v):
+        return v[:10]
+    # GDELT: 20260609T000000Z. Wikimedia pageviews: 20230101.
+    if re.match(r"^\d{8}(T|$)", v):
+        return f"{v[0:4]}-{v[4:6]}-{v[6:8]}"
+    return None
+
+
+def _point_date(item):
+    """The date of one reading, whether it is a dict or a [t, value] pair."""
+    if isinstance(item, dict):
+        # The obvious names first, so the answer is deterministic when a
+        # reading carries more than one date.
+        for k in ("date", "t", "timestamp", "day", "time"):
+            d = _as_date(item.get(k))
+            if d:
+                return d
+        # Then anything that parses as a date at all. Keying on the shape of
+        # the value rather than on a list of field names is what stops this
+        # from going stale: stackexchange.json calls its date `week_start`,
+        # and a names-only version silently lost 140 of its 176 readings.
+        for k in sorted(item):
+            d = _as_date(item[k])
+            if d:
+                return d
+        return None
+    if (isinstance(item, (list, tuple)) and len(item) == 2
+            and isinstance(item[1], (int, float)) and not isinstance(item[1], bool)):
+        return _as_date(item[0])
+    return None
+
+
+def _walk_series(node, found, depth=0):
+    """Collect every list of dated readings anywhere in the structure."""
+    if depth > 6:
+        return
+    if isinstance(node, list):
+        dates = [d for d in (_point_date(i) for i in node) if d]
+        # A list is a series if most of its entries carry a date. The
+        # threshold is not 100% because a real series can hold a gap.
+        if node and len(dates) >= 0.8 * len(node):
+            found.append((len(node), min(dates), max(dates)))
+        else:
+            for item in node[:50]:
+                _walk_series(item, found, depth + 1)
+    elif isinstance(node, dict):
+        for v in node.values():
+            _walk_series(v, found, depth + 1)
+
+
 def backfill():
     out = []
     d = ROOT / "data" / "backfill"
@@ -291,10 +420,19 @@ def backfill():
         try:
             j = json.loads(f.read_text(encoding="utf-8"))
         except Exception:
-            out.append((f.name, "unreadable", "", ""))
+            out.append((f.name, "unreadable", "", "", ""))
             continue
-        rows = j.get("rows") or (len(j.get("data", [])) if isinstance(j.get("data"), list) else "")
-        out.append((f.name, rows, j.get("first", ""), j.get("last", "")))
+        found = []
+        _walk_series(j, found)
+        size = f"{f.stat().st_size / 1024:.0f} KB"
+        if not found:
+            # Say it, rather than printing a blank that reads as "empty".
+            out.append((f.name, "no dated series found", "", "", size))
+            continue
+        rows = sum(n for n, _, _ in found)
+        series = f"{rows:,}" + (f" in {len(found)} series" if len(found) > 1 else "")
+        out.append((f.name, series, min(a for _, a, _ in found),
+                    max(b for _, _, b in found), size))
     return out
 
 
@@ -306,7 +444,6 @@ def frontend():
     if not path.exists():
         return {"error": "index.html not found"}
     s = path.read_text(encoding="utf-8")
-    import re
     in_html = set(re.findall(r'id="([A-Za-z0-9_\-]+)"', s))
     wanted = set(re.findall(r'getElementById\("([A-Za-z0-9_\-]+)"\)', s))
     wanted |= set(re.findall(r'\$\("([A-Za-z0-9_\-]+)"\)', s))
@@ -409,10 +546,12 @@ def main():
     # --- metrics that lie quietly ------------------------------------------
     w("## Metrics needing attention")
     w("")
-    mh = metric_health()
+    mh, recovered = metric_health()
     if mh:
         w("A metric that never errors but never moves is the dangerous kind: it "
-          "reads as data and is not.")
+          f"reads as data and is not. Judged on the last {RECENT_READINGS} "
+          "readings — one full daily cycle — not on the whole history, so a "
+          "fault that has since been repaired does not keep raising its hand.")
         w("")
         w("| | Metric | Readings | Problem |")
         w("|---|---|---|---|")
@@ -423,6 +562,12 @@ def main():
     else:
         w("Every metric varies and returns numbers.")
     w("")
+    if recovered:
+        w(f"**Repaired.** These were failing earlier in the record and are clean "
+          f"across the last {RECENT_READINGS} readings. Listed so the fix is "
+          "visible, and so nobody fixes it twice: "
+          + ", ".join(f"`{k}`" for k, _, _ in recovered) + ".")
+        w("")
 
     # --- indices ------------------------------------------------------------
     w("## Indices")
@@ -446,10 +591,10 @@ def main():
     w("")
     bf = backfill()
     if bf:
-        w("| File | Rows | From | To |")
-        w("|---|---|---|---|")
-        for n, r, a, b in bf:
-            w(f"| `{n}` | {r} | {a} | {b} |")
+        w("| File | Readings | From | To | Size |")
+        w("|---|---|---|---|---|")
+        for n, r, a, b, size in bf:
+            w(f"| `{n}` | {r} | {a} | {b} | {size} |")
     else:
         w("No backfill on disk.")
     w("")

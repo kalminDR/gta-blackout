@@ -19,6 +19,8 @@ Run:  python summarise.py
 
 import glob
 import indices
+import power
+import predictions
 import json
 import os
 import sys
@@ -255,7 +257,10 @@ def flatten(snap):
         # of near-zero numbers is meaningless.
         row[f"{key}_travel_index"] = round(cur_total / free_total * 100, 1) if free_total else None
         row[f"{key}_points_ok"] = ok or None
-        row[f"{key}_points_rejected"] = rejected or None
+        # Zero rejections is a measurement, not an absence: it says the gate
+        # looked and found nothing wrong. Writing it as null made a working
+        # quality gate read as a dead metric in the status report.
+        row[f"{key}_points_rejected"] = rejected
         row[f"{key}_seconds_measured"] = free_total or None
         # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
@@ -540,12 +545,24 @@ def main():
 
     panels = indices.summary(points)
 
+    # The evening ratio cannot live in a single snapshot: it needs a whole
+    # local day, and its baseline comes from the backfill rather than from
+    # the weeks we have been collecting. So it is computed here, over the
+    # finished series, and travels beside it.
+    try:
+        evening = power.verdicts_from_series(points)
+    except Exception as e:                       # a missing backfill is not
+        evening = {}                             # a reason to lose the page
+        print(f"warning: evening ratio unavailable: {str(e)[:120]}",
+              file=sys.stderr)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
                    "latest": points[-1],
                    "observed": observed_ranges(points),
                    "panels": panels,
+                   "evening": evening,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
 
@@ -563,6 +580,13 @@ def main():
                    "placebo": {name: indices.placebo(points, name)
                                for name in indices.PANEL_NAMES},
                    "points": chart}, f, ensure_ascii=False, separators=(",", ":"))
+
+    # The six predictions, republished on every run. They are fixed text and
+    # do not depend on the data, but they travel with it so the page never has
+    # to be edited by hand to show them -- and so a change to them shows up in
+    # the same commit history as the readings that will judge them.
+    with open(os.path.join(OUT_DIR, "predictions.json"), "w", encoding="utf-8") as f:
+        json.dump(predictions.as_published(), f, ensure_ascii=False, indent=1)
 
     series_kb = os.path.getsize(os.path.join(OUT_DIR, "series.json")) / 1024
     print(f"{len(points)} snapshots over {span_days} days "
