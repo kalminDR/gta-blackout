@@ -233,10 +233,6 @@ about gaps.
 
 ## 6. Open items
 
-**Pending upload at the time of writing** — `summarise.py` (traffic quality gate
-and the Russia exclusion) and `index.html` (the six claims). Everything else is
-deployed. Verify with `git log` rather than assuming.
-
 **The six predictions are not on the site yet.** This is the biggest remaining
 piece and the one that creates the press moment: dated, falsifiable statements
 published before the event, which afterwards visibly pass or fail. Thresholds
@@ -249,9 +245,12 @@ one of these, and we will not quietly edit them.* Being publicly wrong about two
 of six is more credible than being right about all six, and it is the version a
 journalist can write about twice.
 
-**`worker.js` is not in the repository.** The Cloudflare Worker handling
-self-reports and signups exists only in the Cloudflare dashboard. A live
-component with no version control. Fix this.
+**The D1 schema is not in the repository.** `worker.js` is, as of
+2026-09-06 — but the three tables it writes to (`reports`, `tallies`,
+`subscribers`) exist only inside the D1 database. The worker cannot be
+redeployed from source alone. The DDL must be exported from the live
+database, never reconstructed from the queries: a guessed schema that
+almost matches is worse than none.
 
 **`chicago`** — a second, independent transit system — is in the plan with no
 code. It matters because New York is currently a single point of failure for
