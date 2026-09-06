@@ -129,6 +129,31 @@ nav a{text-decoration:none}
 .ev .row p{grid-column:1/-1; margin:.2rem 0 0; font-size:.82rem; color:var(--dim)}
 @media (max-width:32rem){ .ev .row{grid-template-columns:1fr} }
 
+.claims{display:grid; gap:1.1rem; margin:2rem 0 0}
+.claim{border:1px solid var(--line); border-radius:.7rem; padding:1.3rem 1.4rem;
+  background:rgba(255,255,255,.02)}
+.claim .n{font-family:Anton,sans-serif; font-size:.85rem; letter-spacing:.14em;
+  color:var(--dim)}
+.claim h3{font-family:Anton,sans-serif; font-size:clamp(1.35rem,3.4vw,2rem);
+  letter-spacing:.01em; text-transform:uppercase; margin:.35rem 0 .1rem; line-height:1.08}
+.claim .verdict{display:inline-block; font-size:.68rem; letter-spacing:.13em;
+  text-transform:uppercase; padding:.24rem .6rem; border-radius:.3rem;
+  border:1px solid var(--line); color:var(--dim); margin:.5rem 0 .8rem}
+.claim .verdict.live{color:var(--amber); border-color:var(--amber)}
+.claim .verdict.held{color:var(--cyan); border-color:var(--cyan)}
+.claim .verdict.missed{color:var(--pink); border-color:var(--pink)}
+.claim .lede{color:var(--text); margin:0 0 .9rem; max-width:var(--measure)}
+.claim .est{font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--dim); border-top:1px dashed var(--line); padding-top:.7rem; margin-top:.2rem}
+.wit{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
+.wit li{padding:.6rem 0; border-bottom:1px solid var(--line); font-size:.93rem;
+  display:flex; gap:.9rem; align-items:baseline}
+.wit li:last-child{border-bottom:0}
+.wit .w-name{flex:0 0 8.5rem; font-size:.72rem; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--dim)}
+.wit .w-say{flex:1}
+.wit .w-say.pending{color:var(--dim); font-style:italic}
+@media(max-width:620px){ .wit li{display:block} .wit .w-name{margin-bottom:.2rem} }
 .panels{display:grid; gap:1px; background:var(--line); border:1px solid var(--line);
   border-radius:14px; overflow:hidden; margin:3rem 0 0;
   grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr))}
@@ -305,7 +330,7 @@ footer p{margin:0 0 .7rem; max-width:var(--measure)}
     <div class="ev" id="ev"></div>
   </section>
 
-  <div class="panels" id="panels"></div>
+  <div class="claims" id="claims"></div>
 
   <section id="yourday">
     <div class="head"><h2>Will you be at work?</h2><p id="tally-total"></p></div>
@@ -493,16 +518,173 @@ const LABEL_FIX = {Newyork:"New York", Losangeles:"Los Angeles"};
 
 // The analytical names are engineering vocabulary. These are what a reader
 // is actually looking at; the underlying structure is unchanged.
-const PANEL_COPY = {
-  attention: ["Where the attention went",
-    "Viewing and other direct signs of attention around Grand Theft Auto VI as release approaches and the game goes live."],
-  displacement: ["What people stopped playing",
-    "Whether activity in other games moves away from its normal pattern when Grand Theft Auto VI arrives."],
-  work: ["Did the ordinary Thursday change?",
-    "Commuting and weekday activity against their usual baselines, without pretending we can see every person who stayed home or know why."],
-  infrastructure: ["What happened to the systems underneath",
-    "Service health, console resale markets and other infrastructure signals, watched for unusual demand, disruption or strain."],
-};
+// Six things a person might notice, if they were counting.
+//
+// The page used to be organised around the four panels the index engine
+// computes: attention, displacement, work, infrastructure. Those are the
+// names of the machinery, and nobody outside this repository has any reason
+// to care about them. What a reader can care about is a sentence they could
+// have said themselves -- fewer of us went to work -- with the numbers
+// underneath as witnesses rather than as the subject.
+//
+// The engine is unchanged. Only the way in is.
+const CLAIMS = [
+  { id: "work", n: "01", title: "Fewer of us went to work",
+    lede: "Nobody files a report saying they took the day. But a commute is a "
+        + "physical thing, and it leaves a mark on the roads and the trains." },
+  { id: "home", n: "02", title: "We stayed in",
+    lede: "A country that sits down in front of a screen changes the shape of "
+        + "its own evening. Transmission operators record that hour by hour, "
+        + "with no interest whatsoever in this game." },
+  { id: "quiet", n: "03", title: "Everything else went quiet",
+    lede: "The most testable part of the claim. If one game takes the evening, "
+        + "every other game should empty out at the same moment." },
+  { id: "consoles", n: "04", title: "You could not buy a console",
+    lede: "When demand outruns supply, the second-hand price moves first, and "
+        + "it moves in public." },
+  { id: "servers", n: "05", title: "The servers buckled",
+    lede: "Sony and Microsoft publish their own service health. If the launch "
+        + "is as big as we think, they will be the ones to say so." },
+  { id: "money", n: "06", title: "It cost somebody money",
+    lede: "This one is not a measurement and never will be. It is arithmetic "
+        + "on top of the measurements, with every assumption visible and "
+        + "adjustable. It gets no verdict, because it cannot earn one.",
+    estimate: true },
+];
+
+// How each metric is allowed to speak.
+//
+// A reader cannot use "deviation_log2 = -0.31". They can use "a fifth quieter
+// than normal". Every witness therefore carries the claim it belongs to, a
+// short label, and a sentence maker that takes the percentage deviation from
+// baseline and returns plain English. Anything without a sentence maker stays
+// out of this section and lives in the methods table instead.
+function pct(v){ return Math.abs(v) < 10 ? Math.abs(v).toFixed(1)+"%" : Math.round(Math.abs(v))+"%"; }
+
+const CITY_LABEL = { budapest:"Budapest", london:"London", berlin:"Berlin",
+                     warsaw:"Warsaw", newyork:"New York", losangeles:"Los Angeles" };
+
+const WITNESS = {};
+Object.keys(CITY_LABEL).forEach(function(c){
+  WITNESS["traffic_"+c+"_travel_index"] = { claim:"work", label:CITY_LABEL[c]+" roads",
+    say: function(d){ return d < 0
+      ? CITY_LABEL[c]+"'s roads were "+pct(d)+" clearer than an ordinary Thursday"
+      : CITY_LABEL[c]+"'s roads were "+pct(d)+" busier than an ordinary Thursday"; } };
+});
+["de","fr","es","it","nl","pl","se","hu"].forEach(function(c){
+  const NAME = { de:"Germany", fr:"France", es:"Spain", it:"Italy",
+                 nl:"the Netherlands", pl:"Poland", se:"Sweden", hu:"Hungary" }[c];
+  WITNESS["power_"+c+"_load_mw"] = { claim:"home", label:NAME+" grid",
+    say: function(d){ return d > 0
+      ? NAME+" drew "+pct(d)+" more electricity than a normal evening"
+      : NAME+" drew "+pct(d)+" less electricity than a normal evening"; } };
+});
+[["steam_cs2","Counter-Strike 2"],["steam_dota2","Dota 2"],["steam_pubg","PUBG"],
+ ["steam_apex","Apex Legends"],["steam_bg3","Baldur's Gate 3"],["steam_rdr2","Red Dead 2"],
+ ["steam_gta5","GTA V"],["steam_gta5_enhanced","GTA V Enhanced"]].forEach(function(pair){
+  WITNESS[pair[0]] = { claim:"quiet", label:pair[1],
+    say: function(d){ return d < 0
+      ? pair[1]+" lost "+pct(d)+" of the players it would normally have right now"
+      : pair[1]+" had "+pct(d)+" more players than normal"; } };
+});
+WITNESS["twitch_other_viewers"] = { claim:"quiet", label:"Everything else on Twitch",
+  say: function(d){ return d < 0
+    ? "Every other game on Twitch was "+pct(d)+" quieter than normal"
+    : "Every other game on Twitch was "+pct(d)+" busier than normal"; } };
+[["us","the United States","$"],["uk","Britain","\u00a3"],["de","Germany","\u20ac"]].forEach(function(m){
+  [["ps5","a second-hand PS5"],["ps5_pro","a second-hand PS5 Pro"],
+   ["xbox_series_x","a second-hand Xbox Series X"]].forEach(function(pr){
+    WITNESS["price_"+m[0]+"_"+pr[0]] = { claim:"consoles", label:{ps5:"PS5",ps5_pro:"PS5 Pro",xbox_series_x:"Xbox"}[pr[0]]+" \u00b7 "+m[0].toUpperCase(),
+      say: function(d){ return d > 0
+        ? "In "+m[1]+", "+pr[1]+" cost "+pct(d)+" more than before the launch"
+        : "In "+m[1]+", "+pr[1]+" cost "+pct(d)+" less than before the launch"; } };
+  });
+});
+WITNESS["psn_incidents"] = { claim:"servers", label:"PlayStation Network",
+  say: function(d){ return d > 0
+    ? "Sony was reporting more service problems than usual"
+    : "Sony reported no more trouble than on an ordinary day"; } };
+WITNESS["xbox_service_issues"] = { claim:"servers", label:"Xbox Live",
+  say: function(d){ return d > 0
+    ? "Microsoft was reporting more service problems than usual"
+    : "Microsoft reported no more trouble than on an ordinary day"; } };
+
+// Some witnesses can speak before any baseline exists.
+//
+// A deviation needs weeks of history. A price does not: "a second-hand PS5
+// costs $525 in America today" is already a fact worth printing, and printing
+// it now is what makes the November comparison mean anything. So a witness may
+// carry a second voice that reads the raw current value, used whenever the
+// baseline is not ready.
+const CURRENCY = { us:"$", uk:"\u00a3", de:"\u20ac" };
+const NOW_SAY = {};
+[["us","America"],["uk","Britain"],["de","Germany"]].forEach(function(m){
+  [["ps5","a second-hand PS5"],["ps5_pro","a PS5 Pro"],
+   ["xbox_series_x","an Xbox Series X"]].forEach(function(pr){
+    NOW_SAY["price_"+m[0]+"_"+pr[0]] = function(v){
+      return "In "+m[1]+", "+pr[1]+" costs "+CURRENCY[m[0]]
+           + Math.round(v).toLocaleString("en-US")+" today"; };
+  });
+});
+Object.keys(CITY_LABEL).forEach(function(c){
+  NOW_SAY["traffic_"+c+"_travel_index"] = function(v){
+    return v <= 101 ? CITY_LABEL[c]+"'s roads are flowing freely right now"
+      : "Driving in "+CITY_LABEL[c]+" is taking "+pct(v-100)+" longer than an empty road"; };
+});
+NOW_SAY["psn_incidents"] = function(v){
+  return v > 0 ? "Sony is reporting "+v+" service "+(v===1?"problem":"problems")+" right now"
+               : "Sony reports no trouble right now"; };
+NOW_SAY["xbox_service_issues"] = function(v){
+  return v > 0 ? "Microsoft is reporting "+v+" service "+(v===1?"problem":"problems")+" right now"
+               : "Microsoft reports no trouble right now"; };
+
+function renderClaims(metrics, released, latest){
+  const byKey = {};
+  metrics.forEach(function(m){ byKey[m.key] = m; });
+
+  $("claims").innerHTML = CLAIMS.map(function(c){
+    const keys = Object.keys(WITNESS).filter(function(k){ return WITNESS[k].claim === c.id; });
+
+    const live = [], silent = [];
+    keys.forEach(function(k){
+      const w = WITNESS[k], m = byKey[k];
+      const d = (m && typeof m.deviation_log2 === "number")
+        ? (Math.pow(2, m.deviation_log2) - 1) * 100 : null;
+      if (d !== null){ live.push([w.label, w.say(d)]); return; }
+      const raw = latest ? latest[k] : null;
+      if (NOW_SAY[k] && typeof raw === "number"){ live.push([w.label, NOW_SAY[k](raw)]); return; }
+      silent.push(w.label);
+    });
+
+    // Listing twenty-five witnesses that all say nothing is not honesty, it
+    // is noise. One line stating how many are watching and why none can speak
+    // yet says the same thing and can actually be read.
+    let rows = live.slice(0, 5).map(function(r){
+      return '<li><span class="w-name">' + r[0] + '</span><span class="w-say">' + r[1] + "</span></li>";
+    }).join("");
+    const extra = live.length - Math.min(live.length, 5);
+    if (silent.length || extra){
+      const bits = [];
+      if (extra) bits.push(extra + " more reporting");
+      if (silent.length) bits.push(silent.length + " still learning what normal looks like");
+      rows += '<li><span class="w-name">and</span><span class="w-say pending">'
+            + bits.join(", ") + "</span></li>";
+    }
+
+    // A verdict is only meaningful once there is a day to judge.
+    let verdict = '<span class="verdict">nothing to judge yet</span>';
+    if (c.estimate) verdict = '<span class="verdict">estimate, not a measurement</span>';
+    else if (released) verdict = '<span class="verdict live">reading now</span>';
+
+    return '<article class="claim"><div class="n">' + c.n + "</div>"
+      + "<h3>" + c.title + "</h3>" + verdict
+      + '<p class="lede">' + c.lede + "</p>"
+      + (rows ? '<ul class="wit">' + rows + "</ul>"
+              : '<p class="est">No witness for this one is reporting yet.</p>')
+      + "</article>";
+  }).join("");
+}
+
 const pretty = s => Object.keys(LABEL_FIX).reduce((a,k)=>a.replace(k,LABEL_FIX[k]), s||"");
 
 function tick(){
@@ -735,18 +917,7 @@ async function load(){
   const sr = (data.latest || {}).selfreport || (L.selfreport || null);
   if (sr && typeof sr.total === "number") renderTally(sr);
 
-  $("panels").innerHTML = Object.keys(PANELS).map(function(k){
-    const p = PANELS[k], v = num(p.index);
-    const dir = (p.effect_direction||"").indexOf("higher") === 0
-      ? "a launch pushes this up" : "a launch pushes this down";
-    const pc = (typeof p.placebo_percentile === "number")
-      ? '<br><span class="pc">above ' + p.placebo_percentile + '% of past Thursdays</span>' : "";
-    const copy = PANEL_COPY[k] || [p.name, ""];
-    return '<div class="panel"><h3>'+copy[0]+'</h3>'+
-      '<div class="v'+(v===null?" pending":"")+'">'+(v===null?"building baseline":Math.round(v))+'</div>'+
-      '<div class="m">'+copy[1]+'</div>'+
-      '<div class="m">'+p.sources_available+' of '+p.sources_expected+' sources · '+dir+pc+'</div></div>';
-  }).join("");
+  renderClaims(METRICS, new Date() >= RELEASE, L);
 
   const html = [];
   Object.keys(PANELS).forEach(function(key){

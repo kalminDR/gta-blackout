@@ -298,8 +298,19 @@ def flatten(snap):
             row[f"bestbuy_{prod}_price"] = None
 
     # --- Console health
-    row["psn_incidents"] = as_number(
-        dig(src, "console_status", "playstation", "data", "incident_count"))
+    # Sony's own count includes the Russian PlayStation Store, which has been
+    # listed as degraded continuously since the 2022 withdrawal. Counting it
+    # means the metric reads a permanent 1 and never moves -- and it means the
+    # prediction "service problems on launch day" would be satisfied in
+    # advance, by a war, without the launch doing anything at all.
+    incidents = dig(src, "console_status", "playstation", "data", "incidents")
+    if isinstance(incidents, list):
+        row["psn_incidents"] = sum(
+            1 for i in incidents
+            if isinstance(i, dict) and i.get("country") != "RU")
+    else:
+        row["psn_incidents"] = as_number(
+            dig(src, "console_status", "playstation", "data", "incident_count"))
     xbox_issues = dig(src, "console_status", "xbox", "data", "service_issues")
     row["xbox_service_issues"] = len(xbox_issues) if isinstance(xbox_issues, list) else None
 
