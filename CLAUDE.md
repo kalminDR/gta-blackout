@@ -522,6 +522,20 @@ stills, characters, logos, or the Pricedown typeface.
   force it. `test_power.py` had an `ok=` parameter for one run, and two checks
   passed while asserting nothing. One way to state an expectation, no override.
 - `collect.py --check` exercises the collectors.
+- **The sandbox cannot reach the data hosts; only the GitHub runner can.** The
+  agent proxy answers `403 to CONNECT` for `data.ny.gov`,
+  `data.cityofchicago.org`, `web-api.tp.entsoe.eu` and the rest, while
+  `api.github.com` works fine. Two consequences, both of which have already
+  caused a mistake:
+  - A failed request from here is **not** evidence about the upstream service.
+    On 7 September a `curl` that could not reach ENTSO-E was offered as
+    corroboration that ENTSO-E was down. It corroborated nothing. The real
+    evidence was the HTTP 503 recorded in the snapshots, which the runner
+    collected.
+  - A new source cannot be verified from here before it is written. Confirm
+    the endpoint from a browser first, the same way the traffic coordinates
+    had to be left to the data — a dataset id that looks right and is wrong
+    produces a collector that fails silently in CI.
 - **Never invent a number.** A missing country stays missing; a dead measurement
   point is dropped, not averaged in; an index without enough baseline prints
   nothing. An empty cell is more honest than a filled false one, and the whole
