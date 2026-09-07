@@ -1,12 +1,12 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-07 17:16 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-07 17:51 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
-- **1 planned sources have no code at all**: chicago
-- **138 snapshots** over 128.0 hours (5.3 days); last one 0.0 h ago
+- **0 planned sources have no code at all**
+- **138 snapshots** over 128.0 hours (5.3 days); last one 0.6 h ago
 
 ## Sources
 
@@ -29,8 +29,8 @@ Newest snapshot: `data/2026-09-07/1714.json`
 
 ## Planned but not built
 
-- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_predictions.py, test_score.py but not registered as a source
-- **`chicago`** — Did people commute: a second, independent transit system — **no code anywhere in the repo**
+- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_chicago.py, test_predictions.py, test_score.py but not registered as a source
+- **`chicago`** — Did people commute: a second, independent transit system — referenced in backfill.py, test_chicago.py but not registered as a source
 - **`wikipedia`** — Attention: edits and pageviews, six languages — referenced in backfill.py but not registered as a source
 
 Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot activity dominates; issue comments fell ~98%); **stackoverflow** (Volume collapsed to ~1% of 2023 by August 2026); **yahoo_finance** (Runner IPs blocked); **bestbuy** (Requires a US phone number); **gdelt** (Runner IPs rate-limited; manual browser fetch instead)
