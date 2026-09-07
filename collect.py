@@ -1147,8 +1147,32 @@ def has_real_data(value):
     return value is not None
 
 
+# How many recent snapshots the health check looks back over. See the note
+# inside check() for why six.
+RECENT_SNAPSHOTS = 6
+
+
+def _recent_snapshots(n):
+    """The newest n snapshots, oldest first, across day boundaries."""
+    days = sorted(d for d in glob.glob(os.path.join("data", "*"))
+                  if re.fullmatch(r"\d{4}-\d{2}-\d{2}", os.path.basename(d)))
+    files = []
+    for day in reversed(days):
+        files = sorted(glob.glob(os.path.join(day, "*.json"))) + files
+        if len(files) >= n:
+            break
+    out = []
+    for path in files[-n:]:
+        try:
+            with open(path, encoding="utf-8") as f:
+                out.append(json.load(f))
+        except Exception:
+            continue
+    return out
+
+
 def check():
-    """Read the newest snapshot and fail loudly if a source has gone dark.
+    """Read the recent snapshots and fail loudly if a source has gone dark.
 
     The collector deliberately swallows errors so one bad source cannot kill
     a run. The downside is that a broken source stays broken in silence, so
@@ -1172,21 +1196,56 @@ def check():
     with open(files[-1], encoding="utf-8") as f:
         snap = json.load(f)
 
+    # Judged over the last few snapshots, not just the newest one.
+    #
+    # ENTSO-E's Transparency Platform returns HTTP 503 for a few minutes at a
+    # time, several times a day. Reading only the newest snapshot turned every
+    # one of those into a failed workflow and an email about somebody else's
+    # server. An alarm that cries wolf gets filtered, and then the real one is
+    # missed too -- so the alarm has to fire on "this source is broken", not
+    # on "this source blinked".
+    #
+    # Six is not arbitrary. Each successful ENTSO-E call carries twelve hours
+    # of history, so an hour of readings is only actually lost after twelve
+    # consecutive failures. Six is halfway there: late enough that a blink
+    # does not raise it, early enough to act before data goes missing.
+    recent = _recent_snapshots(RECENT_SNAPSHOTS)
+
+    def ever_worked(name):
+        return any(has_real_data((s.get("sources") or {}).get(name))
+                   for s in recent)
+
     # A source that says "skipped" has no key configured yet. That is a
     # decision, not a fault, so it must not raise an alarm every hour -
     # otherwise the real alarms get ignored.
     waiting = [name for name, val in snap["sources"].items()
                if isinstance(val, dict) and "skipped" in val]
-    dead = [name for name, val in snap["sources"].items()
-            if name not in waiting and not has_real_data(val)]
+    failing = [name for name, val in snap["sources"].items()
+               if name not in waiting and not has_real_data(val)]
+    # Broken: nothing usable in any recent snapshot. Blinking: failed just now
+    # but working within the window, which is upstream's problem, not ours.
+    dead = [name for name in failing if not ever_worked(name)]
+    blinking = [name for name in failing if name in set(failing) - set(dead)]
 
     for name in snap["sources"]:
-        state = "DEAD" if name in dead else ("waiting for key" if name in waiting else "ok")
+        if name in dead:
+            state = "DEAD"
+        elif name in blinking:
+            state = f"blinked (worked within the last {len(recent)} readings)"
+        elif name in waiting:
+            state = "waiting for key"
+        else:
+            state = "ok"
         print(f"  {name:16s} {state}", file=sys.stderr)
 
-    if dead:
-        print(f"\nThese sources returned no usable data: {', '.join(dead)}",
+    if blinking:
+        print(f"\nUpstream blinked, not our failure: {', '.join(blinking)}. "
+              f"Each worked at least once in the last {len(recent)} readings.",
               file=sys.stderr)
+
+    if dead:
+        print(f"\nThese sources returned no usable data in the last "
+              f"{len(recent)} readings: {', '.join(dead)}", file=sys.stderr)
         print(f"Check {files[-1]} for the exact errors.", file=sys.stderr)
         return 1
     return 0

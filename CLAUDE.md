@@ -289,6 +289,33 @@ most settled version wins. No extra call, no extra quota. Snapshots taken
 before 6 September have no window and cannot be back-filled — that data was
 never saved.
 
+### ENTSO-E blinks, and the health check used to call that a failure
+
+The Transparency Platform returns HTTP 503 for a few minutes at a time, several
+times a day — an HTML maintenance page, all nine countries at once. Observed
+repeatedly on 6 and 7 September 2026: eight countries fine, then zero, then
+eight again, within the hour.
+
+`collect.py --check` read only the newest snapshot, so every blink failed the
+workflow and sent an email about somebody else's server. **An alarm that cries
+wolf gets filtered, and then the real one is missed too.** It now judges over
+the last `RECENT_SNAPSHOTS` readings: a source that worked at least once in
+that window "blinked" and is reported without failing the run; a source that
+worked in none of them is DEAD and still fails loudly. `test_check.py` pushes
+from both sides, including the boundary reading where a success falls out of
+the window and the alarm correctly fires.
+
+Six readings is not arbitrary. Each successful ENTSO-E call carries twelve
+hours of history, so an hour of readings is only actually lost after twelve
+consecutive failures. Six is halfway there.
+
+**The twelve-hour window turned out to be insurance against this, unplanned.**
+Through a day of repeated 503s every one of the eight countries still had an
+unbroken run of fifteen local hours, because one successful call backfills
+half a day. Had the collector still been keeping one point per call, the
+flapping would have punched holes straight through the evening hours the ratio
+depends on.
+
 ### GB does not publish electricity to ENTSO-E
 
 Post-Brexit. The backfill returns 8 of 9 countries and names the reason. If
@@ -486,8 +513,9 @@ stills, characters, logos, or the Pricedown typeface.
   `test_predictions.py` (the six, and a re-derivation of the two thresholds
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
   absent data never reads as "failed"), `test_schema.py` (the D1 schema against
-  the statements `worker.js` actually issues).
-  Run all six after touching collection or aggregation. The counts move; the
+  the statements `worker.js` actually issues), `test_check.py` (the health
+  check, from both sides: a blink must not fail the run, a dead source must).
+  Run all seven after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
