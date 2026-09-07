@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-07 02:17 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-07 03:18 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **1 planned sources have no code at all**: chicago
-- **123 snapshots** over 113.0 hours (4.7 days); last one 0.0 h ago
+- **124 snapshots** over 114.0 hours (4.8 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-07/0215.json`
+Newest snapshot: `data/2026-09-07/0317.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-07 02:15 UTC`
-- 123 of ~114 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-07 03:17 UTC`
+- 124 of ~115 expected hourly readings
 - **1 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
 
@@ -48,22 +48,26 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/123 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/123 | never returned a number — source not authenticating |
-| 🔴 | `baseline_quality` | 0/123 | never returned a number |
-| 🔴 | `deviations` | 0/123 | never returned a number |
-| 🔴 | `polymarket_market_count` | 83/123 | frozen at 6 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 117/123 | frozen at 20 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 118/123 | zero in 13 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 111/123 | zero in 15 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 111/123 | zero in 10 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 111/123 | zero in 16 of 24 readings |
-| 🔴 | `twitch_gta5` | 120/123 | zero in 15 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 107/123 | zero in 22 of 24 readings |
-| 🔴 | `yt_subscribers` | 119/123 | frozen at 1.37e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 107/123 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 63/123 | missing 10 of 23 since it started |
-| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 52/123 | missing 6 of 11 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/124 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/124 | never returned a number — source not authenticating |
+| 🔴 | `baseline_quality` | 0/124 | never returned a number |
+| 🔴 | `deviations` | 0/124 | never returned a number |
+| 🔴 | `listings_uk_xbox_series_x` | 20/124 | frozen at 100 for all 20 readings |
+| 🔴 | `listings_us_ps5` | 20/124 | frozen at 100 for all 20 readings |
+| 🔴 | `listings_us_ps5_pro` | 20/124 | frozen at 100 for all 20 readings |
+| 🔴 | `listings_us_xbox_series_x` | 20/124 | frozen at 100 for all 20 readings |
+| 🔴 | `polymarket_market_count` | 84/124 | frozen at 6 for all 24 readings |
+| 🔴 | `price_us_ps5_pro` | 20/124 | frozen at 1299.99 for all 20 readings |
+| 🔴 | `steam_rank_gta5_enh` | 118/124 | frozen at 20 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 119/124 | zero in 13 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 112/124 | zero in 15 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 112/124 | zero in 16 of 24 readings |
+| 🔴 | `twitch_gta5` | 121/124 | zero in 14 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 108/124 | zero in 22 of 24 readings |
+| 🔴 | `yt_subscribers` | 120/124 | frozen at 1.37e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 108/124 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 64/124 | missing 10 of 24 since it started |
+| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 53/124 | missing 6 of 12 since it started |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_losangeles_delay_pct`, `traffic_losangeles_seconds_measured`, `traffic_losangeles_travel_index`, `yt_QdBZY2fkU-0_likes_per_hour`.
 
@@ -76,7 +80,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | work | **null** |
 | infrastructure | **null** |
 
-Baseline needs 6 samples per hour-of-week bucket. **1 of 168 buckets qualify** (112 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **1 of 168 buckets qualify** (113 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
