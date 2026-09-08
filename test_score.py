@@ -174,5 +174,28 @@ finally:
     score.SCORERS.clear()
     score.SCORERS.update(broken)
 
+print("\n8. A source that goes dark says so, and still never says 'failed'")
+# ENTSO-E retired web-api.tp.entsoe.eu on 8 September 2026. If it never
+# returns, the power prediction must report that the witness is gone -- not
+# that the evening is merely incomplete, which reads like "wait a bit", and
+# above all not "failed".
+import power as _power
+_bf = _power.load_backfill()
+stops_early = {"sources": {"entsoe": {"DE": {"hourly": [
+    ["2026-09-07T14:00:00+00:00", 40000.0],
+    ["2026-09-07T18:00:00+00:00", 46000.0]]}}}}
+r = score.score_power([stops_early], _bf)
+check("a source that stopped before the launch is not a failure",
+      r["verdict"], None)
+check("and the reason says it went dark rather than 'not yet'",
+      "went dark" in (r["reason"] or ""))
+check("naming the last day it published", r["evidence"]["last_reading"],
+      "2026-09-07")
+
+r = score.score_power([], _bf)
+check("no readings at all is also not a failure", r["verdict"], None)
+check("and is distinguished from a source that once worked",
+      "published nothing" in (r["reason"] or ""))
+
 print(f"\n{passed} checks passed" + (f", {failed} FAILED" if failed else ""))
 sys.exit(1 if failed else 0)

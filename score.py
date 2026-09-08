@@ -176,8 +176,23 @@ def score_power(snapshots, backfill=None):
     verdicts = power.verdicts_from_snapshots(snapshots, backfill)
     on_the_day = {c: v for c, v in verdicts.items() if v.get("day") == RELEASE.isoformat()}
     if not on_the_day:
-        return _cannot("no country has a complete launch-day evening yet",
-                       days_available=sorted({v.get("day") for v in verdicts.values()}))
+        days = sorted(d for d in {v.get("day") for v in verdicts.values()} if d)
+        # "Not yet" and "the source is gone" are different findings, and on
+        # 19 November the difference is the whole point. A reader told the
+        # evening is not complete yet will wait for it; a reader told the
+        # source stopped publishing knows the witness is not coming. ENTSO-E
+        # retired web-api.tp.entsoe.eu on 8 September 2026 and this is exactly
+        # the case that wording has to survive.
+        if not days:
+            reason = ("no electricity readings at all -- the source has "
+                      "published nothing we could collect")
+        elif max(days) < RELEASE.isoformat():
+            reason = (f"electricity readings stop at {max(days)}, before the "
+                      "launch day; the source went dark and did not return")
+        else:
+            reason = "no country has a complete launch-day evening yet"
+        return _cannot(reason, days_available=days,
+                       last_reading=max(days) if days else None)
 
     scored = {c: v for c, v in on_the_day.items() if v.get("z") is not None}
     unscored = sorted(set(on_the_day) - set(scored))
