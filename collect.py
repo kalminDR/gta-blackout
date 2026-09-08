@@ -696,17 +696,23 @@ def collect_console_prices():
                     "X-EBAY-C-MARKETPLACE-ID": market,
                 })
                 items = res.get("itemSummaries") or []
-                prices, titles = [], []
+                prices = []
                 for it in items:
                     p = as_float(dig(it, "price", "value"))
                     if p is not None:
                         prices.append(p)
-                        titles.append((it.get("title") or "")[:70])
                 stats = _price_stats(prices)
                 out[market][key] = stats or {"count": 0}
-                # Keep a few titles so we can see whether the search is
-                # returning consoles or junk, and tighten it if needed.
-                out[market][key]["sample_titles"] = titles[:3]
+                # Listing titles used to be stored here, three per query, to
+                # check by eye that the search returned consoles rather than
+                # accessories. Confirmed on 8 September 2026 -- every sample
+                # was a console -- and dropped, which also removes them from
+                # the exemption declaration filed with eBay.
+                #
+                # Drift is still detectable without them: if accessories crept
+                # into the results the median would fall by an order of
+                # magnitude, and a second-hand PS5 at fifty euros is not a
+                # reading anyone would mistake for a real one.
             except Exception as e:
                 out[market][key] = {"error": str(e)[:120]}
             time.sleep(0.6)

@@ -267,8 +267,10 @@ def metric_health():
             continue
         # Descriptors that are meant to be constant: the road class of a fixed
         # measurement point does not change, and flagging it as "frozen" buries
-        # the metrics that genuinely stopped moving.
-        if k.endswith(("_road_class", "_points_ok")):
+        # the metrics that genuinely stopped moving. yt_subscribers belongs
+        # here too -- YouTube rounds the public count, so it is constant by
+        # construction rather than by failure.
+        if k.endswith(("_road_class", "_points_ok", "yt_subscribers")):
             continue
 
         ez = _expects_zero(k)
