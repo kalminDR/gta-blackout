@@ -316,6 +316,45 @@ half a day. Had the collector still been keeping one point per call, the
 flapping would have punched holes straight through the evening hours the ratio
 depends on.
 
+### web-api.tp.entsoe.eu was retired on 8 September 2026
+
+Not a blink. The endpoint is gone.
+
+The decline was visible for two days first: read timeouts on 6 September,
+HTTP 503 with their styled maintenance page on the 7th, HTTP 599 that evening,
+and from **01:15 UTC on 8 September a plain-text `404 page not found`**,
+unbroken. Confirmed from a browser on an unrelated network, so it is not the
+runner, not the agent proxy, and not the token — a bad token returns 401.
+
+**Last successful call: 7 September 13:17 UTC.** Its twelve-hour window left
+7 September with fifteen local hours ending at 14:00, so there is no evening
+ratio for the 7th or the 8th.
+
+The URL had never changed since the day it was written. Nothing on our side
+caused this.
+
+**What it costs, honestly.** Nothing yet, and possibly nothing at all. The
+ratio's baseline comes from the backfill's four autumn windows, never from the
+live series, so September evenings were never going to be evidence. What
+matters is whether a working endpoint exists in November.
+
+If none does, claim 02 keeps its **first** witness — evening traffic — and
+loses its second. The published power prediction then reports that it could
+not be measured, which is what `score.py` is built to do and what
+`test_score.py` asserts from five directions. **A dead source can never
+produce a "failed" verdict.**
+
+`score_power` now distinguishes three cases in its wording, because on
+19 November the difference is the whole point: no readings at all, readings
+that stop before the launch day (the source went dark), and an evening merely
+not finished yet. The middle one used to print as the third, which reads like
+"wait a bit" when the truth is "the witness is not coming".
+
+**Still open: where it went.** Do not guess a replacement URL — a wrong
+endpoint that returns something plausible is worse than a clean failure. If
+ENTSO-E has migrated, the new address has to be confirmed from a browser and
+this environment cannot reach it.
+
 ### GB does not publish electricity to ENTSO-E
 
 Post-Brexit. The backfill returns 8 of 9 countries and names the reason. If
