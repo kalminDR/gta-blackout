@@ -553,6 +553,15 @@ stills, characters, logos, or the Pricedown typeface.
   force it. `test_power.py` had an `ok=` parameter for one run, and two checks
   passed while asserting nothing. One way to state an expectation, no override.
 - `collect.py --check` exercises the collectors.
+- **Never carry a generated file in a feature branch.** `STATE.md`,
+  `public/series.json`, `public/latest.json`, `public/chart.json` and
+  `public/predictions.json` are rewritten from scratch by the hourly workflow.
+  A branch that carries its own copy conflicts with every run, and the conflict
+  preserves nothing: hand-merging two generated files produces a report that
+  describes neither state. Before pushing, reset them to main
+  (`git checkout origin/main -- STATE.md public/`) and let the first run after
+  the merge regenerate them. This has now caused a merge conflict three times —
+  twice on `public/`, once on `STATE.md` after `state.py` joined the workflow.
 - **Never invent a number.** A missing country stays missing; a dead measurement
   point is dropped, not averaged in; an index without enough baseline prints
   nothing. An empty cell is more honest than a filled false one, and the whole
