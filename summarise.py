@@ -294,7 +294,18 @@ def flatten(snap):
         for prod in ("ps5_pro", "ps5", "xbox_series_x"):
             row[f"price_{short}_{prod}"] = as_number(
                 dig(src, "console_prices", market, prod, "median"))
-            row[f"listings_{short}_{prod}"] = as_number(
+            # `listings_*` used to carry the count of priced items, which the
+            # request caps at 100. Five of nine markets were pinned there for
+            # every reading, so the number said "we hit the limit", not "this
+            # many consoles are for sale" -- and it could only ever move down.
+            #
+            # Two honest metrics replace it rather than one series quietly
+            # changing meaning halfway through. How many eBay says match:
+            row[f"ebay_matches_{short}_{prod}"] = as_number(
+                dig(src, "console_prices", market, prod, "matches"))
+            # And how many we actually priced, which says how much weight the
+            # median can carry.
+            row[f"ebay_sampled_{short}_{prod}"] = as_number(
                 dig(src, "console_prices", market, prod, "count"))
 
     for prod in ("ps5_pro", "ps5", "xbox_series_x"):

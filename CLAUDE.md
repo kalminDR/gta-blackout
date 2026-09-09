@@ -519,6 +519,36 @@ declaration filed with eBay, which currently discloses them.
 
 ---
 
+### `listings_*` was measuring the page size, not the market
+
+Found on 9 September 2026 in `state.py`'s own frozen-metric table, which is
+what that table is for.
+
+Five of the nine eBay listing counts read exactly **100** in every reading —
+`listings_uk_ps5_pro`, `listings_uk_xbox_series_x`, and all three US products.
+Nothing ever exceeded 100 in any market. That is not a market that happens to
+hold a round number of consoles: the request carries `&limit=100`, and `count`
+was simply the number of items that came back.
+
+So the metric reported that we had hit the limit, and it could only ever move
+downward. On a launch day when consoles get scarce it would have looked
+entirely plausible while measuring an API parameter.
+
+Nobody was misled — `listings_*` was published in `series.json` and
+`latest.json` but was never a witness on the page or a scored metric. Claim 04
+is exactly where somebody would have reached for it later, though.
+
+**Replaced by two metrics rather than one series quietly changing meaning.**
+`ebay_matches_*` is eBay's own match total; `ebay_sampled_*` is how many we
+actually priced, which is worth having on its own because it says how much
+weight the median can carry. Snapshots taken before today carry no total, so
+`ebay_matches_*` reads null for them. Missing, never invented.
+
+**The general lesson: a metric pinned to a round number is a parameter, not a
+measurement.** Check the request before believing the reading.
+
+---
+
 ## 7. Settled, do not revisit without new evidence
 
 **Rejected sources**, each with a documented reason: Reddit (API closed,
