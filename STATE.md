@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-10 06:25 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-10 07:21 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **1 planned sources have no code at all**: chicago
-- **199 snapshots** over 189.1 hours (7.9 days); last one 0.1 h ago
+- **200 snapshots** over 190.0 hours (7.9 days); last one 0.1 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-10/0621.json`
+Newest snapshot: `data/2026-09-10/0717.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-10 06:21 UTC`
-- 199 of ~190 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-10 07:17 UTC`
+- 200 of ~191 expected hourly readings
 - **1 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
 
@@ -48,37 +48,37 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/199 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/199 | never returned a number — source not authenticating |
-| 🔴 | `baseline_quality` | 0/199 | never returned a number |
-| 🔴 | `deviations` | 0/199 | never returned a number |
-| 🔴 | `listings_uk_ps5_pro` | 95/199 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 95/199 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 95/199 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 95/199 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 95/199 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 159/199 | frozen at 6 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 192/199 | frozen at 6 for all 23 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 187/199 | zero in 10 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 183/199 | zero in 22 of 24 readings |
-| 🔴 | `yt_subscribers` | 195/199 | frozen at 1.37e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 183/199 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
-| 🟠 | `power_de_lag_hours` | 32/199 | missing 4 of 8 since it started |
-| 🟠 | `power_de_load_mw` | 32/199 | missing 4 of 8 since it started |
-| 🟠 | `power_es_lag_hours` | 31/199 | missing 4 of 7 since it started |
-| 🟠 | `power_es_load_mw` | 31/199 | missing 4 of 7 since it started |
-| 🟠 | `power_fr_lag_hours` | 32/199 | missing 3 of 8 since it started |
-| 🟠 | `power_fr_load_mw` | 32/199 | missing 3 of 8 since it started |
-| 🟠 | `power_hu_lag_hours` | 36/199 | missing 5 of 12 since it started |
-| 🟠 | `power_hu_load_mw` | 36/199 | missing 5 of 12 since it started |
-| 🟠 | `power_it_lag_hours` | 31/199 | missing 5 of 9 since it started |
-| 🟠 | `power_it_load_mw` | 31/199 | missing 5 of 9 since it started |
-| 🟠 | `power_nl_lag_hours` | 35/199 | missing 5 of 12 since it started |
-| 🟠 | `power_nl_load_mw` | 35/199 | missing 5 of 12 since it started |
-| 🟠 | `power_pl_lag_hours` | 35/199 | missing 5 of 12 since it started |
-| 🟠 | `power_pl_load_mw` | 35/199 | missing 5 of 12 since it started |
-| 🟠 | `power_se_lag_hours` | 31/199 | missing 4 of 8 since it started |
-| 🟠 | `power_se_load_mw` | 31/199 | missing 4 of 8 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/200 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/200 | never returned a number — source not authenticating |
+| 🔴 | `baseline_quality` | 0/200 | never returned a number |
+| 🔴 | `deviations` | 0/200 | never returned a number |
+| 🔴 | `listings_uk_ps5_pro` | 96/200 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 96/200 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 96/200 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 96/200 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 96/200 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 160/200 | frozen at 6 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 193/200 | frozen at 6 for all 23 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 188/200 | zero in 10 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 184/200 | zero in 22 of 24 readings |
+| 🔴 | `yt_subscribers` | 196/200 | frozen at 1.37e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 184/200 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🟠 | `power_de_lag_hours` | 32/200 | missing 5 of 9 since it started |
+| 🟠 | `power_de_load_mw` | 32/200 | missing 5 of 9 since it started |
+| 🟠 | `power_es_lag_hours` | 31/200 | missing 5 of 8 since it started |
+| 🟠 | `power_es_load_mw` | 31/200 | missing 5 of 8 since it started |
+| 🟠 | `power_fr_lag_hours` | 32/200 | missing 4 of 9 since it started |
+| 🟠 | `power_fr_load_mw` | 32/200 | missing 4 of 9 since it started |
+| 🟠 | `power_hu_lag_hours` | 36/200 | missing 6 of 13 since it started |
+| 🟠 | `power_hu_load_mw` | 36/200 | missing 6 of 13 since it started |
+| 🟠 | `power_it_lag_hours` | 31/200 | missing 6 of 10 since it started |
+| 🟠 | `power_it_load_mw` | 31/200 | missing 6 of 10 since it started |
+| 🟠 | `power_nl_lag_hours` | 35/200 | missing 6 of 13 since it started |
+| 🟠 | `power_nl_load_mw` | 35/200 | missing 6 of 13 since it started |
+| 🟠 | `power_pl_lag_hours` | 35/200 | missing 6 of 13 since it started |
+| 🟠 | `power_pl_load_mw` | 35/200 | missing 6 of 13 since it started |
+| 🟠 | `power_se_lag_hours` | 31/200 | missing 5 of 9 since it started |
+| 🟠 | `power_se_load_mw` | 31/200 | missing 5 of 9 since it started |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_budapest_delay_pct`, `traffic_london_delay_pct`, `traffic_losangeles_delay_pct`, `traffic_losangeles_seconds_measured`, `traffic_losangeles_travel_index`.
 
