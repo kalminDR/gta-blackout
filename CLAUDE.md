@@ -510,12 +510,28 @@ exactly as before.
 code. It matters because New York is currently a single point of failure for
 claim 01's strongest evidence.
 
-**`yt_subscribers_per_hour`** is always zero because YouTube rounds the
-subscriber count to 13.7M. Not broken, meaningless. Remove it.
+### Two cleanups, done 8 September 2026
 
-**eBay `sample_titles`** can be dropped now that the query is confirmed to return
-consoles rather than accessories. Doing so also simplifies the exemption
-declaration filed with eBay, which currently discloses them.
+**`yt_subscribers_per_hour` is gone.** Confirmed before removing: 139 readings,
+every one exactly 0.0, because `yt_subscribers` sat at exactly 13,700,000
+across 151 readings. YouTube rounds the public count, so the rate derived from
+it could never be anything else. A number that cannot move cannot measure a
+change.
+
+The raw count stays — "Rockstar has 13.7 million subscribers" is a true thing
+to be able to say — but it is now exempt from the frozen-metric alarm in
+`state.py`, alongside `_road_class` and `_points_ok`. **Its constancy is
+YouTube's rounding, not a dead collector**, and an alarm that fires on correct
+behaviour buries the ones that matter.
+
+**eBay `sample_titles` is gone.** Re-confirmed from live data first: every
+sample was a console, none an accessory. Removing them also takes them out of
+the exemption declaration filed with eBay.
+
+Drift is still detectable without them. If accessories crept into the results
+the median would fall by an order of magnitude, and a second-hand PS5 at fifty
+euros is not a reading anyone would mistake for a real one. Note the Polymarket
+collector has a `sample_titles` of its own; that one is unrelated and stays.
 
 ---
 

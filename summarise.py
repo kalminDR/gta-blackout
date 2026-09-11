@@ -339,7 +339,12 @@ def flatten(snap):
 CUMULATIVE = {
     "hn_max_item_id": "hn_items_per_hour",
     "yt_rockstar_total_views": "yt_rockstar_views_per_hour",
-    "yt_subscribers": "yt_subscribers_per_hour",
+    # yt_subscribers is deliberately absent. YouTube rounds the public
+    # subscriber count -- Rockstar's sat at exactly 13,700,000 across 151
+    # readings -- so the derived rate was 0.0 in all 139 readings it produced.
+    # Not broken, and not a signal either: a number that cannot move cannot
+    # measure a change. The raw count is still collected, because "Rockstar
+    # has 13.7 million subscribers" is a true thing to be able to say.
 }
 
 # Trailer view and like counters are discovered per video ID, so they are
