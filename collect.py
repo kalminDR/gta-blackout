@@ -704,6 +704,15 @@ def collect_console_prices():
                         titles.append((it.get("title") or "")[:70])
                 stats = _price_stats(prices)
                 out[market][key] = stats or {"count": 0}
+                # `count` is how many listings we priced, and the request asks
+                # for at most 100 -- so it is a sample size, not a supply
+                # figure. Five of the nine queries sat at exactly 100 for
+                # every reading, which is the cap showing through rather than
+                # a market that happens to hold a round number of consoles.
+                #
+                # eBay reports the real match count separately. If a response
+                # ever lacks it the value stays None: missing, never guessed.
+                out[market][key]["matches"] = as_float(res.get("total"))
                 # Keep a few titles so we can see whether the search is
                 # returning consoles or junk, and tighten it if needed.
                 out[market][key]["sample_titles"] = titles[:3]
