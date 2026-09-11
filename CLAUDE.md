@@ -506,9 +506,39 @@ secret — the browser calls that endpoint, so the URL is public by
 construction. Until the variable is set the collector reports "skipped"
 exactly as before.
 
-**`chicago`** — a second, independent transit system — is in the plan with no
-code. It matters because New York is currently a single point of failure for
-claim 01's strongest evidence.
+### Chicago, and the backfill that nobody was running
+
+`fetch_chicago` is in `backfill.py` as of 7 September 2026, reading
+`data.cityofchicago.org` dataset `6iiy-9s97` — daily bus, rail and total
+boardings, back to 2001. It exists for redundancy: New York was the only place
+we could see whether people travelled to work, so claim 01's strongest evidence
+had no fallback if the MTA feed were late or revised on 19 November. The
+endpoint was confirmed from a browser before a line was written, because this
+environment cannot reach it.
+
+Chicago brings something New York does not: **the CTA labels every day** as
+weekday, Saturday, or Sunday-and-holiday. In the New York series every holiday
+had to be found by hunting for dips. Here the operator says so, and a weekday
+carrying a weekend code *is* a holiday.
+
+The codes are W, A and U, but that is derived in `_day_type_meaning` rather
+than asserted — for each code the function reads which weekdays actually carry
+it. A code book remembered rather than read is how a wrong assumption survives,
+and the years before 2020 are of limited use anyway: the pandemic moved the
+level so far that anything older is a different city.
+
+**The bigger find: the backfill only ran by hand.** Its own comment said
+"history does not change, so there is nothing to gain from running it on a
+schedule". That is true of 2023 and false of every source here that publishes
+daily — yesterday becomes history every day. The MTA series was frozen at
+3 September, and `score.py` reads that file to decide the subway prediction.
+**A backfill nobody remembers to run is a prediction that can never be
+scored,** and it would have been discovered on 20 November.
+
+It now runs daily at 06:30 UTC, after both cities have published the previous
+day. `inputs.start_date` exists only for `workflow_dispatch`, so the scheduled
+run passed an empty string; both the workflow and `backfill.py` now fall back
+to 2023-01-01 rather than crashing on `date.fromisoformat("")`.
 
 **`yt_subscribers_per_hour`** is always zero because YouTube rounds the
 subscriber count to 13.7M. Not broken, meaningless. Remove it.
@@ -553,14 +583,24 @@ stills, characters, logos, or the Pricedown typeface.
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
   absent data never reads as "failed"), `test_schema.py` (the D1 schema against
   the statements `worker.js` actually issues), `test_check.py` (the health
-  check, from both sides: a blink must not fail the run, a dead source must).
-  Run all seven after touching collection or aggregation. The counts move; the
+  check, from both sides: a blink must not fail the run, a dead source must),
+  `test_chicago.py` (the CTA parser, and the day-type derivation).
+  Run all eight after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
   force it. `test_power.py` had an `ok=` parameter for one run, and two checks
   passed while asserting nothing. One way to state an expectation, no override.
 - `collect.py --check` exercises the collectors.
+- **Never carry a generated file in a feature branch.** `STATE.md`,
+  `public/series.json`, `public/latest.json`, `public/chart.json` and
+  `public/predictions.json` are rewritten from scratch by the hourly workflow.
+  A branch that carries its own copy conflicts with every run, and the conflict
+  preserves nothing: hand-merging two generated files produces a report that
+  describes neither state. Before pushing, reset them to main
+  (`git checkout origin/main -- STATE.md public/`) and let the first run after
+  the merge regenerate them. This has now caused a merge conflict three times —
+  twice on `public/`, once on `STATE.md` after `state.py` joined the workflow.
 - **Never invent a number.** A missing country stays missing; a dead measurement
   point is dropped, not averaged in; an index without enough baseline prints
   nothing. An empty cell is more honest than a filled false one, and the whole

@@ -1,8 +1,18 @@
 name: backfill
 
-# Run by hand only. This fetches history, and history does not change,
-# so there is nothing to gain from running it on a schedule.
+# Daily, and by hand when a wider window is wanted.
+#
+# This used to be by hand only, on the reasoning that history does not change.
+# That is true of 2023 and false of every source here that publishes daily:
+# yesterday becomes history every day. The MTA and Chicago series are exactly
+# that, and score.py reads the MTA file to decide the subway prediction -- so
+# a backfill nobody remembers to run is a prediction that can never be scored.
+# On 20 November that would have been discovered far too late.
+#
+# 06:30 UTC, after New York and Chicago have both published the previous day.
 on:
+  schedule:
+    - cron: "30 6 * * *"
   workflow_dispatch:
     inputs:
       start_date:
@@ -28,7 +38,11 @@ jobs:
       - name: Fetch history
         env:
           ENTSOE_TOKEN: ${{ secrets.ENTSOE_TOKEN }}
-        run: python backfill.py "${{ inputs.start_date }}"
+          START_DATE: ${{ inputs.start_date }}
+        run: |
+          START="${START_DATE:-2023-01-01}"
+          echo "START_DATE=$START" >> "$GITHUB_ENV"
+          python backfill.py "$START"
 
       - name: Commit history
         run: |
@@ -39,6 +53,6 @@ jobs:
             echo "nothing new"
             exit 0
           fi
-          git commit -m "backfill from ${{ inputs.start_date }}"
+          git commit -m "backfill from ${START_DATE}"
           git pull --rebase --autostash origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"

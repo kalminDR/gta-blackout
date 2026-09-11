@@ -96,6 +96,101 @@ def fetch_mta(start):
     }
 
 
+def fetch_chicago(start):
+    """Daily boardings on Chicago transit: bus, rail, and the total.
+
+    A second, independent transit system, and the reason it exists is
+    redundancy. New York is currently the only place we can see whether people
+    travelled to work, which makes claim 01's strongest evidence a single point
+    of failure. If the MTA feed is late, revised or broken on 19 November, that
+    evidence is simply absent and there is nothing to fall back on.
+
+    Chicago also brings something New York does not: the CTA labels every day
+    as weekday, Saturday, or Sunday-and-holiday. In the New York series every
+    holiday had to be found by hunting for dips -- Thanksgiving, Juneteenth,
+    the Jewish High Holidays, once a wildfire smoke emergency. Here the
+    operator says so. `day_type` is stored raw and its meaning is derived from
+    the data in `_day_type_meaning` rather than assumed from a code book.
+
+    History runs to 2001, far deeper than the MTA series, though the years
+    before 2020 are of limited use: the pandemic moved the level so far that
+    anything older is a different city.
+    """
+    url = ("https://data.cityofchicago.org/resource/6iiy-9s97.json"
+           f"?$where=service_date>='{start.isoformat()}T00:00:00'"
+           "&$order=service_date&$limit=100000")
+    rows = get_json(url)
+    if not rows:
+        return {"error": "no rows returned"}
+
+    all_fields = sorted(rows[0].keys())
+    out = []
+    for r in rows:
+        rec = {}
+        for k, v in r.items():
+            if k == "service_date":
+                rec["date"] = (v or "")[:10]
+            elif _is_number(v):
+                rec[k] = _num(v)
+            else:
+                rec[k] = v          # day_type lives here
+        if rec.get("date"):
+            out.append(rec)
+
+    return {
+        "source": "data.cityofchicago.org dataset 6iiy-9s97",
+        "all_fields": all_fields,
+        "day_types_found": sorted({r["day_type"] for r in out
+                                   if isinstance(r.get("day_type"), str)}),
+        "day_type_meaning": _day_type_meaning(out),
+        "rows": len(out),
+        "first": out[0]["date"] if out else None,
+        "last": out[-1]["date"] if out else None,
+        "data": out,
+    }
+
+
+def _day_type_meaning(rows):
+    """What each day_type code actually means, read off the calendar.
+
+    The CTA does not ship a code book with the data, and guessing at one from
+    memory is the kind of thing that is right until it is not. So the meaning
+    is derived: for each code, look at which weekdays carry it. A code that is
+    almost always Saturday means Saturday. A code that is mostly Sunday but
+    also appears on scattered weekdays is Sunday-and-holidays -- and those
+    scattered weekdays are exactly the holidays, which is the useful part.
+    """
+    import collections
+    NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+             "Saturday", "Sunday"]
+    by_code = collections.defaultdict(collections.Counter)
+    for r in rows:
+        code, day = r.get("day_type"), r.get("date")
+        if not isinstance(code, str) or not day:
+            continue
+        try:
+            wd = date.fromisoformat(day).weekday()
+        except ValueError:
+            continue
+        by_code[code][NAMES[wd]] += 1
+
+    out = {}
+    for code, counter in by_code.items():
+        total = sum(counter.values())
+        top, n = counter.most_common(1)[0]
+        out[code] = {
+            "mostly": top,
+            "share_pct": round(100 * n / total, 1),
+            "days_seen": total,
+            # Weekdays carrying a weekend code are holidays. This is the
+            # thing New York made us infer from the size of the dip.
+            "weekday_exceptions": sum(v for k, v in counter.items()
+                                      if k not in ("Saturday", "Sunday"))
+                                  if top in ("Saturday", "Sunday") else 0,
+        }
+    return out
+
+
 def _is_number(v):
     try:
         float(v)
@@ -415,12 +510,14 @@ def fetch_entsoe(token):
 
 
 def main():
-    start = date.fromisoformat(sys.argv[1]) if len(sys.argv) > 1 else date(2023, 1, 1)
+    given = sys.argv[1].strip() if len(sys.argv) > 1 else ""
+    start = date.fromisoformat(given) if given else date(2023, 1, 1)
     end = datetime.now(timezone.utc).date() - timedelta(days=1)
     os.makedirs(OUT, exist_ok=True)
 
     jobs = {
         "mta_ridership": lambda: fetch_mta(start),
+        "chicago_ridership": lambda: fetch_chicago(start),
         "stackexchange": lambda: fetch_stackexchange(start, end),
         "wikipedia": lambda: fetch_wikipedia(start, end),
         "wikipedia_pageviews": lambda: fetch_wikipedia_pageviews(start, end),
