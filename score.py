@@ -171,7 +171,13 @@ def score_traffic(points, today=None):
 
 # ------------------------------------------------------------------- 02 power
 
-def score_power(snapshots, backfill=None):
+# How many days without a reading before a source counts as gone rather than
+# merely between readings. ENTSO-E publishes hourly and flaps for hours at a
+# time; two days of silence is well past any outage it has had.
+STALE_AFTER_DAYS = 2
+
+
+def score_power(snapshots, backfill=None, ctx_today=None):
     """Three of eight grids at two standard deviations from their own autumn."""
     verdicts = power.verdicts_from_snapshots(snapshots, backfill)
     on_the_day = {c: v for c, v in verdicts.items() if v.get("day") == RELEASE.isoformat()}
@@ -183,12 +189,21 @@ def score_power(snapshots, backfill=None):
         # source stopped publishing knows the witness is not coming. ENTSO-E
         # retired web-api.tp.entsoe.eu on 8 September 2026 and this is exactly
         # the case that wording has to survive.
+        today = (ctx_today or datetime.date.today()).isoformat()
         if not days:
             reason = ("no electricity readings at all -- the source has "
                       "published nothing we could collect")
-        elif max(days) < RELEASE.isoformat():
-            reason = (f"electricity readings stop at {max(days)}, before the "
-                      "launch day; the source went dark and did not return")
+        elif max(days) < (datetime.date.fromisoformat(today)
+                          - datetime.timedelta(days=STALE_AFTER_DAYS)).isoformat():
+            # Stale relative to now, which is the only thing that can mean the
+            # source stopped. The first version of this compared the last
+            # reading to the launch day instead, so it announced that the
+            # source "went dark and did not return" on every single day before
+            # 19 November -- including days when the collector had a complete
+            # reading from the evening before. A wording meant to stop one
+            # false impression created another.
+            reason = (f"electricity readings stop at {max(days)} and none have "
+                      f"arrived since; the source has gone dark")
         else:
             reason = "no country has a complete launch-day evening yet"
         return _cannot(reason, days_available=days,
@@ -322,7 +337,8 @@ def score_servers(points):
 SCORERS = {
     "subway": lambda ctx: score_subway(ctx.get("mta")),
     "traffic": lambda ctx: score_traffic(ctx["points"], ctx.get("today")),
-    "power": lambda ctx: score_power(ctx.get("snapshots") or [], ctx.get("backfill")),
+    "power": lambda ctx: score_power(ctx.get("snapshots") or [],
+                                     ctx.get("backfill"), ctx.get("today")),
     "steam": lambda ctx: score_steam(ctx["points"], ctx.get("today")),
     "twitch": lambda ctx: score_twitch(ctx["points"]),
     "servers": lambda ctx: score_servers(ctx["points"]),

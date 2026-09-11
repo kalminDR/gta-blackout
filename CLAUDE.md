@@ -316,9 +316,11 @@ half a day. Had the collector still been keeping one point per call, the
 flapping would have punched holes straight through the evening hours the ratio
 depends on.
 
-### web-api.tp.entsoe.eu was retired on 8 September 2026
+### ENTSO-E went down for 29 hours on 7-8 September, and it was not retired
 
-Not a blink. The endpoint is gone.
+**This section previously said the endpoint had been retired. That was wrong,
+and it is corrected here rather than deleted, because the reasoning that
+produced it was sound and the conclusion still was not.**
 
 The decline was visible for two days first: read timeouts on 6 September,
 HTTP 503 with their styled maintenance page on the 7th, HTTP 599 that evening,
@@ -333,10 +335,9 @@ ratio for the 7th or the 8th.
 The URL had never changed since the day it was written. Nothing on our side
 caused this.
 
-**What it costs, honestly.** Nothing yet, and possibly nothing at all. The
+**What it cost.** Two evening ratios, 7 and 8 September, and nothing else. The
 ratio's baseline comes from the backfill's four autumn windows, never from the
-live series, so September evenings were never going to be evidence. What
-matters is whether a working endpoint exists in November.
+live series, so September evenings were never going to be evidence.
 
 If none does, claim 02 keeps its **first** witness — evening traffic — and
 loses its second. The published power prediction then reports that it could
@@ -350,10 +351,26 @@ that stop before the launch day (the source went dark), and an evening merely
 not finished yet. The middle one used to print as the third, which reads like
 "wait a bit" when the truth is "the witness is not coming".
 
-**Still open: where it went.** Do not guess a replacement URL — a wrong
-endpoint that returns something plausible is worse than a clean failure. If
-ENTSO-E has migrated, the new address has to be confirmed from a browser and
-this environment cannot reach it.
+**It came back at 18:19 UTC on 8 September**, on the same URL, with no change
+at our end. Two more days of heavy flapping followed — 0 to 8 countries per
+reading, hour to hour — and it has been steady since the 10th.
+
+**What the wrong conclusion was built on.** A plain-text `404 page not found`
+held for twelve hours across two independent networks, after two days of
+decline. Every part of that was true. The inference — that a 404 means gone
+where a 503 means down — is the sort that is usually right and was not.
+
+The lesson is not "check harder". It is that **an outage has no upper bound
+you can infer from its symptoms**, and a conclusion about a service's future
+should not be written into a document that later sessions will treat as
+settled. What should have been recorded is what was measured: the errors, the
+hours, the cost. The prediction that it would not return added nothing and was
+the only part that turned out false.
+
+**Nothing downstream depended on the wrong conclusion**, which is the one piece
+of luck here. The scorer was already built so that a dead source yields no
+verdict, and that behaviour is correct whether a source is dead for a day or
+for good.
 
 ### GB does not publish electricity to ENTSO-E
 
