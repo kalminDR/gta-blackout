@@ -1,79 +1,77 @@
 {
- "generated_at_utc": "2026-09-22T18:42:25+00:00",
+ "generated_at_utc": "2026-09-22T21:56:46+00:00",
  "coverage": {
   "first_snapshot": "2026-09-02T09:14:59+00:00",
-  "last_snapshot": "2026-09-22T18:41:34+00:00",
-  "snapshot_count": 328,
-  "days_of_history": 20.4,
+  "last_snapshot": "2026-09-22T21:55:59+00:00",
+  "snapshot_count": 329,
+  "days_of_history": 20.5,
   "unreadable_files": [],
   "hours_since_last_snapshot": 0.0
  },
  "latest": {
-  "t": "2026-09-22T18:41:34+00:00",
-  "twitch_top100_total": 1105446,
-  "twitch_gta5": 81671,
+  "t": "2026-09-22T21:55:59+00:00",
+  "twitch_top100_total": 947337,
+  "twitch_gta5": 122278,
   "twitch_top_game": "Just Chatting",
-  "twitch_top_game_viewers": 233413,
+  "twitch_top_game_viewers": 144504,
   "twitch_by_language": {
-   "de": 131331,
-   "en": 391542,
-   "es": 134245,
-   "fr": 104965,
-   "hu": 4303,
-   "it": 36919,
-   "ja": 37629,
-   "pl": 10844,
-   "pt": 10684,
-   "ru": 221654,
-   "uk": 21330
+   "cs": 2976,
+   "de": 82700,
+   "en": 475823,
+   "es": 78654,
+   "fr": 104869,
+   "it": 92159,
+   "pl": 7100,
+   "pt": 21866,
+   "ru": 81190
   },
-  "twitch_gta5_viewers": 173286,
-  "twitch_gta5_channels": 297,
-  "twitch_gta5_top5_share": 39.1,
-  "twitch_other_viewers": 1023775,
-  "steam_gta5": 63148,
-  "steam_gta5_enhanced": 50491,
-  "steam_cs2": 1093746,
-  "steam_dota2": 794096,
-  "steam_pubg": 269656,
-  "steam_apex": 105573,
-  "steam_bg3": 53722,
-  "steam_rdr2": 29748,
-  "steam_basket_total": 2460180,
+  "twitch_gta5_viewers": 189947,
+  "twitch_gta5_channels": 99,
+  "twitch_gta5_top5_share": 41.9,
+  "twitch_other_viewers": 825059,
+  "steam_gta5": 38353,
+  "steam_gta5_enhanced": 34062,
+  "steam_cs2": 673688,
+  "steam_dota2": 534212,
+  "steam_pubg": 132210,
+  "steam_apex": 66903,
+  "steam_bg3": 44516,
+  "steam_rdr2": 22718,
+  "steam_basket_total": 1546662,
   "steam_rank_gta5": 8,
   "steam_rank_gta5_enh": 21,
-  "hn_max_item_id": 49806128,
+  "hn_max_item_id": 49808724,
   "polymarket_total_volume": 4119309.06,
   "polymarket_market_count": 6,
   "yt_subscribers": 13800000,
   "yt_rockstar_total_views": 1768907099,
-  "yt_EiQEBYDox_k_views": 15436157,
-  "yt_EiQEBYDox_k_likes": 1070034,
-  "yt_QdBZY2fkU-0_views": 296332663,
-  "yt_QdBZY2fkU-0_likes": 12476326,
-  "yt_VQRLujxTm3c_views": 183164362,
-  "yt_VQRLujxTm3c_likes": 6614224,
-  "yt_qq76pQsI1iw_views": 9840861,
-  "yt_qq76pQsI1iw_likes": 352876,
-  "yt_tJbzMqJGH4k_views": 28744321,
-  "yt_tJbzMqJGH4k_likes": 1623909,
+  "yt_EiQEBYDox_k_views": 15437414,
+  "yt_EiQEBYDox_k_likes": 1070038,
+  "yt_QdBZY2fkU-0_views": 296343171,
+  "yt_QdBZY2fkU-0_likes": 12476347,
+  "yt_VQRLujxTm3c_views": 183172238,
+  "yt_VQRLujxTm3c_likes": 6614246,
+  "yt_qq76pQsI1iw_views": 9842343,
+  "yt_qq76pQsI1iw_likes": 352885,
+  "yt_tJbzMqJGH4k_views": 28767858,
+  "yt_tJbzMqJGH4k_likes": 1624305,
   "traffic_budapest_delay_pct": 0.0,
   "traffic_budapest_travel_index": 100.0,
   "traffic_budapest_points_ok": 5,
   "traffic_budapest_points_rejected": 1,
   "traffic_budapest_seconds_measured": 999,
   "traffic_budapest_road_class": 2,
-  "traffic_london_delay_pct": 6.8,
-  "traffic_london_travel_index": 106.8,
+  "traffic_london_delay_pct": 0.0,
+  "traffic_london_travel_index": 100.0,
   "traffic_london_points_ok": 5,
   "traffic_london_points_rejected": 1,
-  "traffic_london_seconds_measured": 455,
+  "traffic_london_seconds_measured": 451,
   "traffic_london_road_class": 2,
-  "traffic_berlin_delay_pct": 8.2,
-  "traffic_berlin_travel_index": 108.2,
-  "traffic_berlin_points_ok": 6,
+  "traffic_berlin_delay_pct": 0.0,
+  "traffic_berlin_travel_index": 100.0,
+  "traffic_berlin_points_ok": 5,
   "traffic_berlin_points_rejected": 0,
-  "traffic_berlin_seconds_measured": 803,
+  "traffic_berlin_seconds_measured": 722,
   "traffic_berlin_road_class": 0.5,
   "traffic_warsaw_delay_pct": 0.0,
   "traffic_warsaw_travel_index": 100.0,
@@ -81,62 +79,62 @@
   "traffic_warsaw_points_rejected": 3,
   "traffic_warsaw_seconds_measured": 225,
   "traffic_warsaw_road_class": 1,
-  "traffic_newyork_delay_pct": 62.1,
-  "traffic_newyork_travel_index": 162.1,
+  "traffic_newyork_delay_pct": 99.6,
+  "traffic_newyork_travel_index": 199.6,
   "traffic_newyork_points_ok": 6,
   "traffic_newyork_points_rejected": 0,
-  "traffic_newyork_seconds_measured": 813,
+  "traffic_newyork_seconds_measured": 803,
   "traffic_newyork_road_class": 0.0,
-  "traffic_losangeles_delay_pct": 2.5,
-  "traffic_losangeles_travel_index": 102.5,
+  "traffic_losangeles_delay_pct": 145.5,
+  "traffic_losangeles_travel_index": 245.5,
   "traffic_losangeles_points_ok": 6,
   "traffic_losangeles_points_rejected": 0,
   "traffic_losangeles_seconds_measured": 279,
   "traffic_losangeles_road_class": 0.0,
-  "power_de_load_mw": 57791.1,
-  "power_de_lag_hours": 0.95,
-  "power_de_t": "2026-09-22T17:45:00+00:00",
-  "power_es_load_mw": 33656.0,
-  "power_es_lag_hours": 0.7,
-  "power_es_t": "2026-09-22T18:00:00+00:00",
-  "power_fr_load_mw": 48304.8,
-  "power_fr_lag_hours": 0.95,
-  "power_fr_t": "2026-09-22T17:45:00+00:00",
+  "power_de_load_mw": 45141.9,
+  "power_de_lag_hours": 0.94,
+  "power_de_t": "2026-09-22T21:00:00+00:00",
+  "power_es_load_mw": 27592.0,
+  "power_es_lag_hours": 0.69,
+  "power_es_t": "2026-09-22T21:15:00+00:00",
+  "power_fr_load_mw": 43232.3,
+  "power_fr_lag_hours": 1.19,
+  "power_fr_t": "2026-09-22T20:45:00+00:00",
   "power_gb_load_mw": null,
   "power_gb_lag_hours": null,
   "power_gb_t": null,
-  "power_hu_load_mw": 5587.3,
-  "power_hu_lag_hours": 0.7,
-  "power_hu_t": "2026-09-22T18:00:00+00:00",
-  "power_it_load_mw": 7945.0,
-  "power_it_lag_hours": 1.2,
-  "power_it_t": "2026-09-22T17:30:00+00:00",
-  "power_nl_load_mw": 11114.1,
-  "power_nl_lag_hours": 0.95,
-  "power_nl_t": "2026-09-22T17:45:00+00:00",
-  "power_pl_load_mw": 21401.5,
-  "power_pl_lag_hours": 1.2,
-  "power_pl_t": "2026-09-22T17:30:00+00:00",
-  "power_se_load_mw": 16184.0,
-  "power_se_lag_hours": 1.2,
-  "power_se_t": "2026-09-22T17:30:00+00:00",
+  "power_hu_load_mw": 4783.3,
+  "power_hu_lag_hours": 0.69,
+  "power_hu_t": "2026-09-22T21:15:00+00:00",
+  "power_it_load_mw": 29986.0,
+  "power_it_lag_hours": 0.94,
+  "power_it_t": "2026-09-22T21:00:00+00:00",
+  "power_nl_load_mw": 10655.6,
+  "power_nl_lag_hours": 0.94,
+  "power_nl_t": "2026-09-22T21:00:00+00:00",
+  "power_pl_load_mw": 17165.0,
+  "power_pl_lag_hours": 1.19,
+  "power_pl_t": "2026-09-22T20:45:00+00:00",
+  "power_se_load_mw": 15795.0,
+  "power_se_lag_hours": 0.44,
+  "power_se_t": "2026-09-22T21:30:00+00:00",
   "price_us_ps5_pro": 1250.0,
   "listings_us_ps5_pro": 100,
-  "price_us_ps5": 529.96,
+  "price_us_ps5": 522.49,
   "listings_us_ps5": 100,
-  "price_us_xbox_series_x": 599.47,
+  "price_us_xbox_series_x": 574.99,
   "listings_us_xbox_series_x": 100,
-  "price_uk_ps5_pro": 871.35,
+  "price_uk_ps5_pro": 869.5,
   "listings_uk_ps5_pro": 100,
   "price_uk_ps5": 489.99,
   "listings_uk_ps5": 100,
-  "price_uk_xbox_series_x": 469.99,
+  "price_uk_xbox_series_x": 470.0,
   "listings_uk_xbox_series_x": 100,
   "price_de_ps5_pro": 1021.06,
-  "listings_de_ps5_pro": 84,
-  "price_de_ps5": 571.28,
-  "listings_de_ps5": 33,
-  "price_de_xbox_series_x": 547.97,
+  "listings_de_ps5_pro": 88,
+  "price_de_ps5": 564.65,
+  "listings_de_ps5": 36,
+  "price_de_xbox_series_x": 559.6,
   "listings_de_xbox_series_x": 100,
   "bestbuy_ps5_pro_online": null,
   "bestbuy_ps5_pro_price": null,
@@ -159,77 +157,30 @@
   "yt_qq76pQsI1iw_likes_per_hour": null,
   "yt_tJbzMqJGH4k_views_per_hour": null,
   "yt_tJbzMqJGH4k_likes_per_hour": null,
-  "deviations": {
-   "steam_cs2": -0.011,
-   "steam_dota2": -0.0256,
-   "steam_pubg": -0.0231,
-   "steam_apex": -0.1227,
-   "steam_bg3": -0.106,
-   "steam_rdr2": 0.3495,
-   "steam_gta5": 0.1189,
-   "steam_gta5_enhanced": 0.2219,
-   "twitch_other_viewers": -0.1517,
-   "traffic_budapest_travel_index": -0.0491,
-   "traffic_london_travel_index": 0.0013,
-   "traffic_berlin_travel_index": -0.0747,
-   "traffic_warsaw_travel_index": -0.289,
-   "traffic_newyork_travel_index": 0.0885,
-   "xbox_service_issues": 0.0
-  },
-  "baseline_quality": {
-   "steam_cs2": "hour_of_day",
-   "steam_dota2": "hour_of_day",
-   "steam_pubg": "hour_of_day",
-   "steam_apex": "hour_of_day",
-   "steam_bg3": "hour_of_day",
-   "steam_rdr2": "hour_of_day",
-   "steam_gta5": "hour_of_day",
-   "steam_gta5_enhanced": "hour_of_day",
-   "twitch_other_viewers": "hour_of_day",
-   "traffic_budapest_travel_index": "hour_of_day",
-   "traffic_london_travel_index": "hour_of_day",
-   "traffic_berlin_travel_index": "hour_of_day",
-   "traffic_warsaw_travel_index": "hour_of_day",
-   "traffic_newyork_travel_index": "hour_of_day",
-   "xbox_service_issues": "hour_of_day"
-  },
+  "deviations": null,
+  "baseline_quality": null,
   "indices": {
    "attention": null,
-   "displacement": {
-    "index": 98,
-    "log2": -0.0231,
-    "components": 9,
-    "components_expected": 9
-   },
-   "work": {
-    "index": 97,
-    "log2": -0.0491,
-    "components": 5,
-    "components_expected": 6
-   },
-   "infrastructure": {
-    "index": 100,
-    "log2": 0.0,
-    "components": 1,
-    "components_expected": 2
-   }
+   "displacement": null,
+   "work": null,
+   "infrastructure": null
   }
  },
  "observed": {
   "from": "2026-09-02T09:14:59+00:00",
-  "to": "2026-09-22T18:41:34+00:00",
-  "days": 20.4,
+  "to": "2026-09-22T21:55:59+00:00",
+  "days": 20.5,
   "gta5_steam_players": {
    "min": 58990,
    "max": 178295,
-   "median": 105352,
-   "readings": 327
+   "median": 105290,
+   "readings": 328
   },
   "trailer_views": {
    "min": 294134903,
-   "max": 296332663,
-   "median": 295270753,
-   "readings": 323
+   "max": 296343171,
+   "median": 295274341,
+   "readings": 324
   }
  },
  "panels": {
@@ -248,8 +199,8 @@
    "displacement": {
     "name": "Displacement",
     "effect_direction": "higher = more effect",
-    "index": 98,
-    "sources_available": 9,
+    "index": null,
+    "sources_available": 0,
     "sources_expected": 9,
     "placebo_thursdays": 2,
     "placebo_peak_today": 104,
@@ -259,8 +210,8 @@
    "work": {
     "name": "Work & Mobility",
     "effect_direction": "lower = more effect",
-    "index": 97,
-    "sources_available": 5,
+    "index": null,
+    "sources_available": 0,
     "sources_expected": 6,
     "placebo_thursdays": 2,
     "placebo_peak_today": 100,
@@ -270,8 +221,8 @@
    "infrastructure": {
     "name": "Infrastructure",
     "effect_direction": "higher = more effect",
-    "index": 100,
-    "sources_available": 1,
+    "index": null,
+    "sources_available": 0,
     "sources_expected": 2,
     "placebo_thursdays": 2,
     "placebo_peak_today": 100,
@@ -336,9 +287,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 1093746,
-    "deviation_log2": -0.011,
-    "baseline_quality": "hour_of_day"
+    "value": 673688,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_dota2",
@@ -348,9 +299,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 794096,
-    "deviation_log2": -0.0256,
-    "baseline_quality": "hour_of_day"
+    "value": 534212,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_pubg",
@@ -360,9 +311,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 269656,
-    "deviation_log2": -0.0231,
-    "baseline_quality": "hour_of_day"
+    "value": 132210,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_apex",
@@ -372,9 +323,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 105573,
-    "deviation_log2": -0.1227,
-    "baseline_quality": "hour_of_day"
+    "value": 66903,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_bg3",
@@ -384,9 +335,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 53722,
-    "deviation_log2": -0.106,
-    "baseline_quality": "hour_of_day"
+    "value": 44516,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_rdr2",
@@ -396,9 +347,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 29748,
-    "deviation_log2": 0.3495,
-    "baseline_quality": "hour_of_day"
+    "value": 22718,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_gta5",
@@ -408,9 +359,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 63148,
-    "deviation_log2": 0.1189,
-    "baseline_quality": "hour_of_day"
+    "value": 38353,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "steam_gta5_enhanced",
@@ -420,9 +371,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 50491,
-    "deviation_log2": 0.2219,
-    "baseline_quality": "hour_of_day"
+    "value": 34062,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "twitch_other_viewers",
@@ -432,9 +383,9 @@
     "primary": true,
     "timezone": "UTC",
     "evidence": "measured",
-    "value": 1023775,
-    "deviation_log2": -0.1517,
-    "baseline_quality": "hour_of_day"
+    "value": 825059,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_budapest_travel_index",
@@ -445,8 +396,8 @@
     "timezone": "Europe/Budapest",
     "evidence": "measured",
     "value": 100.0,
-    "deviation_log2": -0.0491,
-    "baseline_quality": "hour_of_day"
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_london_travel_index",
@@ -456,9 +407,9 @@
     "primary": true,
     "timezone": "Europe/London",
     "evidence": "measured",
-    "value": 106.8,
-    "deviation_log2": 0.0013,
-    "baseline_quality": "hour_of_day"
+    "value": 100.0,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_berlin_travel_index",
@@ -468,9 +419,9 @@
     "primary": true,
     "timezone": "Europe/Berlin",
     "evidence": "measured",
-    "value": 108.2,
-    "deviation_log2": -0.0747,
-    "baseline_quality": "hour_of_day"
+    "value": 100.0,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_warsaw_travel_index",
@@ -481,8 +432,8 @@
     "timezone": "Europe/Warsaw",
     "evidence": "measured",
     "value": 100.0,
-    "deviation_log2": -0.289,
-    "baseline_quality": "hour_of_day"
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_newyork_travel_index",
@@ -492,9 +443,9 @@
     "primary": true,
     "timezone": "America/New_York",
     "evidence": "measured",
-    "value": 162.1,
-    "deviation_log2": 0.0885,
-    "baseline_quality": "hour_of_day"
+    "value": 199.6,
+    "deviation_log2": null,
+    "baseline_quality": null
    },
    {
     "key": "traffic_losangeles_travel_index",
@@ -504,7 +455,7 @@
     "primary": true,
     "timezone": "America/Los_Angeles",
     "evidence": "measured",
-    "value": 102.5,
+    "value": 245.5,
     "deviation_log2": null,
     "baseline_quality": null
    },
@@ -541,8 +492,8 @@
     "timezone": "UTC",
     "evidence": "measured",
     "value": 0,
-    "deviation_log2": 0.0,
-    "baseline_quality": "hour_of_day"
+    "deviation_log2": null,
+    "baseline_quality": null
    }
   ],
   "frozen_metrics": [
@@ -557,14 +508,14 @@
  "evening": {
   "DE": {
    "day": "2026-09-22",
-   "ratio": 1.071,
+   "ratio": 1.072,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "ES": {
    "day": "2026-09-22",
-   "ratio": 1.1074,
+   "ratio": 1.1263,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
@@ -585,28 +536,28 @@
   },
   "IT": {
    "day": "2026-09-22",
-   "ratio": 1.0589,
+   "ratio": 1.111,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "NL": {
    "day": "2026-09-22",
-   "ratio": 1.0175,
+   "ratio": 1.02,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "PL": {
    "day": "2026-09-22",
-   "ratio": 1.0343,
+   "ratio": 1.0326,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
   },
   "SE": {
    "day": "2026-09-22",
-   "ratio": 1.1773,
+   "ratio": 1.0463,
    "z": null,
    "detects_pct": null,
    "reason": "no season-matched baseline"
@@ -615,194 +566,194 @@
  "changes": {
   "twitch_top100_total": {
    "vs_24h": {
-    "then": 1039154,
-    "absolute": 66292,
-    "percent": 6.4
+    "then": 734203,
+    "absolute": 213134,
+    "percent": 29.0
    },
    "vs_7d": {
-    "then": 1116999,
-    "absolute": -11553,
-    "percent": -1.0
+    "then": 938310,
+    "absolute": 9027,
+    "percent": 1.0
    }
   },
   "twitch_gta5": {
    "vs_24h": {
-    "then": 47065,
-    "absolute": 34606,
-    "percent": 73.5
+    "then": 130691,
+    "absolute": -8413,
+    "percent": -6.4
    },
    "vs_7d": {
-    "then": 59053,
-    "absolute": 22618,
-    "percent": 38.3
+    "then": 132699,
+    "absolute": -10421,
+    "percent": -7.9
    }
   },
   "twitch_top_game_viewers": {
    "vs_24h": {
-    "then": 270335,
-    "absolute": -36922,
-    "percent": -13.7
+    "then": 130691,
+    "absolute": 13813,
+    "percent": 10.6
    },
    "vs_7d": {
-    "then": 229640,
-    "absolute": 3773,
-    "percent": 1.6
+    "then": 164033,
+    "absolute": -19529,
+    "percent": -11.9
    }
   },
   "twitch_gta5_viewers": {
    "vs_24h": {
-    "then": 118479,
-    "absolute": 54807,
-    "percent": 46.3
+    "then": 190392,
+    "absolute": -445,
+    "percent": -0.2
    },
    "vs_7d": {
-    "then": 154733,
-    "absolute": 18553,
-    "percent": 12.0
+    "then": 203240,
+    "absolute": -13293,
+    "percent": -6.5
    }
   },
   "twitch_gta5_channels": {
    "vs_24h": {
-    "then": 94,
-    "absolute": 203,
-    "percent": 216.0
+    "then": 99,
+    "absolute": 0,
+    "percent": 0.0
    },
    "vs_7d": {
-    "then": 199,
-    "absolute": 98,
-    "percent": 49.2
+    "then": 99,
+    "absolute": 0,
+    "percent": 0.0
    }
   },
   "twitch_gta5_top5_share": {
    "vs_24h": {
-    "then": 39.7,
-    "absolute": -0.6,
-    "percent": -1.5
+    "then": 49.8,
+    "absolute": -7.9,
+    "percent": -15.9
    },
    "vs_7d": {
-    "then": 32.4,
-    "absolute": 6.7,
-    "percent": 20.7
+    "then": 44.0,
+    "absolute": -2.1,
+    "percent": -4.8
    }
   },
   "twitch_other_viewers": {
    "vs_24h": {
-    "then": 962861,
-    "absolute": 60914,
-    "percent": 6.3
+    "then": 585145,
+    "absolute": 239914,
+    "percent": 41.0
    },
    "vs_7d": {
-    "then": 1057946,
-    "absolute": -34171,
-    "percent": -3.2
+    "then": 805611,
+    "absolute": 19448,
+    "percent": 2.4
    }
   },
   "steam_gta5": {
    "vs_24h": {
-    "then": 62293,
-    "absolute": 855,
-    "percent": 1.4
+    "then": 32319,
+    "absolute": 6034,
+    "percent": 18.7
    },
    "vs_7d": {
-    "then": 65150,
-    "absolute": -2002,
-    "percent": -3.1
+    "then": 39437,
+    "absolute": -1084,
+    "percent": -2.7
    }
   },
   "steam_gta5_enhanced": {
    "vs_24h": {
-    "then": 50566,
-    "absolute": -75,
-    "percent": -0.1
+    "then": 32926,
+    "absolute": 1136,
+    "percent": 3.5
    },
    "vs_7d": {
-    "then": 51960,
-    "absolute": -1469,
-    "percent": -2.8
+    "then": 35887,
+    "absolute": -1825,
+    "percent": -5.1
    }
   },
   "steam_cs2": {
    "vs_24h": {
-    "then": 1060679,
-    "absolute": 33067,
-    "percent": 3.1
+    "then": 561958,
+    "absolute": 111730,
+    "percent": 19.9
    },
    "vs_7d": {
-    "then": 1045132,
-    "absolute": 48614,
-    "percent": 4.7
+    "then": 654486,
+    "absolute": 19202,
+    "percent": 2.9
    }
   },
   "steam_dota2": {
    "vs_24h": {
-    "then": 748461,
-    "absolute": 45635,
-    "percent": 6.1
+    "then": 426074,
+    "absolute": 108138,
+    "percent": 25.4
    },
    "vs_7d": {
-    "then": 776646,
-    "absolute": 17450,
-    "percent": 2.2
+    "then": 503385,
+    "absolute": 30827,
+    "percent": 6.1
    }
   },
   "steam_pubg": {
    "vs_24h": {
-    "then": 226189,
-    "absolute": 43467,
-    "percent": 19.2
+    "then": 97939,
+    "absolute": 34271,
+    "percent": 35.0
    },
    "vs_7d": {
-    "then": 244738,
-    "absolute": 24918,
-    "percent": 10.2
+    "then": 126947,
+    "absolute": 5263,
+    "percent": 4.1
    }
   },
   "steam_apex": {
    "vs_24h": {
-    "then": 88144,
-    "absolute": 17429,
-    "percent": 19.8
+    "then": 56218,
+    "absolute": 10685,
+    "percent": 19.0
    },
    "vs_7d": {
-    "then": 87509,
-    "absolute": 18064,
-    "percent": 20.6
+    "then": 64195,
+    "absolute": 2708,
+    "percent": 4.2
    }
   },
   "steam_bg3": {
    "vs_24h": {
-    "then": 57361,
-    "absolute": -3639,
-    "percent": -6.3
+    "then": 42159,
+    "absolute": 2357,
+    "percent": 5.6
    },
    "vs_7d": {
-    "then": 49916,
-    "absolute": 3806,
-    "percent": 7.6
+    "then": 42971,
+    "absolute": 1545,
+    "percent": 3.6
    }
   },
   "steam_rdr2": {
    "vs_24h": {
-    "then": 30133,
-    "absolute": -385,
-    "percent": -1.3
+    "then": 21926,
+    "absolute": 792,
+    "percent": 3.6
    },
    "vs_7d": {
-    "then": 32770,
-    "absolute": -3022,
-    "percent": -9.2
+    "then": 29910,
+    "absolute": -7192,
+    "percent": -24.0
    }
   },
   "steam_basket_total": {
    "vs_24h": {
-    "then": 2323826,
-    "absolute": 136354,
-    "percent": 5.9
+    "then": 1271519,
+    "absolute": 275143,
+    "percent": 21.6
    },
    "vs_7d": {
-    "then": 2353821,
-    "absolute": 106359,
-    "percent": 4.5
+    "then": 1497218,
+    "absolute": 49444,
+    "percent": 3.3
    }
   },
   "steam_rank_gta5": {
@@ -810,11 +761,6 @@
     "then": 8,
     "absolute": 0,
     "percent": 0.0
-   },
-   "vs_7d": {
-    "then": 10,
-    "absolute": -2,
-    "percent": -20.0
    }
   },
   "steam_rank_gta5_enh": {
@@ -822,29 +768,24 @@
     "then": 20,
     "absolute": 1,
     "percent": 5.0
-   },
-   "vs_7d": {
-    "then": 21,
-    "absolute": 0,
-    "percent": 0.0
    }
   },
   "hn_max_item_id": {
    "vs_24h": {
-    "then": 49791923,
-    "absolute": 14205,
+    "then": 49794658,
+    "absolute": 14066,
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 49717022,
-    "absolute": 89106,
+    "then": 49719472,
+    "absolute": 89252,
     "percent": 0.2
    }
   },
   "polymarket_total_volume": {
    "vs_24h": {
-    "then": 4118918.07,
-    "absolute": 390.99,
+    "then": 4119197.06,
+    "absolute": 112.0,
     "percent": 0.0
    },
    "vs_7d": {
@@ -884,153 +825,141 @@
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 1762910545,
-    "absolute": 5996554,
+    "then": 1763359980,
+    "absolute": 5547119,
     "percent": 0.3
    }
   },
   "yt_EiQEBYDox_k_views": {
    "vs_24h": {
-    "then": 15429473,
-    "absolute": 6684,
+    "then": 15430872,
+    "absolute": 6542,
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 15375535,
-    "absolute": 60622,
+    "then": 15377022,
+    "absolute": 60392,
     "percent": 0.4
    }
   },
   "yt_EiQEBYDox_k_likes": {
    "vs_24h": {
-    "then": 1067999,
-    "absolute": 2035,
-    "percent": 0.2
+    "then": 1069669,
+    "absolute": 369,
+    "percent": 0.0
    },
    "vs_7d": {
     "then": 1069864,
-    "absolute": 170,
+    "absolute": 174,
     "percent": 0.0
    }
   },
   "yt_QdBZY2fkU-0_views": {
    "vs_24h": {
-    "then": 296278131,
-    "absolute": 54532,
+    "then": 296289881,
+    "absolute": 53290,
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 295859213,
-    "absolute": 473450,
+    "then": 295870983,
+    "absolute": 472188,
     "percent": 0.2
    }
   },
   "yt_QdBZY2fkU-0_likes": {
    "vs_24h": {
-    "then": 12473496,
-    "absolute": 2830,
+    "then": 12475048,
+    "absolute": 1299,
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 12477149,
-    "absolute": -823,
+    "then": 12477201,
+    "absolute": -854,
     "percent": -0.0
    }
   },
   "yt_VQRLujxTm3c_views": {
    "vs_24h": {
-    "then": 183123627,
-    "absolute": 40735,
+    "then": 183132424,
+    "absolute": 39814,
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 182812493,
-    "absolute": 351869,
+    "then": 182821339,
+    "absolute": 350899,
     "percent": 0.2
    }
   },
   "yt_VQRLujxTm3c_likes": {
    "vs_24h": {
-    "then": 6610385,
-    "absolute": 3839,
-    "percent": 0.1
+    "then": 6612629,
+    "absolute": 1617,
+    "percent": 0.0
    },
    "vs_7d": {
-    "then": 6614194,
-    "absolute": 30,
+    "then": 6614237,
+    "absolute": 9,
     "percent": 0.0
    }
   },
   "yt_qq76pQsI1iw_views": {
    "vs_24h": {
-    "then": 9833359,
-    "absolute": 7502,
+    "then": 9835048,
+    "absolute": 7295,
     "percent": 0.1
    },
    "vs_7d": {
-    "then": 9764128,
-    "absolute": 76733,
+    "then": 9766425,
+    "absolute": 75918,
     "percent": 0.8
    }
   },
   "yt_qq76pQsI1iw_likes": {
    "vs_24h": {
-    "then": 85491,
-    "absolute": 267385,
-    "percent": 312.8
+    "then": 347491,
+    "absolute": 5394,
+    "percent": 1.6
    },
    "vs_7d": {
-    "then": 352553,
-    "absolute": 323,
+    "then": 352563,
+    "absolute": 322,
     "percent": 0.1
    }
   },
   "yt_tJbzMqJGH4k_views": {
    "vs_24h": {
-    "then": 28616801,
-    "absolute": 127520,
+    "then": 28643696,
+    "absolute": 124162,
     "percent": 0.4
    },
    "vs_7d": {
-    "then": 27628706,
-    "absolute": 1115615,
+    "then": 27653410,
+    "absolute": 1114448,
     "percent": 4.0
    }
   },
   "yt_tJbzMqJGH4k_likes": {
    "vs_24h": {
-    "then": 1621711,
-    "absolute": 2198,
+    "then": 1622088,
+    "absolute": 2217,
     "percent": 0.1
    },
    "vs_7d": {
-    "then": 1605191,
-    "absolute": 18718,
+    "then": 1605680,
+    "absolute": 18625,
     "percent": 1.2
-   }
-  },
-  "traffic_budapest_delay_pct": {
-   "vs_24h": {
-    "then": 2.0,
-    "absolute": -2.0,
-    "percent": -100.0
-   },
-   "vs_7d": {
-    "then": 1.7,
-    "absolute": -1.7,
-    "percent": -100.0
    }
   },
   "traffic_budapest_travel_index": {
    "vs_24h": {
-    "then": 102.0,
-    "absolute": -2.0,
-    "percent": -2.0
+    "then": 100.0,
+    "absolute": 0.0,
+    "percent": 0.0
    },
    "vs_7d": {
-    "then": 101.7,
-    "absolute": -1.7,
-    "percent": -1.7
+    "then": 100.0,
+    "absolute": 0.0,
+    "percent": 0.0
    }
   },
   "traffic_budapest_points_ok": {
@@ -1081,16 +1010,23 @@
     "percent": 0.0
    }
   },
+  "traffic_london_delay_pct": {
+   "vs_24h": {
+    "then": 4.4,
+    "absolute": -4.4,
+    "percent": -100.0
+   }
+  },
   "traffic_london_travel_index": {
    "vs_24h": {
-    "then": 100.0,
-    "absolute": 6.8,
-    "percent": 6.8
+    "then": 104.4,
+    "absolute": -4.4,
+    "percent": -4.2
    },
    "vs_7d": {
     "then": 100.0,
-    "absolute": 6.8,
-    "percent": 6.8
+    "absolute": 0.0,
+    "percent": 0.0
    }
   },
   "traffic_london_points_ok": {
@@ -1119,14 +1055,14 @@
   },
   "traffic_london_seconds_measured": {
    "vs_24h": {
-    "then": 451,
-    "absolute": 4,
-    "percent": 0.9
+    "then": 525,
+    "absolute": -74,
+    "percent": -14.1
    },
    "vs_7d": {
     "then": 451,
-    "absolute": 4,
-    "percent": 0.9
+    "absolute": 0,
+    "percent": 0.0
    }
   },
   "traffic_london_road_class": {
@@ -1141,52 +1077,40 @@
     "percent": 0.0
    }
   },
-  "traffic_berlin_delay_pct": {
-   "vs_24h": {
-    "then": 7.1,
-    "absolute": 1.1,
-    "percent": 15.5
-   },
-   "vs_7d": {
-    "then": 23.4,
-    "absolute": -15.2,
-    "percent": -65.0
-   }
-  },
   "traffic_berlin_travel_index": {
    "vs_24h": {
-    "then": 107.1,
-    "absolute": 1.1,
-    "percent": 1.0
+    "then": 100.0,
+    "absolute": 0.0,
+    "percent": 0.0
    },
    "vs_7d": {
-    "then": 123.4,
-    "absolute": -15.2,
-    "percent": -12.3
+    "then": 100.0,
+    "absolute": 0.0,
+    "percent": 0.0
    }
   },
   "traffic_berlin_points_ok": {
    "vs_24h": {
     "then": 6,
-    "absolute": 0,
-    "percent": 0.0
+    "absolute": -1,
+    "percent": -16.7
    },
    "vs_7d": {
     "then": 6,
-    "absolute": 0,
-    "percent": 0.0
+    "absolute": -1,
+    "percent": -16.7
    }
   },
   "traffic_berlin_seconds_measured": {
    "vs_24h": {
-    "then": 803,
-    "absolute": 0,
-    "percent": 0.0
+    "then": 799,
+    "absolute": -77,
+    "percent": -9.6
    },
    "vs_7d": {
-    "then": 796,
-    "absolute": 7,
-    "percent": 0.9
+    "then": 799,
+    "absolute": -77,
+    "percent": -9.6
    }
   },
   "traffic_berlin_road_class": {
@@ -1263,26 +1187,26 @@
   },
   "traffic_newyork_delay_pct": {
    "vs_24h": {
-    "then": 39.2,
-    "absolute": 22.9,
-    "percent": 58.4
+    "then": 13.8,
+    "absolute": 85.8,
+    "percent": 621.7
    },
    "vs_7d": {
-    "then": 89.8,
-    "absolute": -27.7,
-    "percent": -30.8
+    "then": 145.4,
+    "absolute": -45.8,
+    "percent": -31.5
    }
   },
   "traffic_newyork_travel_index": {
    "vs_24h": {
-    "then": 139.2,
-    "absolute": 22.9,
-    "percent": 16.5
+    "then": 113.8,
+    "absolute": 85.8,
+    "percent": 75.4
    },
    "vs_7d": {
-    "then": 189.8,
-    "absolute": -27.7,
-    "percent": -14.6
+    "then": 245.4,
+    "absolute": -45.8,
+    "percent": -18.7
    }
   },
   "traffic_newyork_points_ok": {
@@ -1299,33 +1223,38 @@
   },
   "traffic_newyork_seconds_measured": {
    "vs_24h": {
-    "then": 809,
-    "absolute": 4,
-    "percent": 0.5
+    "then": 803,
+    "absolute": 0,
+    "percent": 0.0
    },
    "vs_7d": {
-    "then": 806,
-    "absolute": 7,
-    "percent": 0.9
+    "then": 808,
+    "absolute": -5,
+    "percent": -0.6
    }
   },
   "traffic_losangeles_delay_pct": {
    "vs_24h": {
-    "then": 3.2,
-    "absolute": -0.7,
-    "percent": -21.9
+    "then": 118.3,
+    "absolute": 27.2,
+    "percent": 23.0
+   },
+   "vs_7d": {
+    "then": 118.3,
+    "absolute": 27.2,
+    "percent": 23.0
    }
   },
   "traffic_losangeles_travel_index": {
    "vs_24h": {
-    "then": 103.2,
-    "absolute": -0.7,
-    "percent": -0.7
+    "then": 218.3,
+    "absolute": 27.2,
+    "percent": 12.5
    },
    "vs_7d": {
-    "then": 100.0,
-    "absolute": 2.5,
-    "percent": 2.5
+    "then": 218.3,
+    "absolute": 27.2,
+    "percent": 12.5
    }
   },
   "traffic_losangeles_points_ok": {
@@ -1354,194 +1283,194 @@
   },
   "power_de_load_mw": {
    "vs_24h": {
-    "then": 56085.1,
-    "absolute": 1706.0,
-    "percent": 3.0
+    "then": 46000.7,
+    "absolute": -858.8,
+    "percent": -1.9
    },
    "vs_7d": {
-    "then": 60036.1,
-    "absolute": -2245.0,
-    "percent": -3.7
+    "then": 50704.8,
+    "absolute": -5562.9,
+    "percent": -11.0
    }
   },
   "power_de_lag_hours": {
    "vs_24h": {
-    "then": 0.98,
-    "absolute": -0.03,
-    "percent": -3.1
+    "then": 0.89,
+    "absolute": 0.05,
+    "percent": 5.6
    },
    "vs_7d": {
-    "then": 1.1,
-    "absolute": -0.15,
-    "percent": -13.6
+    "then": 1.05,
+    "absolute": -0.11,
+    "percent": -10.5
    }
   },
   "power_es_load_mw": {
    "vs_24h": {
-    "then": 34052.0,
-    "absolute": -396.0,
-    "percent": -1.2
+    "then": 25224.0,
+    "absolute": 2368.0,
+    "percent": 9.4
    },
    "vs_7d": {
-    "then": 35252.0,
-    "absolute": -1596.0,
-    "percent": -4.5
+    "then": 28764.0,
+    "absolute": -1172.0,
+    "percent": -4.1
    }
   },
   "power_es_lag_hours": {
    "vs_24h": {
-    "then": 0.73,
-    "absolute": -0.03,
-    "percent": -4.1
+    "then": 0.64,
+    "absolute": 0.05,
+    "percent": 7.8
    },
    "vs_7d": {
-    "then": 0.6,
-    "absolute": 0.1,
-    "percent": 16.7
+    "then": 0.8,
+    "absolute": -0.11,
+    "percent": -13.8
    }
   },
   "power_fr_load_mw": {
    "vs_24h": {
-    "then": 45379.2,
-    "absolute": 2925.6,
-    "percent": 6.4
+    "then": 41783.7,
+    "absolute": 1448.6,
+    "percent": 3.5
    },
    "vs_7d": {
-    "then": 49102.6,
-    "absolute": -797.8,
-    "percent": -1.6
+    "then": 44961.2,
+    "absolute": -1728.9,
+    "percent": -3.8
    }
   },
   "power_fr_lag_hours": {
    "vs_24h": {
-    "then": 0.48,
-    "absolute": 0.47,
-    "percent": 97.9
+    "then": 1.39,
+    "absolute": -0.2,
+    "percent": -14.4
    },
    "vs_7d": {
-    "then": 1.1,
-    "absolute": -0.15,
-    "percent": -13.6
+    "then": 1.3,
+    "absolute": -0.11,
+    "percent": -8.5
    }
   },
   "power_hu_load_mw": {
    "vs_24h": {
-    "then": 5322.1,
-    "absolute": 265.2,
-    "percent": 5.0
+    "then": 4321.8,
+    "absolute": 461.5,
+    "percent": 10.7
    },
    "vs_7d": {
-    "then": 5568.4,
-    "absolute": 18.9,
-    "percent": 0.3
+    "then": 4808.2,
+    "absolute": -24.9,
+    "percent": -0.5
    }
   },
   "power_hu_lag_hours": {
    "vs_24h": {
-    "then": 0.73,
-    "absolute": -0.03,
-    "percent": -4.1
+    "then": 0.64,
+    "absolute": 0.05,
+    "percent": 7.8
    },
    "vs_7d": {
-    "then": 0.6,
-    "absolute": 0.1,
-    "percent": 16.7
+    "then": 0.55,
+    "absolute": 0.14,
+    "percent": 25.5
    }
   },
   "power_it_load_mw": {
    "vs_24h": {
-    "then": 6686.0,
-    "absolute": 1259.0,
-    "percent": 18.8
+    "then": 10150.0,
+    "absolute": 19836.0,
+    "percent": 195.4
    },
    "vs_7d": {
-    "then": 41018.0,
-    "absolute": -33073.0,
-    "percent": -80.6
+    "then": 12386.0,
+    "absolute": 17600.0,
+    "percent": 142.1
    }
   },
   "power_it_lag_hours": {
    "vs_24h": {
-    "then": 0.73,
-    "absolute": 0.47,
-    "percent": 64.4
+    "then": 0.89,
+    "absolute": 0.05,
+    "percent": 5.6
    },
    "vs_7d": {
-    "then": 0.85,
-    "absolute": 0.35,
-    "percent": 41.2
+    "then": 0.8,
+    "absolute": 0.14,
+    "percent": 17.5
    }
   },
   "power_nl_load_mw": {
    "vs_24h": {
-    "then": 11047.6,
-    "absolute": 66.5,
-    "percent": 0.6
+    "then": 10708.2,
+    "absolute": -52.6,
+    "percent": -0.5
    },
    "vs_7d": {
-    "then": 11517.8,
-    "absolute": -403.7,
-    "percent": -3.5
+    "then": 11972.2,
+    "absolute": -1316.6,
+    "percent": -11.0
    }
   },
   "power_nl_lag_hours": {
    "vs_24h": {
-    "then": 0.98,
-    "absolute": -0.03,
-    "percent": -3.1
+    "then": 0.89,
+    "absolute": 0.05,
+    "percent": 5.6
    },
    "vs_7d": {
-    "then": 0.85,
-    "absolute": 0.1,
-    "percent": 11.8
+    "then": 0.8,
+    "absolute": 0.14,
+    "percent": 17.5
    }
   },
   "power_pl_load_mw": {
    "vs_24h": {
-    "then": 20478.0,
-    "absolute": 923.5,
-    "percent": 4.5
+    "then": 15610.4,
+    "absolute": 1554.6,
+    "percent": 10.0
    },
    "vs_7d": {
-    "then": 21089.8,
-    "absolute": 311.7,
-    "percent": 1.5
+    "then": 16716.4,
+    "absolute": 448.6,
+    "percent": 2.7
    }
   },
   "power_pl_lag_hours": {
    "vs_24h": {
-    "then": 0.98,
-    "absolute": 0.22,
-    "percent": 22.4
+    "then": 1.14,
+    "absolute": 0.05,
+    "percent": 4.4
    },
    "vs_7d": {
-    "then": 1.1,
-    "absolute": 0.1,
-    "percent": 9.1
+    "then": 1.05,
+    "absolute": 0.14,
+    "percent": 13.3
    }
   },
   "power_se_load_mw": {
    "vs_24h": {
-    "then": 19248.0,
-    "absolute": -3064.0,
-    "percent": -15.9
+    "then": 12824.0,
+    "absolute": 2971.0,
+    "percent": 23.2
    },
    "vs_7d": {
-    "then": 17491.0,
-    "absolute": -1307.0,
-    "percent": -7.5
+    "then": 15607.0,
+    "absolute": 188.0,
+    "percent": 1.2
    }
   },
   "power_se_lag_hours": {
    "vs_24h": {
-    "then": 0.73,
-    "absolute": 0.47,
-    "percent": 64.4
+    "then": 1.39,
+    "absolute": -0.95,
+    "percent": -68.3
    },
    "vs_7d": {
-    "then": 0.6,
-    "absolute": 0.6,
-    "percent": 100.0
+    "then": 0.55,
+    "absolute": -0.11,
+    "percent": -20.0
    }
   },
   "price_us_ps5_pro": {
@@ -1551,9 +1480,9 @@
     "percent": 0.0
    },
    "vs_7d": {
-    "then": 1249.99,
-    "absolute": 0.01,
-    "percent": 0.0
+    "then": 1247.49,
+    "absolute": 2.51,
+    "percent": 0.2
    }
   },
   "listings_us_ps5_pro": {
@@ -1570,14 +1499,14 @@
   },
   "price_us_ps5": {
    "vs_24h": {
-    "then": 527.0,
-    "absolute": 2.96,
-    "percent": 0.6
+    "then": 529.98,
+    "absolute": -7.49,
+    "percent": -1.4
    },
    "vs_7d": {
-    "then": 527.47,
-    "absolute": 2.49,
-    "percent": 0.5
+    "then": 522.49,
+    "absolute": 0.0,
+    "percent": 0.0
    }
   },
   "listings_us_ps5": {
@@ -1594,14 +1523,14 @@
   },
   "price_us_xbox_series_x": {
    "vs_24h": {
-    "then": 569.99,
-    "absolute": 29.48,
-    "percent": 5.2
+    "then": 559.99,
+    "absolute": 15.0,
+    "percent": 2.7
    },
    "vs_7d": {
     "then": 599.99,
-    "absolute": -0.52,
-    "percent": -0.1
+    "absolute": -25.0,
+    "percent": -4.2
    }
   },
   "listings_us_xbox_series_x": {
@@ -1619,13 +1548,13 @@
   "price_uk_ps5_pro": {
    "vs_24h": {
     "then": 879.48,
-    "absolute": -8.13,
-    "percent": -0.9
+    "absolute": -9.98,
+    "percent": -1.1
    },
    "vs_7d": {
     "then": 859.48,
-    "absolute": 11.87,
-    "percent": 1.4
+    "absolute": 10.02,
+    "percent": 1.2
    }
   },
   "listings_uk_ps5_pro": {
@@ -1642,14 +1571,14 @@
   },
   "price_uk_ps5": {
    "vs_24h": {
-    "then": 474.78,
-    "absolute": 15.21,
-    "percent": 3.2
+    "then": 477.92,
+    "absolute": 12.07,
+    "percent": 2.5
    },
    "vs_7d": {
-    "then": 488.05,
-    "absolute": 1.94,
-    "percent": 0.4
+    "then": 485.55,
+    "absolute": 4.44,
+    "percent": 0.9
    }
   },
   "listings_uk_ps5": {
@@ -1666,14 +1595,14 @@
   },
   "price_uk_xbox_series_x": {
    "vs_24h": {
-    "then": 463.15,
-    "absolute": 6.84,
-    "percent": 1.5
+    "then": 459.99,
+    "absolute": 10.01,
+    "percent": 2.2
    },
    "vs_7d": {
-    "then": 460.3,
-    "absolute": 9.69,
-    "percent": 2.1
+    "then": 465.34,
+    "absolute": 4.66,
+    "percent": 1.0
    }
   },
   "listings_uk_xbox_series_x": {
@@ -1702,50 +1631,50 @@
   },
   "listings_de_ps5_pro": {
    "vs_24h": {
-    "then": 85,
-    "absolute": -1,
-    "percent": -1.2
+    "then": 82,
+    "absolute": 6,
+    "percent": 7.3
    },
    "vs_7d": {
     "then": 99,
-    "absolute": -15,
-    "percent": -15.2
+    "absolute": -11,
+    "percent": -11.1
    }
   },
   "price_de_ps5": {
    "vs_24h": {
-    "then": 568.52,
-    "absolute": 2.76,
-    "percent": 0.5
+    "then": 564.0,
+    "absolute": 0.65,
+    "percent": 0.1
    },
    "vs_7d": {
     "then": 563.13,
-    "absolute": 8.15,
-    "percent": 1.4
+    "absolute": 1.52,
+    "percent": 0.3
    }
   },
   "listings_de_ps5": {
    "vs_24h": {
-    "then": 36,
-    "absolute": -3,
-    "percent": -8.3
+    "then": 37,
+    "absolute": -1,
+    "percent": -2.7
    },
    "vs_7d": {
-    "then": 40,
-    "absolute": -7,
-    "percent": -17.5
+    "then": 38,
+    "absolute": -2,
+    "percent": -5.3
    }
   },
   "price_de_xbox_series_x": {
    "vs_24h": {
-    "then": 553.92,
-    "absolute": -5.95,
-    "percent": -1.1
+    "then": 548.11,
+    "absolute": 11.49,
+    "percent": 2.1
    },
    "vs_7d": {
     "then": 596.1,
-    "absolute": -48.13,
-    "percent": -8.1
+    "absolute": -36.5,
+    "percent": -6.1
    }
   },
   "listings_de_xbox_series_x": {
