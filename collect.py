@@ -399,62 +399,95 @@ def collect_youtube():
 # Angeles point had landed on a frontage road rather than the freeway it was
 # named after.
 #
-# So this list is no longer a set of answers. It is a set of candidates: six
-# per city, each recorded with the length and class of the road it actually
-# hit. After a few days of readings the ones measuring real arterial road get
-# kept and the rest are dropped, on evidence rather than on my guess about
-# where a coordinate lands. Coordinates cannot be verified from here, which
-# is precisely why the choice is left to the data.
+# So the list became a set of candidates: six per city, each recorded with
+# the length and class of the road it actually hit, and the keepers chosen on
+# the readings rather than on a guess about where a coordinate lands.
+#
+# That choice was made on 27 September 2026, from 250 readings per candidate
+# (6-27 September). One property split the candidates cleanly: how often the
+# point registers any delay at all -- travel time more than 2% over free
+# flow. Twenty-one of them did in 20-66% of readings. Fifteen did in 11% or
+# fewer, eleven of those in under 5%: roads that read "empty" through every rush hour,
+# which cannot show a quieter Thursday because they never show a busy one.
+# There was nothing between 11% and 20%, so the cut sits in that gap, and no
+# threshold had to be tuned to reach a number. Three points that could hear
+# were already rejected as too short to hold a queue (a2_old_kent_road, 94 m;
+# aleje_jerozolimskie, 217 m; pulawska, 333 m).
+#
+# Every responsive point is kept, rather than the best three the plan said:
+# with the cut in a natural gap, a cap would only have forced a coin-toss in
+# Los Angeles (i210 and i10 hear on 24.0% and 23.6% of readings). London and
+# Warsaw keep two, not three, because only two could hear. A deaf point is
+# not added to make the numbers even.
+#
+# The set is fixed before the prediction window opens on 1 October. The
+# traffic prediction is a rank test across Thursdays, so the instrument must
+# not change during it. Dropped candidates stay in RETIRED_POINTS with their
+# reason, so the choice can be checked and the coordinates are not lost.
 CITY_POINTS = {
     "Budapest": {
-        "ulloi_ut":         (47.4650, 19.1200),   # 154 s, FRC2 - the one that worked
-        "hungaria_korut":   (47.5060, 19.0960),
-        "vaci_ut":          (47.5450, 19.0700),
-        "m0_south":         (47.4090, 19.0450),
-        "m1_m7_bevezeto":   (47.4530, 18.9750),
-        "robert_karoly":    (47.5390, 19.0620),
+        "hungaria_korut":   (47.5060, 19.0960),   # delay in 60% of readings
+        "ulloi_ut":         (47.4650, 19.1200),   # 44%
+        "vaci_ut":          (47.5450, 19.0700),   # 30%
     },
     "London": {
-        "a2_old_kent_road": (51.4850, -0.0650),   # 72 s, FRC3 - the least bad
-        "a40_westway":      (51.5230, -0.2270),
-        "a406_north_circ":  (51.5920, -0.2680),
-        "a13_east":         (51.5100, 0.0250),
-        "a12_eastway":      (51.5450, -0.0200),
-        "a3_wandsworth":    (51.4480, -0.1900),
+        "a3_wandsworth":    (51.4480, -0.1900),   # 44%
+        "a13_east":         (51.5100, 0.0250),    # 19.6%, the lowest kept
     },
     "Berlin": {
-        "frankfurter_allee": (52.5150, 13.4700),  # 159 s, FRC1 - the best point we have
-        "a100_stadtring":    (52.4870, 13.3160),
-        "kaiserdamm":        (52.5075, 13.2870),
-        "a111_north":        (52.5850, 13.2900),
-        "tempelhofer_damm":  (52.4650, 13.3860),
-        "prenzlauer_allee":  (52.5450, 13.4270),
+        "frankfurter_allee": (52.5150, 13.4700),  # 66%
+        "prenzlauer_allee":  (52.5450, 13.4270),  # 51%
+        "tempelhofer_damm":  (52.4650, 13.3860),  # 36%
     },
     "Warsaw": {
-        "wislostrada":         (52.2450, 21.0300),  # 131 s, FRC1
-        "aleje_jerozolimskie": (52.2280, 20.9800),
-        "s8_trasa_ak":         (52.2570, 20.9530),
-        "trasa_lazienkowska":  (52.2280, 21.0450),
-        "s2_pow_south":        (52.1600, 21.0300),
-        "pulawska":            (52.1800, 21.0230),
+        "wislostrada":         (52.2450, 21.0300),  # 47%
+        "trasa_lazienkowska":  (52.2280, 21.0450),  # 43%
     },
     "New York": {
-        "lie_i495_queens": (40.7350, -73.8700),   # 217 s, FRC3 - the best point we have
-        "cross_bronx_i95": (40.8430, -73.9200),
-        "fdr_drive":       (40.7720, -73.9450),
-        "bqe_i278":        (40.6970, -73.9720),
-        "west_side_hwy":   (40.7780, -73.9880),
-        "van_wyck_i678":   (40.6800, -73.8100),
+        "bqe_i278":        (40.6970, -73.9720),   # 58%
+        "lie_i495_queens": (40.7350, -73.8700),   # 51%
+        "fdr_drive":       (40.7720, -73.9450),   # 50%
+        "cross_bronx_i95": (40.8430, -73.9200),   # 46%
     },
     "Los Angeles": {
-        # Every previous point here returned FRC4, a local connecting road.
-        # These are pushed onto the freeway carriageways themselves.
-        "i405_sepulveda":   (34.0430, -118.4380),
-        "i10_santa_monica": (34.0290, -118.3800),
-        "us101_hollywood":  (34.1000, -118.3260),
-        "i110_harbor":      (33.9800, -118.2780),
-        "i5_golden_state":  (34.1300, -118.2700),
-        "i210_pasadena":    (34.1490, -118.0700),
+        "i110_harbor":      (33.9800, -118.2780),  # 35%
+        "i405_sepulveda":   (34.0430, -118.4380),  # 32%
+        "i210_pasadena":    (34.1490, -118.0700),  # 24%
+        "i10_santa_monica": (34.0290, -118.3800),  # 24%
+    },
+}
+
+# Not polled. Share of readings with any delay, 6-27 September 2026.
+RETIRED_POINTS = {
+    "Budapest": {
+        "m0_south":         ((47.4090, 19.0450), "deaf: delay in 10% of readings"),
+        "m1_m7_bevezeto":   ((47.4530, 18.9750), "deaf: 6%"),
+        "robert_karoly":    ((47.5390, 19.0620), "too short: 427 m; deaf: 3%"),
+    },
+    "London": {
+        "a2_old_kent_road": ((51.4850, -0.0650), "too short: 94 m (delay in 59%)"),
+        "a40_westway":      ((51.5230, -0.2270), "deaf: 3%"),
+        "a406_north_circ":  ((51.5920, -0.2680), "deaf: 4%"),
+        "a12_eastway":      ((51.5450, -0.0200), "deaf: 2%"),
+    },
+    "Berlin": {
+        "a100_stadtring":   ((52.4870, 13.3160), "deaf: 0%"),
+        "kaiserdamm":       ((52.5075, 13.2870), "deaf: 4%"),
+        "a111_north":       ((52.5850, 13.2900), "deaf: 4%"),
+    },
+    "Warsaw": {
+        "aleje_jerozolimskie": ((52.2280, 20.9800), "too short: 217 m (delay in 60%)"),
+        "s8_trasa_ak":         ((52.2570, 20.9530), "deaf: 1%"),
+        "s2_pow_south":        ((52.1600, 21.0300), "too short: 520 m; deaf: 2%"),
+        "pulawska":            ((52.1800, 21.0230), "too short: 333 m (delay in 52%)"),
+    },
+    "New York": {
+        "west_side_hwy":   ((40.7780, -73.9880), "deaf: 7%"),
+        "van_wyck_i678":   ((40.6800, -73.8100), "deaf: 1%"),
+    },
+    "Los Angeles": {
+        "us101_hollywood":  ((34.1000, -118.3260), "deaf: 11%"),
+        "i5_golden_state":  ((34.1300, -118.2700), "deaf: 2%"),
     },
 }
 

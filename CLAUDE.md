@@ -165,10 +165,39 @@ Fixed by lowering the TomTom zoom from 10 to 8, expanding to six candidates per
 city, recording `segment_metres` per reading, and rejecting points under 700m or
 of class FRC4+ at aggregation time rather than averaging them in.
 
-**Still open:** after a few days of readings, keep the best three per city on
-measured evidence. Coordinates cannot be verified from a sandbox, which is
-exactly why the choice was left to the data. Note TomTom volume is now 36
-calls/hour (864/day) — check the plan ceiling before November.
+### Half the traffic points could not hear a rush hour
+
+Settled on 27 September 2026 from 250 readings per candidate. The property
+that separated them was not length or road class but whether a point ever
+registers delay at all. Twenty-one of the thirty-six showed travel time over
+free flow in 20–66% of readings; fifteen in 11% or fewer, eleven of those
+under 5%. A road that reads "empty" through
+every rush hour cannot show a quieter Thursday, and because the city figure
+sums seconds, a long deaf segment also dilutes the points that do hear.
+
+**Every point that can hear is kept (18), not "the best three".** The
+responsive and deaf groups have nothing between 11% and 20%, so the cut sits
+in that gap; a cap of three would only have forced a coin-toss in Los Angeles
+between two points at 24.0% and 23.6%. London and Warsaw keep two, because
+only two could hear. A deaf point is never added to even the numbers up.
+
+Carried back to claim 01: on the kept points the weekday evening commute
+stands clearly above the weekend in every city, and by more than before —
+Berlin 50% vs 34% delay (was 23% vs 16%), Los Angeles 220% vs 88% (was 140%
+vs 57%). That gap is what 19 November has to close for "fewer of us went to
+work" to show.
+
+The city figure is rebuilt from kept points only, over the whole history, and
+from the rebuild (6 September 09:00 UTC) onwards — before that, the same point
+names sat on different stretches of road. Dropped points are in
+`collect.RETIRED_POINTS` with their reason. TomTom volume halves to 18
+calls/hour (432/day).
+
+**The kept set must not change between 1 October and 17 December.** The
+traffic prediction ranks Thursdays in that window against each other; a
+point swapped in mid-window measures a road the earlier Thursdays never saw.
+`test_traffic.py` locks the set. If a point dies, it is dropped, not
+replaced.
 
 ### The Russian PlayStation Store nearly won us a prediction for free
 
@@ -624,8 +653,9 @@ stills, characters, logos, or the Pricedown typeface.
   check, from both sides: a blink must not fail the run, a dead source must;
   and a thin cadence must fail it, with the gate that keeps two clocks from
   double-counting), `test_chicago.py` (the CTA parser, and the day-type
-  derivation).
-  Run all eight after touching collection or aggregation. The counts move; the
+  derivation), `test_traffic.py` (only kept points count, and the kept set is
+  locked for the prediction window).
+  Run all nine after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
