@@ -96,5 +96,89 @@ print("\n5. Two blinking sources are still not a failure")
 code, _ = run_check([snapshot(True)] * 5 + [snapshot(False, twitch_ok=False)])
 check("both blinked, neither is dead", code, 0)
 
+# ---------------------------------------------------------------------------
+# Cadence. From 13 September 2026 GitHub's scheduler started the collector
+# every four to six hours instead of hourly, for two weeks, and every check
+# above stayed green because the runs that did happen worked. A missing run
+# leaves no failure behind, so only the gaps between readings can show it.
+# ---------------------------------------------------------------------------
+from datetime import datetime, timedelta, timezone
+
+sys.path.insert(0, str(ROOT))
+import collect  # noqa: E402
+
+T0 = datetime(2026, 9, 14, 0, 5, tzinfo=timezone.utc)
+
+
+def hours(*hs):
+    return [T0 + timedelta(hours=h) for h in hs]
+
+
+print("\n6. Hourly readings are on schedule")
+check("24 hourly readings: no complaint", collect.cadence_problem(hours(*range(24))), None)
+check("one missed hour is not a fault",
+      collect.cadence_problem(hours(*[h for h in range(24) if h != 20])), None)
+
+print("\n7. The 13 September pattern raises the alarm")
+late = collect.cadence_problem(hours(0, 5, 10, 14, 19, 24))
+check("a reading every four to six hours is reported", late is not None, True)
+check("and it blames the scheduler, not a source", "scheduler" in (late or ""), True)
+check("three readings in six hours is still too few",
+      collect.cadence_problem(hours(0, 1, 2, 3, 4, 5, 6, 8, 10, 12)) is not None, True)
+
+print("\n8. Too little history is not a fault")
+check("a fresh start with two readings", collect.cadence_problem(hours(0, 1)), None)
+check("no readings at all", collect.cadence_problem([]), None)
+
+print("\n9. The whole check fails on a sparse cadence, and says why")
+sparse = []
+for h in (0, 5, 10, 14, 19, 24):
+    s = snapshot(True)
+    s["collected_at_utc"] = (T0 + timedelta(hours=h)).isoformat()
+    sparse.append(s)
+code, out = run_check(sparse)
+check("exit code is one", code, 1)
+check("with a CADENCE line", "CADENCE" in out, True)
+check("and no source is called dead", "DEAD" in out, False)
+hourly = []
+for h in range(8):
+    s = snapshot(True)
+    s["collected_at_utc"] = (T0 + timedelta(hours=h)).isoformat()
+    hourly.append(s)
+code, out = run_check(hourly)
+check("the same sources hourly: exit code zero", code, 0)
+
+
+def gate_at(newest, now):
+    """Run collect.gate() against a data/ directory holding one snapshot."""
+    tmp = tempfile.mkdtemp()
+    here = os.getcwd()
+    try:
+        day = pathlib.Path(tmp) / "data" / newest.strftime("%Y-%m-%d")
+        day.mkdir(parents=True)
+        s = snapshot(True)
+        s["collected_at_utc"] = newest.isoformat()
+        (day / newest.strftime("%H%M.json")).write_text(json.dumps(s), encoding="utf-8")
+        os.chdir(tmp)
+        return collect.gate(now)[0]
+    finally:
+        os.chdir(here)
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+print("\n10. The gate: the fallback schedule stands down when the hour is done")
+# The heartbeat collects at :05; GitHub's fallback fires at :37.
+check("reading 32 minutes old: skip", gate_at(T0, T0 + timedelta(minutes=32)), False)
+check("reading 90 minutes old: run", gate_at(T0, T0 + timedelta(minutes=90)), True)
+check("the boundary, 45 minutes: run", gate_at(T0, T0 + timedelta(minutes=45)), True)
+empty = tempfile.mkdtemp()
+here = os.getcwd()
+try:
+    os.chdir(empty)
+    check("no data at all: run", collect.gate(T0)[0], True)
+finally:
+    os.chdir(here)
+    shutil.rmtree(empty, ignore_errors=True)
+
 print(f"\n{passed} checks passed" + (f", {failed} FAILED" if failed else ""))
 sys.exit(1 if failed else 0)

@@ -165,10 +165,39 @@ Fixed by lowering the TomTom zoom from 10 to 8, expanding to six candidates per
 city, recording `segment_metres` per reading, and rejecting points under 700m or
 of class FRC4+ at aggregation time rather than averaging them in.
 
-**Still open:** after a few days of readings, keep the best three per city on
-measured evidence. Coordinates cannot be verified from a sandbox, which is
-exactly why the choice was left to the data. Note TomTom volume is now 36
-calls/hour (864/day) — check the plan ceiling before November.
+### Half the traffic points could not hear a rush hour
+
+Settled on 27 September 2026 from 250 readings per candidate. The property
+that separated them was not length or road class but whether a point ever
+registers delay at all. Twenty-one of the thirty-six showed travel time over
+free flow in 20–66% of readings; fifteen in 11% or fewer, eleven of those
+under 5%. A road that reads "empty" through
+every rush hour cannot show a quieter Thursday, and because the city figure
+sums seconds, a long deaf segment also dilutes the points that do hear.
+
+**Every point that can hear is kept (18), not "the best three".** The
+responsive and deaf groups have nothing between 11% and 20%, so the cut sits
+in that gap; a cap of three would only have forced a coin-toss in Los Angeles
+between two points at 24.0% and 23.6%. London and Warsaw keep two, because
+only two could hear. A deaf point is never added to even the numbers up.
+
+Carried back to claim 01: on the kept points the weekday evening commute
+stands clearly above the weekend in every city, and by more than before —
+Berlin 50% vs 34% delay (was 23% vs 16%), Los Angeles 220% vs 88% (was 140%
+vs 57%). That gap is what 19 November has to close for "fewer of us went to
+work" to show.
+
+The city figure is rebuilt from kept points only, over the whole history, and
+from the rebuild (6 September 09:00 UTC) onwards — before that, the same point
+names sat on different stretches of road. Dropped points are in
+`collect.RETIRED_POINTS` with their reason. TomTom volume halves to 18
+calls/hour (432/day).
+
+**The kept set must not change between 1 October and 17 December.** The
+traffic prediction ranks Thursdays in that window against each other; a
+point swapped in mid-window measures a road the earlier Thursdays never saw.
+`test_traffic.py` locks the set. If a point dies, it is dropped, not
+replaced.
 
 ### The Russian PlayStation Store nearly won us a prediction for free
 
@@ -360,6 +389,44 @@ this environment cannot reach it.
 Post-Brexit. The backfill returns 8 of 9 countries and names the reason. If
 Britain is wanted, the fallback is Elexon BMRS or the NESO data portal, both
 free and key-free. Not yet written.
+
+### GitHub stopped starting the collector, and every light stayed green
+
+From **13 September 2026** GitHub's scheduler started the hourly job only every
+four to six hours: 24 readings a day through the 12th, then 17 on the 13th and
+five or six a day from the 14th, for two weeks before anyone looked. Every run
+that happened succeeded. The run numbers are consecutive — the missing runs
+were never created, so there was nothing to fail. `collect.py --check` judged
+the sources, the sources were fine, and the workflow went green on every run
+while about three-quarters of the readings went missing.
+
+What it cost, by claim. The hour-of-week baseline needs six readings per
+hour-of-week and each one was getting a reading about one week in four; at
+that rate it would not fill before launch. Claim 03's Twitch prediction asks for four *consecutive*
+hourly readings above threshold — impossible to pass on a five-a-day cadence
+for a reason that has nothing to do with the launch. Thursday evenings, which
+claim 02's traffic witness depends on, were thin. Electricity lost little: each
+ENTSO-E call carries twelve hours, so a reading every five hours still left
+most evenings whole.
+
+The lesson is the same one as the Russian PlayStation Store, from the other
+side. **A health check that asks "did the sources answer?" cannot see a run
+that never started.** Only the gaps between readings can. `--check` now also
+fails when fewer than four readings arrived in the six hours before the newest
+one, and names the scheduler rather than a source. Replayed over the whole
+record, it stays silent 2–12 September and fires first at 17:21 UTC on
+13 September.
+
+The fix is a second clock. `heartbeat.js` is a separate Cloudflare Worker that
+asks GitHub to run the workflow at five past every hour; GitHub's own schedule
+stays at :37 as a fallback (off the top of the hour, where its queue is most
+congested). A `--gate` step makes the fallback stand down when a reading less
+than 45 minutes old already exists, so the two never double-count. Separate
+from `worker.js` on purpose — one holds a GitHub token, the other takes the
+public's answers.
+
+**The top-of-the-hour GitHub schedule is best-effort and was never a
+guarantee.** Do not move the collector back onto it alone.
 
 ### GitHub Actions shows local time; snapshots are named in UTC
 
@@ -583,9 +650,12 @@ stills, characters, logos, or the Pricedown typeface.
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
   absent data never reads as "failed"), `test_schema.py` (the D1 schema against
   the statements `worker.js` actually issues), `test_check.py` (the health
-  check, from both sides: a blink must not fail the run, a dead source must),
-  `test_chicago.py` (the CTA parser, and the day-type derivation).
-  Run all eight after touching collection or aggregation. The counts move; the
+  check, from both sides: a blink must not fail the run, a dead source must;
+  and a thin cadence must fail it, with the gate that keeps two clocks from
+  double-counting), `test_chicago.py` (the CTA parser, and the day-type
+  derivation), `test_traffic.py` (only kept points count, and the kept set is
+  locked for the prediction window).
+  Run all nine after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to

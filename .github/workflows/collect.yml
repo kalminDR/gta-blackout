@@ -2,10 +2,19 @@ name: collect
 
 on:
   schedule:
-    # Every hour, on the hour (UTC). GitHub sometimes runs a few minutes
-    # late under load - that is fine, the snapshot records its own timestamp.
-    - cron: "0 * * * *"
-  workflow_dispatch:        # lets you trigger a run by hand from the Actions tab
+    # Once an hour, at 37 minutes past -- deliberately not on the hour.
+    #
+    # This was "0 * * * *" until 27 September 2026. GitHub's scheduler is
+    # best-effort and the top of the hour is its most congested slot; from
+    # 13 September it started this job only every four to six hours, and did
+    # so for two weeks while every run reported success. Moving off :00 is
+    # GitHub's own advice and costs nothing, but it is not a guarantee, which
+    # is why this schedule is now only the fallback: the primary clock is an
+    # external Cloudflare cron (heartbeat.js) that calls workflow_dispatch at
+    # five past each hour. When both fire in one hour, the gate below makes
+    # this one stand down.
+    - cron: "37 * * * *"
+  workflow_dispatch:        # the heartbeat's trigger, and yours from the Actions tab
 
 # Needed so the job is allowed to push its commit back into the repo.
 permissions:
@@ -27,7 +36,16 @@ jobs:
         with:
           python-version: "3.12"
 
+      # Only GitHub's own schedule is gated. A dispatch -- from the heartbeat or
+      # from you -- always runs. If the heartbeat already collected this hour,
+      # the fallback stands down instead of taking a duplicate reading.
+      - name: Gate
+        id: gate
+        if: github.event_name == 'schedule'
+        run: python collect.py --gate
+
       - name: Collect snapshot
+        if: steps.gate.outputs.run != 'false'
         env:
           TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
@@ -43,6 +61,7 @@ jobs:
         run: python collect.py
 
       - name: Summarise into public/
+        if: steps.gate.outputs.run != 'false'
         run: python summarise.py
 
       # STATE.md is the file that exists so nothing about this project has to
@@ -52,10 +71,12 @@ jobs:
       # A status report that is only true when someone remembers to make it
       # true is the thing this project replaced.
       - name: Refresh STATE.md
+        if: steps.gate.outputs.run != 'false'
         continue-on-error: true
         run: python state.py
 
       - name: Commit snapshot
+        if: steps.gate.outputs.run != 'false'
         run: |
           git config user.name  "attention-heist-bot"
           git config user.email "bot@users.noreply.github.com"
@@ -77,4 +98,5 @@ jobs:
       # Runs after the snapshot is safely committed, so a failure here never
       # costs us data - it only makes GitHub send an email.
       - name: Health check
+        if: steps.gate.outputs.run != 'false'
         run: python collect.py --check
