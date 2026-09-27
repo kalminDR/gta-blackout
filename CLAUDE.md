@@ -361,6 +361,44 @@ Post-Brexit. The backfill returns 8 of 9 countries and names the reason. If
 Britain is wanted, the fallback is Elexon BMRS or the NESO data portal, both
 free and key-free. Not yet written.
 
+### GitHub stopped starting the collector, and every light stayed green
+
+From **13 September 2026** GitHub's scheduler started the hourly job only every
+four to six hours: 24 readings a day through the 12th, then 17 on the 13th and
+five or six a day from the 14th, for two weeks before anyone looked. Every run
+that happened succeeded. The run numbers are consecutive — the missing runs
+were never created, so there was nothing to fail. `collect.py --check` judged
+the sources, the sources were fine, and the workflow went green on every run
+while about three-quarters of the readings went missing.
+
+What it cost, by claim. The hour-of-week baseline needs six readings per
+hour-of-week and each one was getting a reading about one week in four; at
+that rate it would not fill before launch. Claim 03's Twitch prediction asks for four *consecutive*
+hourly readings above threshold — impossible to pass on a five-a-day cadence
+for a reason that has nothing to do with the launch. Thursday evenings, which
+claim 02's traffic witness depends on, were thin. Electricity lost little: each
+ENTSO-E call carries twelve hours, so a reading every five hours still left
+most evenings whole.
+
+The lesson is the same one as the Russian PlayStation Store, from the other
+side. **A health check that asks "did the sources answer?" cannot see a run
+that never started.** Only the gaps between readings can. `--check` now also
+fails when fewer than four readings arrived in the six hours before the newest
+one, and names the scheduler rather than a source. Replayed over the whole
+record, it stays silent 2–12 September and fires first at 17:21 UTC on
+13 September.
+
+The fix is a second clock. `heartbeat.js` is a separate Cloudflare Worker that
+asks GitHub to run the workflow at five past every hour; GitHub's own schedule
+stays at :37 as a fallback (off the top of the hour, where its queue is most
+congested). A `--gate` step makes the fallback stand down when a reading less
+than 45 minutes old already exists, so the two never double-count. Separate
+from `worker.js` on purpose — one holds a GitHub token, the other takes the
+public's answers.
+
+**The top-of-the-hour GitHub schedule is best-effort and was never a
+guarantee.** Do not move the collector back onto it alone.
+
 ### GitHub Actions shows local time; snapshots are named in UTC
 
 This caused a false alarm that the collector had stopped for three hours. It had
@@ -583,8 +621,10 @@ stills, characters, logos, or the Pricedown typeface.
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
   absent data never reads as "failed"), `test_schema.py` (the D1 schema against
   the statements `worker.js` actually issues), `test_check.py` (the health
-  check, from both sides: a blink must not fail the run, a dead source must),
-  `test_chicago.py` (the CTA parser, and the day-type derivation).
+  check, from both sides: a blink must not fail the run, a dead source must;
+  and a thin cadence must fail it, with the gate that keeps two clocks from
+  double-counting), `test_chicago.py` (the CTA parser, and the day-type
+  derivation).
   Run all eight after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.

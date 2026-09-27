@@ -1151,6 +1151,98 @@ def has_real_data(value):
 # inside check() for why six.
 RECENT_SNAPSHOTS = 6
 
+# How many readings must have arrived in the hours before the newest one.
+#
+# Added on 27 September 2026, after the collector ran every four to six hours
+# for fourteen days while this check stayed green. It only ever asked whether
+# each source returned data -- never whether readings were arriving at all --
+# and GitHub had quietly stopped starting the hourly job on time from
+# 13 September. 353 snapshots where there should have been about 580, the
+# hour-of-week baseline stalled at zero qualifying buckets, and the Twitch
+# prediction ("four consecutive hourly readings") became impossible to pass
+# for a reason that had nothing to do with the launch.
+#
+# Four in six hours rather than six in six: a single late or dropped run is
+# normal for GitHub's scheduler and must not raise an alarm, but two missing
+# hours in six means the clock is failing, not blinking. Measured against the
+# newest snapshot rather than the wall clock, so it is deterministic and a
+# test can drive it; the check runs straight after a snapshot is committed,
+# so in production the two are the same moment.
+CADENCE_WINDOW_HOURS = 6
+CADENCE_MIN_READINGS = 4
+
+# A scheduled run starting within this many minutes of the newest snapshot
+# skips itself. See the gate step in collect.yml: an external clock is the
+# primary trigger and GitHub's own schedule is only the fallback, so when both
+# fire in the same hour the second must not produce a duplicate reading.
+GATE_MINUTES = 45
+
+
+def _snapshot_time(path, snap):
+    """When a snapshot was taken: its own timestamp, else its file name."""
+    t = (snap or {}).get("collected_at_utc")
+    if t:
+        try:
+            return datetime.fromisoformat(t)
+        except ValueError:
+            pass
+    day, name = os.path.basename(os.path.dirname(path)), os.path.basename(path)[:4]
+    try:
+        return datetime.strptime(day + name, "%Y-%m-%d%H%M").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def _snapshot_files():
+    days = sorted(d for d in glob.glob(os.path.join("data", "*"))
+                  if re.fullmatch(r"\d{4}-\d{2}-\d{2}", os.path.basename(d)))
+    out = []
+    for day in days:
+        out += sorted(glob.glob(os.path.join(day, "*.json")))
+    return out
+
+
+def cadence_problem(times, window_hours=CADENCE_WINDOW_HOURS,
+                    minimum=CADENCE_MIN_READINGS):
+    """None if readings are arriving on schedule, else a sentence saying not.
+
+    `times` are snapshot timestamps. Counted over the window ending at the
+    newest one. Too little history to fill a window is not a fault.
+    """
+    times = sorted(t for t in times if t is not None)
+    if not times:
+        return None
+    newest = times[-1]
+    if (newest - times[0]).total_seconds() < window_hours * 3600:
+        return None
+    start = newest - timedelta(hours=window_hours)
+    n = sum(1 for t in times if t > start)
+    if n >= minimum:
+        return None
+    return (f"only {n} readings in the {window_hours} hours before the newest "
+            f"one, against about {window_hours} expected. The collector is "
+            f"not being started on time -- this is the scheduler, not a source")
+
+
+def gate(now=None):
+    """Should this run collect? False if the newest snapshot is very recent."""
+    files = _snapshot_files()
+    if not files:
+        return True, "no snapshots yet"
+    path = files[-1]
+    try:
+        with open(path, encoding="utf-8") as f:
+            snap = json.load(f)
+    except Exception:
+        snap = None
+    t = _snapshot_time(path, snap)
+    if t is None:
+        return True, "newest snapshot has no readable time"
+    age = ((now or datetime.now(timezone.utc)) - t).total_seconds() / 60
+    if age < GATE_MINUTES:
+        return False, f"newest snapshot is {age:.0f} minutes old; this hour is collected"
+    return True, f"newest snapshot is {age:.0f} minutes old"
+
 
 def _recent_snapshots(n):
     """The newest n snapshots, oldest first, across day boundaries."""
@@ -1243,15 +1335,38 @@ def check():
               f"Each worked at least once in the last {len(recent)} readings.",
               file=sys.stderr)
 
+    # Readings arriving at all, not only readings containing data. A check that
+    # asks only the second question stayed green for fourteen days while
+    # four-fifths of the readings never happened.
+    window = _snapshot_files()[-(CADENCE_WINDOW_HOURS * 3):]
+    times = []
+    for path in window:
+        try:
+            with open(path, encoding="utf-8") as f:
+                times.append(_snapshot_time(path, json.load(f)))
+        except Exception:
+            times.append(_snapshot_time(path, None))
+    late = cadence_problem(times)
+    if late:
+        print(f"\nCADENCE: {late}", file=sys.stderr)
+
     if dead:
         print(f"\nThese sources returned no usable data in the last "
               f"{len(recent)} readings: {', '.join(dead)}", file=sys.stderr)
         print(f"Check {files[-1]} for the exact errors.", file=sys.stderr)
         return 1
-    return 0
+    return 1 if late else 0
 
 
 if __name__ == "__main__":
     if "--check" in sys.argv:
         sys.exit(check())
+    if "--gate" in sys.argv:
+        go, why = gate()
+        print(f"gate: {'run' if go else 'skip'} -- {why}")
+        out = os.environ.get("GITHUB_OUTPUT")
+        if out:
+            with open(out, "a", encoding="utf-8") as f:
+                f.write(f"run={'true' if go else 'false'}\n")
+        sys.exit(0)
     main()
