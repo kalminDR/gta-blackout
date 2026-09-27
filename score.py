@@ -187,8 +187,8 @@ def score_power(snapshots, backfill=None, ctx_today=None):
         # 19 November the difference is the whole point. A reader told the
         # evening is not complete yet will wait for it; a reader told the
         # source stopped publishing knows the witness is not coming. ENTSO-E
-        # retired web-api.tp.entsoe.eu on 8 September 2026 and this is exactly
-        # the case that wording has to survive.
+        # was down for 29 hours on 7-8 September 2026 and came back; an outage
+        # like that on launch day is exactly the case this wording must survive.
         today = (ctx_today or datetime.date.today()).isoformat()
         if not days:
             reason = ("no electricity readings at all -- the source has "

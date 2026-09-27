@@ -175,10 +175,10 @@ finally:
     score.SCORERS.update(broken)
 
 print("\n8. A source that goes dark says so, and still never says 'failed'")
-# ENTSO-E retired web-api.tp.entsoe.eu on 8 September 2026. If it never
-# returns, the power prediction must report that the witness is gone -- not
-# that the evening is merely incomplete, which reads like "wait a bit", and
-# above all not "failed".
+# ENTSO-E was down for 29 hours on 7-8 September 2026. If an outage like that
+# lasts through the launch, the power prediction must report that the witness
+# is gone -- not that the evening is merely incomplete, which reads like
+# "wait a bit", and above all not "failed".
 import power as _power
 _bf = _power.load_backfill()
 stops_early = {"sources": {"entsoe": {"DE": {"hourly": [
