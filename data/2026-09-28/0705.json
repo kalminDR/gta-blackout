@@ -1,0 +1,1593 @@
+{
+ "collected_at_utc": "2026-09-28T07:05:21+00:00",
+ "collector_version": "1.0",
+ "sources": {
+  "console_prices": {
+   "EBAY_DE": {
+    "currency": "EUR",
+    "ps5": {
+     "count": 34,
+     "max": 1267.58,
+     "median": 566.92,
+     "min": 318.28,
+     "sample_titles": [
+      "Sony PlayStation 5 Slim - PS5 - Disc Edition - 1TB ohne OVP PlayStatio",
+      "PlayStation 5 Slim NON-DISC Edition 1TB Videospielkonsole - Defekt - B",
+      "Sony PlayStation 5 PS5 Slim 1TB Disc Edition Konsole mit Controller (U"
+     ]
+    },
+    "ps5_pro": {
+     "count": 86,
+     "max": 1511.76,
+     "median": 1018.46,
+     "min": 343.05,
+     "sample_titles": [
+      "PlayStation 5 Pro 2TB PS5 Konsole - BRANDNEU in OVP - Schneller Versan",
+      "PlayStation®5 Pro Konsole - 2 TB| Mit Controller| Neu & Versiegelt| Ne",
+      "Sony PlayStation 5 PS5 Pro 2TB Digital Konsole NEU & VERSIEGELT SCHNEL"
+     ]
+    },
+    "xbox_series_x": {
+     "count": 100,
+     "max": 1511.82,
+     "median": 632.63,
+     "min": 302.34,
+     "sample_titles": [
+      "Xbox Series X 1TB X25 Limited Edition 25th Anniversary Konsole VORVERK",
+      "Microsoft Xbox Series X 1TB Videospielkonsole - Schwarz Nur Konsole ",
+      "Microsoft Xbox Series X 1TB Konsole ohne Controller - ohne OVP - Garan"
+     ]
+    }
+   },
+   "EBAY_GB": {
+    "currency": "GBP",
+    "ps5": {
+     "count": 100,
+     "max": 1089.98,
+     "median": 490.0,
+     "min": 349.8,
+     "sample_titles": [
+      "Sony PlayStation 5 Slim 1TB White Game Console Disc",
+      "Sony PlayStation 5 Slim - PS5 - Disc Edition - 1TB Unboxed PlayStation",
+      "Sony PlayStation 5 PS5 Slim 1TB Disc-Free White Console + Controller C"
+     ]
+    },
+    "ps5_pro": {
+     "count": 100,
+     "max": 1299.95,
+     "median": 869.99,
+     "min": 475.9,
+     "sample_titles": [
+      "Sony PlayStation 5 Pro 2TB Console + DualSense Controller ",
+      "PlayStation 5 Pro 2TB PS5 Console - BRAND NEW  in box - Same day fast ",
+      "PlayStation 5 Pro Digital Console 2TB - Brand New and Sealed ✅"
+     ]
+    },
+    "xbox_series_x": {
+     "count": 100,
+     "max": 1300.0,
+     "median": 475.9,
+     "min": 260.69,
+     "sample_titles": [
+      "Microsoft Xbox Series x 1TB Black Video Game Console Bundle With Contr",
+      "POGA Sly with Xbox Series X with 4 controllers",
+      "Microsoft Xbox Series X 1TB Video Game Console ** NO CONTROLLER** Mint"
+     ]
+    }
+   },
+   "EBAY_US": {
+    "currency": "USD",
+    "ps5": {
+     "count": 100,
+     "max": 1153.13,
+     "median": 509.0,
+     "min": 349.99,
+     "sample_titles": [
+      "Sony PlayStation 5 Slim Disc Edition Console White 1TB - OPEN BOX - TE",
+      "Sony PlayStation 5 Slim Disc Edition CFI-2015 1TB Video Game Console B",
+      "Sony PlayStation 5 Slim Disc PS5 1TB White Console Gaming System CFI-2"
+     ]
+    },
+    "ps5_pro": {
+     "count": 100,
+     "max": 1499.95,
+     "median": 1289.44,
+     "min": 309.99,
+     "sample_titles": [
+      "PLAYSTATION 5 PRO CONSOLE-2 TB_4K_STARTER BUNDLE_CFI-7119_APR-26_ FACT",
+      "Sony PlayStation 5 PRO w/ Controllers and a charging station",
+      "NEW SEALED Sony PlayStation 5 Pro Console 2TB PS5 IN HAND FREE SHIPPIN"
+     ]
+    },
+    "xbox_series_x": {
+     "count": 100,
+     "max": 1450.95,
+     "median": 599.98,
+     "min": 300.0,
+     "sample_titles": [
+      "Xbox Series X - Gaming Console - 1TB SSD Carbon Black *NEW SEALED*",
+      "Microsoft Xbox Series X 1TB Video Game Console - Black with White Cont",
+      "Microsoft Xbox Series X  Black Console no controller. Also open to bar"
+     ]
+    }
+   }
+  },
+  "console_status": {
+   "playstation": {
+    "data": {
+     "countries_checked": 43,
+     "incident_count": 1,
+     "incidents": [
+      {
+       "country": "RU",
+       "service": "PlayStation Store",
+       "since": "2026-08-26T05:14:55.000+00:00"
+      }
+     ],
+     "services_checked": 146
+    },
+    "source_url": "https://status.playstation.com/data/statuses/region/SCEE.json"
+   },
+   "xbox": {
+    "data": {
+     "overall": null,
+     "service_issues": [],
+     "services_checked": 9,
+     "title_issues": [],
+     "titles_checked": 2
+    },
+    "source_url": "https://xnotify.xboxlive.com/servicestatusv6/US/en-US"
+   }
+  },
+  "entsoe": {
+   "DE": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      46431.9
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      45315.8
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      43667.9
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      41343.5
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      40126.0
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      40019.3
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      40120.5
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      41423.7
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      45814.6
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      53225.3
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      56714.5
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      57627.4
+     ]
+    ],
+    "lag_hours": 1.1,
+    "load_mw": 57627.4,
+    "points_in_window": 45,
+    "t": "2026-09-28T06:00:00+00:00"
+   },
+   "ES": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      28481.0
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      26938.0
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      25170.0
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      23583.0
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      22520.0
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      21821.0
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      21506.0
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      21456.0
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      22056.0
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      25131.0
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      28859.0
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      30577.3
+     ]
+    ],
+    "lag_hours": 0.6,
+    "load_mw": 30820.0,
+    "points_in_window": 47,
+    "t": "2026-09-28T06:30:00+00:00"
+   },
+   "FR": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      40902.5
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      40926.6
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      40358.8
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      38375.4
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      36777.0
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      34850.6
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      32992.2
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      32681.2
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      34808.8
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      38968.3
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      43064.8
+     ]
+    ],
+    "lag_hours": 1.35,
+    "load_mw": 43820.0,
+    "points_in_window": 44,
+    "t": "2026-09-28T05:45:00+00:00"
+   },
+   "GB": {
+    "no_data": "999; No matching data found for Data item ACTUAL_TOTAL_LOAD_R3 [6.1.A] (10YGB----------A) and interval 2026-09-27T19:00:00Z/2026-09-28T08:00:00Z."
+   },
+   "HU": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      4694.0
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      4651.7
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      4355.4
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      4024.0
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      3849.3
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      3710.9
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      3699.3
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      3811.4
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      4160.0
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      4883.5
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      4957.1
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      4606.5
+     ]
+    ],
+    "lag_hours": 0.6,
+    "load_mw": 4505.7,
+    "points_in_window": 47,
+    "t": "2026-09-28T06:30:00+00:00"
+   },
+   "IT": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      28233.0
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      26240.0
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      24095.8
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      23193.0
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      22410.2
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      21884.0
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      21662.8
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      22138.5
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      24057.2
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      29377.0
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      33705.0
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      25052.5
+     ]
+    ],
+    "lag_hours": 0.85,
+    "load_mw": 14308.0,
+    "points_in_window": 46,
+    "t": "2026-09-28T06:15:00+00:00"
+   },
+   "NL": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      11256.4
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      10945.2
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      10873.5
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      10631.6
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      10750.8
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      10476.7
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      10167.1
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      10035.4
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      10199.3
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      10071.9
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      10957.0
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      11233.5
+     ]
+    ],
+    "lag_hours": 0.85,
+    "load_mw": 11141.1,
+    "points_in_window": 46,
+    "t": "2026-09-28T06:15:00+00:00"
+   },
+   "PL": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      15961.2
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      15016.0
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      14047.0
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      13383.8
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      12990.2
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      12666.9
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      12746.6
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      13143.0
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      14533.1
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      17370.6
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      18849.2
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      19431.9
+     ]
+    ],
+    "lag_hours": 1.1,
+    "load_mw": 19431.9,
+    "points_in_window": 45,
+    "t": "2026-09-28T06:00:00+00:00"
+   },
+   "SE": {
+    "hourly": [
+     [
+      "2026-09-27T19:00:00+00:00",
+      12846.0
+     ],
+     [
+      "2026-09-27T20:00:00+00:00",
+      12499.2
+     ],
+     [
+      "2026-09-27T21:00:00+00:00",
+      11658.0
+     ],
+     [
+      "2026-09-27T22:00:00+00:00",
+      11120.0
+     ],
+     [
+      "2026-09-27T23:00:00+00:00",
+      11497.8
+     ],
+     [
+      "2026-09-28T00:00:00+00:00",
+      11576.8
+     ],
+     [
+      "2026-09-28T01:00:00+00:00",
+      11616.8
+     ],
+     [
+      "2026-09-28T02:00:00+00:00",
+      11591.5
+     ],
+     [
+      "2026-09-28T03:00:00+00:00",
+      11906.5
+     ],
+     [
+      "2026-09-28T04:00:00+00:00",
+      13429.8
+     ],
+     [
+      "2026-09-28T05:00:00+00:00",
+      14224.5
+     ],
+     [
+      "2026-09-28T06:00:00+00:00",
+      18976.3
+     ]
+    ],
+    "lag_hours": 0.6,
+    "load_mw": 18901.0,
+    "points_in_window": 47,
+    "t": "2026-09-28T06:30:00+00:00"
+   }
+  },
+  "hackernews": {
+   "max_item_id": 49874545,
+   "top_stories_count": 500
+  },
+  "polymarket": {
+   "market_count": 6,
+   "markets": {
+    "gta-vi-ps5-launch-price-20260618223907119": {
+     "end_date": "2027-07-01T03:59:00Z",
+     "liquidity": 5741.93796,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "GTA VI: PS5 Launch Price",
+     "volume": 83737.530887
+    },
+    "of-views-of-grand-theft-auto-vi-extended-look-on-day-1-lower-strikes": {
+     "end_date": "2026-08-28T23:59:00Z",
+     "liquidity": null,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "# of views of Grand Theft Auto VI Extended Look on day 1? (Lower Strikes)",
+     "volume": 848720.63004
+    },
+    "of-views-of-grand-theft-auto-vi-extended-look-on-week-1": {
+     "end_date": "2026-09-03T23:59:00Z",
+     "liquidity": null,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "# of views of Grand Theft Auto VI Extended Look on week 1?",
+     "volume": 1668867.6793920002
+    },
+    "of-views-of-gta-6-extended-look-on-day-1": {
+     "end_date": "2026-08-27T23:59:00Z",
+     "liquidity": null,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "# of views of Grand Theft Auto VI Extended Look on day 1?",
+     "volume": 79135.670917
+    },
+    "of-views-of-gta-vi-trailer-2-on-day-1": {
+     "end_date": "2025-05-07T12:00:00Z",
+     "liquidity": null,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "# of views of GTA VI Trailer 2 on day 1?",
+     "volume": 1403090.242366
+    },
+    "will-gta-vi-be-delayed": {
+     "end_date": "2024-10-31T12:00:00Z",
+     "liquidity": null,
+     "outcome_prices": null,
+     "outcomes": null,
+     "source_url": "https://gamma-api.polymarket.com/public-search?q=grand%20theft%20auto&limit_per_type=20",
+     "title": "GTA VI delay announced before November?",
+     "volume": 36078.13758
+    }
+   },
+   "total_volume": 4119629.89
+  },
+  "retail_stock": {
+   "skipped": "no BESTBUY_API_KEY"
+  },
+  "selfreport": {
+   "skipped": "no SELFREPORT_URL"
+  },
+  "steam": {
+   "Apex Legends": 83838,
+   "Baldur's Gate 3": 25773,
+   "Counter-Strike 2": 541532,
+   "Dota 2": 420483,
+   "Grand Theft Auto V": 28263,
+   "Grand Theft Auto V Enhanced": 33429,
+   "PUBG": 274851,
+   "Red Dead Redemption 2": 18578
+  },
+  "steam_charts": {
+   "data": [
+    {
+     "appid": 730,
+     "concurrent_in_game": null,
+     "peak_in_game": 1346533,
+     "rank": 1
+    },
+    {
+     "appid": 570,
+     "concurrent_in_game": null,
+     "peak_in_game": 905795,
+     "rank": 2
+    },
+    {
+     "appid": 578080,
+     "concurrent_in_game": null,
+     "peak_in_game": 712009,
+     "rank": 3
+    },
+    {
+     "appid": 431960,
+     "concurrent_in_game": null,
+     "peak_in_game": 110182,
+     "rank": 4
+    },
+    {
+     "appid": 1867240,
+     "concurrent_in_game": null,
+     "peak_in_game": 333322,
+     "rank": 5
+    },
+    {
+     "appid": 1172470,
+     "concurrent_in_game": null,
+     "peak_in_game": 249613,
+     "rank": 6
+    },
+    {
+     "appid": 892970,
+     "concurrent_in_game": null,
+     "peak_in_game": 258876,
+     "rank": 7
+    },
+    {
+     "appid": 271590,
+     "concurrent_in_game": null,
+     "peak_in_game": 71758,
+     "rank": 8
+    },
+    {
+     "appid": 2868840,
+     "concurrent_in_game": null,
+     "peak_in_game": 97633,
+     "rank": 9
+    },
+    {
+     "appid": 4126040,
+     "concurrent_in_game": null,
+     "peak_in_game": 158928,
+     "rank": 10
+    },
+    {
+     "appid": 2676230,
+     "concurrent_in_game": null,
+     "peak_in_game": 209198,
+     "rank": 11
+    },
+    {
+     "appid": 359550,
+     "concurrent_in_game": null,
+     "peak_in_game": 103271,
+     "rank": 12
+    },
+    {
+     "appid": 2357570,
+     "concurrent_in_game": null,
+     "peak_in_game": 84896,
+     "rank": 13
+    },
+    {
+     "appid": 2767030,
+     "concurrent_in_game": null,
+     "peak_in_game": 90625,
+     "rank": 14
+    },
+    {
+     "appid": 236390,
+     "concurrent_in_game": null,
+     "peak_in_game": 87602,
+     "rank": 15
+    },
+    {
+     "appid": 553850,
+     "concurrent_in_game": null,
+     "peak_in_game": 67937,
+     "rank": 16
+    },
+    {
+     "appid": 250900,
+     "concurrent_in_game": null,
+     "peak_in_game": 76692,
+     "rank": 17
+    },
+    {
+     "appid": 322170,
+     "concurrent_in_game": null,
+     "peak_in_game": 63324,
+     "rank": 18
+    },
+    {
+     "appid": 381210,
+     "concurrent_in_game": null,
+     "peak_in_game": 66283,
+     "rank": 19
+    },
+    {
+     "appid": 230410,
+     "concurrent_in_game": null,
+     "peak_in_game": 91228,
+     "rank": 20
+    },
+    {
+     "appid": 1422450,
+     "concurrent_in_game": null,
+     "peak_in_game": 87652,
+     "rank": 21
+    },
+    {
+     "appid": 2507950,
+     "concurrent_in_game": null,
+     "peak_in_game": 140538,
+     "rank": 22
+    },
+    {
+     "appid": 1973530,
+     "concurrent_in_game": null,
+     "peak_in_game": 63003,
+     "rank": 23
+    },
+    {
+     "appid": 105600,
+     "concurrent_in_game": null,
+     "peak_in_game": 50994,
+     "rank": 24
+    },
+    {
+     "appid": 413150,
+     "concurrent_in_game": null,
+     "peak_in_game": 84487,
+     "rank": 25
+    },
+    {
+     "appid": 3240220,
+     "concurrent_in_game": null,
+     "peak_in_game": 76669,
+     "rank": 26
+    },
+    {
+     "appid": 252490,
+     "concurrent_in_game": null,
+     "peak_in_game": 115920,
+     "rank": 27
+    },
+    {
+     "appid": 1142710,
+     "concurrent_in_game": null,
+     "peak_in_game": 102583,
+     "rank": 28
+    },
+    {
+     "appid": 2807960,
+     "concurrent_in_game": null,
+     "peak_in_game": 46167,
+     "rank": 29
+    },
+    {
+     "appid": 227300,
+     "concurrent_in_game": null,
+     "peak_in_game": 55320,
+     "rank": 30
+    },
+    {
+     "appid": 3405690,
+     "concurrent_in_game": null,
+     "peak_in_game": 48739,
+     "rank": 31
+    },
+    {
+     "appid": 108600,
+     "concurrent_in_game": null,
+     "peak_in_game": 70474,
+     "rank": 32
+    },
+    {
+     "appid": 550,
+     "concurrent_in_game": null,
+     "peak_in_game": 39556,
+     "rank": 33
+    },
+    {
+     "appid": 440,
+     "concurrent_in_game": null,
+     "peak_in_game": 75375,
+     "rank": 34
+    },
+    {
+     "appid": 438100,
+     "concurrent_in_game": null,
+     "peak_in_game": 62464,
+     "rank": 35
+    },
+    {
+     "appid": 1623730,
+     "concurrent_in_game": null,
+     "peak_in_game": 82434,
+     "rank": 36
+    },
+    {
+     "appid": 1086940,
+     "concurrent_in_game": null,
+     "peak_in_game": 72542,
+     "rank": 37
+    },
+    {
+     "appid": 4080220,
+     "concurrent_in_game": null,
+     "peak_in_game": 95985,
+     "rank": 38
+    },
+    {
+     "appid": 1203220,
+     "concurrent_in_game": null,
+     "peak_in_game": 70809,
+     "rank": 39
+    },
+    {
+     "appid": 3527290,
+     "concurrent_in_game": null,
+     "peak_in_game": 33005,
+     "rank": 40
+    },
+    {
+     "appid": 394360,
+     "concurrent_in_game": null,
+     "peak_in_game": 58950,
+     "rank": 41
+    },
+    {
+     "appid": 1174180,
+     "concurrent_in_game": null,
+     "peak_in_game": 44765,
+     "rank": 42
+    },
+    {
+     "appid": 2246340,
+     "concurrent_in_game": null,
+     "peak_in_game": 56596,
+     "rank": 43
+    },
+    {
+     "appid": 1938090,
+     "concurrent_in_game": null,
+     "peak_in_game": 45303,
+     "rank": 44
+    },
+    {
+     "appid": 1091500,
+     "concurrent_in_game": null,
+     "peak_in_game": 43913,
+     "rank": 45
+    },
+    {
+     "appid": 3241660,
+     "concurrent_in_game": null,
+     "peak_in_game": 28558,
+     "rank": 46
+    },
+    {
+     "appid": 252950,
+     "concurrent_in_game": null,
+     "peak_in_game": 35038,
+     "rank": 47
+    },
+    {
+     "appid": 284160,
+     "concurrent_in_game": null,
+     "peak_in_game": 29584,
+     "rank": 48
+    },
+    {
+     "appid": 1245620,
+     "concurrent_in_game": null,
+     "peak_in_game": 44780,
+     "rank": 49
+    },
+    {
+     "appid": 322330,
+     "concurrent_in_game": null,
+     "peak_in_game": 47956,
+     "rank": 50
+    },
+    {
+     "appid": 4000,
+     "concurrent_in_game": null,
+     "peak_in_game": 36951,
+     "rank": 51
+    },
+    {
+     "appid": 4001890,
+     "concurrent_in_game": null,
+     "peak_in_game": 29141,
+     "rank": 52
+    },
+    {
+     "appid": 1449850,
+     "concurrent_in_game": null,
+     "peak_in_game": 18118,
+     "rank": 53
+    },
+    {
+     "appid": 1665460,
+     "concurrent_in_game": null,
+     "peak_in_game": 23985,
+     "rank": 54
+    },
+    {
+     "appid": 1808500,
+     "concurrent_in_game": null,
+     "peak_in_game": 38623,
+     "rank": 55
+    },
+    {
+     "appid": 1281930,
+     "concurrent_in_game": null,
+     "peak_in_game": 35639,
+     "rank": 56
+    },
+    {
+     "appid": 2483190,
+     "concurrent_in_game": null,
+     "peak_in_game": 20954,
+     "rank": 57
+    },
+    {
+     "appid": 4358690,
+     "concurrent_in_game": null,
+     "peak_in_game": 60538,
+     "rank": 58
+    },
+    {
+     "appid": 275850,
+     "concurrent_in_game": null,
+     "peak_in_game": 39497,
+     "rank": 59
+    },
+    {
+     "appid": 3678970,
+     "concurrent_in_game": null,
+     "peak_in_game": 87636,
+     "rank": 60
+    },
+    {
+     "appid": 1222670,
+     "concurrent_in_game": null,
+     "peak_in_game": 35971,
+     "rank": 61
+    },
+    {
+     "appid": 489830,
+     "concurrent_in_game": null,
+     "peak_in_game": 37908,
+     "rank": 62
+    },
+    {
+     "appid": 1085660,
+     "concurrent_in_game": null,
+     "peak_in_game": 37404,
+     "rank": 63
+    },
+    {
+     "appid": 1364780,
+     "concurrent_in_game": null,
+     "peak_in_game": 32076,
+     "rank": 64
+    },
+    {
+     "appid": 2300320,
+     "concurrent_in_game": null,
+     "peak_in_game": 55752,
+     "rank": 65
+    },
+    {
+     "appid": 2694490,
+     "concurrent_in_game": null,
+     "peak_in_game": 51813,
+     "rank": 66
+    },
+    {
+     "appid": 289070,
+     "concurrent_in_game": null,
+     "peak_in_game": 46113,
+     "rank": 67
+    },
+    {
+     "appid": 1905180,
+     "concurrent_in_game": null,
+     "peak_in_game": 31543,
+     "rank": 68
+    },
+    {
+     "appid": 2073620,
+     "concurrent_in_game": null,
+     "peak_in_game": 43270,
+     "rank": 69
+    },
+    {
+     "appid": 4019220,
+     "concurrent_in_game": null,
+     "peak_in_game": 35650,
+     "rank": 70
+    },
+    {
+     "appid": 2344520,
+     "concurrent_in_game": null,
+     "peak_in_game": 49734,
+     "rank": 71
+    },
+    {
+     "appid": 3669870,
+     "concurrent_in_game": null,
+     "peak_in_game": 42799,
+     "rank": 72
+    },
+    {
+     "appid": 3513350,
+     "concurrent_in_game": null,
+     "peak_in_game": 14106,
+     "rank": 73
+    },
+    {
+     "appid": 244210,
+     "concurrent_in_game": null,
+     "peak_in_game": 16648,
+     "rank": 74
+    },
+    {
+     "appid": 291550,
+     "concurrent_in_game": null,
+     "peak_in_game": 15931,
+     "rank": 75
+    },
+    {
+     "appid": 3419430,
+     "concurrent_in_game": null,
+     "peak_in_game": 180861,
+     "rank": 76
+    },
+    {
+     "appid": 813780,
+     "concurrent_in_game": null,
+     "peak_in_game": 30474,
+     "rank": 77
+    },
+    {
+     "appid": 221100,
+     "concurrent_in_game": null,
+     "peak_in_game": 55455,
+     "rank": 78
+    },
+    {
+     "appid": 1366800,
+     "concurrent_in_game": null,
+     "peak_in_game": 43791,
+     "rank": 79
+    },
+    {
+     "appid": 251570,
+     "concurrent_in_game": null,
+     "peak_in_game": 39024,
+     "rank": 80
+    },
+    {
+     "appid": 261550,
+     "concurrent_in_game": null,
+     "peak_in_game": 39108,
+     "rank": 81
+    },
+    {
+     "appid": 594650,
+     "concurrent_in_game": null,
+     "peak_in_game": 34791,
+     "rank": 82
+    },
+    {
+     "appid": 294100,
+     "concurrent_in_game": null,
+     "peak_in_game": 39257,
+     "rank": 83
+    },
+    {
+     "appid": 1374490,
+     "concurrent_in_game": null,
+     "peak_in_game": 38716,
+     "rank": 84
+    },
+    {
+     "appid": 2183900,
+     "concurrent_in_game": null,
+     "peak_in_game": 18776,
+     "rank": 85
+    },
+    {
+     "appid": 582010,
+     "concurrent_in_game": null,
+     "peak_in_game": 30783,
+     "rank": 86
+    },
+    {
+     "appid": 714010,
+     "concurrent_in_game": null,
+     "peak_in_game": 6336,
+     "rank": 87
+    },
+    {
+     "appid": 945360,
+     "concurrent_in_game": null,
+     "peak_in_game": 11752,
+     "rank": 88
+    },
+    {
+     "appid": 393380,
+     "concurrent_in_game": null,
+     "peak_in_game": 21078,
+     "rank": 89
+    },
+    {
+     "appid": 292030,
+     "concurrent_in_game": null,
+     "peak_in_game": 21752,
+     "rank": 90
+    },
+    {
+     "appid": 739630,
+     "concurrent_in_game": null,
+     "peak_in_game": 15164,
+     "rank": 91
+    },
+    {
+     "appid": 3321460,
+     "concurrent_in_game": null,
+     "peak_in_game": 28918,
+     "rank": 92
+    },
+    {
+     "appid": 2050650,
+     "concurrent_in_game": null,
+     "peak_in_game": 15764,
+     "rank": 93
+    },
+    {
+     "appid": 2622380,
+     "concurrent_in_game": null,
+     "peak_in_game": 30178,
+     "rank": 94
+    },
+    {
+     "appid": 960090,
+     "concurrent_in_game": null,
+     "peak_in_game": 10624,
+     "rank": 95
+    },
+    {
+     "appid": 5165210,
+     "concurrent_in_game": null,
+     "peak_in_game": 21203,
+     "rank": 96
+    },
+    {
+     "appid": 2073850,
+     "concurrent_in_game": null,
+     "peak_in_game": 16957,
+     "rank": 97
+    },
+    {
+     "appid": 3551340,
+     "concurrent_in_game": null,
+     "peak_in_game": 42738,
+     "rank": 98
+    },
+    {
+     "appid": 2139460,
+     "concurrent_in_game": null,
+     "peak_in_game": 27258,
+     "rank": 99
+    },
+    {
+     "appid": 1158310,
+     "concurrent_in_game": null,
+     "peak_in_game": 25777,
+     "rank": 100
+    }
+   ],
+   "source_url": "https://api.steampowered.com/ISteamChartsService/GetMostPlayedGames/v1/"
+  },
+  "traffic": {
+   "Berlin": {
+    "points": [
+     {
+      "current_speed": 28,
+      "current_travel_time": 204,
+      "free_flow_speed": 36,
+      "free_flow_travel_time": 159,
+      "point": "frankfurter_allee",
+      "road_class": "FRC1",
+      "segment_metres": 1590
+     },
+     {
+      "current_speed": 27,
+      "current_travel_time": 101,
+      "free_flow_speed": 34,
+      "free_flow_travel_time": 80,
+      "point": "prenzlauer_allee",
+      "road_class": "FRC1",
+      "segment_metres": 756
+     },
+     {
+      "current_speed": 26,
+      "current_travel_time": 159,
+      "free_flow_speed": 35,
+      "free_flow_travel_time": 118,
+      "point": "tempelhofer_damm",
+      "road_class": "FRC1",
+      "segment_metres": 1147
+     }
+    ]
+   },
+   "Budapest": {
+    "points": [
+     {
+      "current_speed": 26,
+      "current_travel_time": 209,
+      "free_flow_speed": 51,
+      "free_flow_travel_time": 106,
+      "point": "hungaria_korut",
+      "road_class": "FRC2",
+      "segment_metres": 1502
+     },
+     {
+      "current_speed": 32,
+      "current_travel_time": 217,
+      "free_flow_speed": 44,
+      "free_flow_travel_time": 158,
+      "point": "ulloi_ut",
+      "road_class": "FRC2",
+      "segment_metres": 1931
+     },
+     {
+      "current_speed": 29,
+      "current_travel_time": 757,
+      "free_flow_speed": 51,
+      "free_flow_travel_time": 430,
+      "point": "vaci_ut",
+      "road_class": "FRC2",
+      "segment_metres": 6092
+     }
+    ]
+   },
+   "London": {
+    "points": [
+     {
+      "current_speed": 21,
+      "current_travel_time": 223,
+      "free_flow_speed": 33,
+      "free_flow_travel_time": 142,
+      "point": "a3_wandsworth",
+      "road_class": "FRC2",
+      "segment_metres": 1302
+     },
+     {
+      "current_speed": 28,
+      "current_travel_time": 249,
+      "free_flow_speed": 60,
+      "free_flow_travel_time": 116,
+      "point": "a13_east",
+      "road_class": "FRC2",
+      "segment_metres": 1933
+     }
+    ]
+   },
+   "Los Angeles": {
+    "points": [
+     {
+      "current_speed": 95,
+      "current_travel_time": 30,
+      "free_flow_speed": 95,
+      "free_flow_travel_time": 30,
+      "point": "i110_harbor",
+      "road_class": "FRC1",
+      "segment_metres": 792
+     },
+     {
+      "current_speed": 101,
+      "current_travel_time": 45,
+      "free_flow_speed": 101,
+      "free_flow_travel_time": 45,
+      "point": "i405_sepulveda",
+      "road_class": "FRC0",
+      "segment_metres": 1262
+     },
+     {
+      "current_speed": 105,
+      "current_travel_time": 26,
+      "free_flow_speed": 105,
+      "free_flow_travel_time": 26,
+      "point": "i210_pasadena",
+      "road_class": "FRC0",
+      "segment_metres": 758
+     },
+     {
+      "current_speed": 103,
+      "current_travel_time": 66,
+      "free_flow_speed": 103,
+      "free_flow_travel_time": 66,
+      "point": "i10_santa_monica",
+      "road_class": "FRC0",
+      "segment_metres": 1888
+     }
+    ]
+   },
+   "New York": {
+    "points": [
+     {
+      "current_speed": 67,
+      "current_travel_time": 76,
+      "free_flow_speed": 67,
+      "free_flow_travel_time": 76,
+      "point": "bqe_i278",
+      "road_class": "FRC0",
+      "segment_metres": 1414
+     },
+     {
+      "current_speed": 84,
+      "current_travel_time": 241,
+      "free_flow_speed": 84,
+      "free_flow_travel_time": 241,
+      "point": "lie_i495_queens",
+      "road_class": "FRC0",
+      "segment_metres": 5623
+     },
+     {
+      "current_speed": 66,
+      "current_travel_time": 326,
+      "free_flow_speed": 66,
+      "free_flow_travel_time": 326,
+      "point": "fdr_drive",
+      "road_class": "FRC1",
+      "segment_metres": 5977
+     },
+     {
+      "current_speed": 67,
+      "current_travel_time": 51,
+      "free_flow_speed": 67,
+      "free_flow_travel_time": 51,
+      "point": "cross_bronx_i95",
+      "road_class": "FRC0",
+      "segment_metres": 949
+     }
+    ]
+   },
+   "Warsaw": {
+    "points": [
+     {
+      "current_speed": 38,
+      "current_travel_time": 166,
+      "free_flow_speed": 47,
+      "free_flow_travel_time": 134,
+      "point": "wislostrada",
+      "road_class": "FRC1",
+      "segment_metres": 1749
+     },
+     {
+      "current_speed": 46,
+      "current_travel_time": 63,
+      "free_flow_speed": 58,
+      "free_flow_travel_time": 50,
+      "point": "trasa_lazienkowska",
+      "road_class": "FRC1",
+      "segment_metres": 806
+     }
+    ]
+   }
+  },
+  "twitch": {
+   "categories": {
+    "gta5": {
+     "category_exists": true,
+     "channels": 94,
+     "game_id": "32982",
+     "median_viewers_per_channel": 94.5,
+     "pages_fetched": 1,
+     "top5_share_pct": 71.4,
+     "total_viewers": 62119,
+     "truncated": false,
+     "viewers_by_language": {
+      "cs": 49,
+      "de": 728,
+      "en": 59633,
+      "es": 191,
+      "fr": 144,
+      "pt": 480,
+      "ru": 862,
+      "uk": 32
+     }
+    },
+    "gta6": {
+     "category_exists": false,
+     "queried_name": "Grand Theft Auto VI"
+    }
+   },
+   "stream_count": 100,
+   "total_viewers_top100": 326534,
+   "viewers_by_game": {
+    "(unknown)": 1753,
+    "Always On": 4718,
+    "Apex Legends": 6685,
+    "BanG Dream! Our Notes": 5419,
+    "Big Walk": 3165,
+    "BioShock Infinite": 3623,
+    "CONTROL Resonant": 1499,
+    "Counter-Strike": 4075,
+    "DJs": 2228,
+    "Deadlock": 9292,
+    "Delta Force": 1969,
+    "Diablo IV": 1581,
+    "Dota 2": 20098,
+    "EA Sports FC 27": 2769,
+    "Escape from Tarkov: Arena": 6034,
+    "Fire Emblem: Fortune's Weave": 1454,
+    "Fortnite": 13661,
+    "Grand Theft Auto V": 48501,
+    "Graveyard Keeper II": 3187,
+    "Hearthstone": 3361,
+    "Honkai: Star Rail": 2664,
+    "I Know a Guy": 1436,
+    "I'm Only Sleeping": 1999,
+    "IRL": 7661,
+    "Just Chatting": 46018,
+    "League of Legends": 6538,
+    "Machine Party": 7429,
+    "NBA 2K27": 1380,
+    "PUBG: BATTLEGROUNDS": 1623,
+    "Pools, Hot Tubs, and Beaches": 3725,
+    "Pratfall": 2214,
+    "Riftbound": 2038,
+    "Rocket League": 1465,
+    "Romancing SaGa 3": 11362,
+    "Rust": 26499,
+    "SILENT HILL: townfall": 1401,
+    "Super Mario Maker 2": 8095,
+    "Teamfight Tactics": 4468,
+    "The Infected": 1355,
+    "The Walking Dead": 2371,
+    "VALORANT": 1652,
+    "Valheim": 1473,
+    "WARDOGS": 11128,
+    "World of Tanks": 1400,
+    "World of Warcraft": 24068
+   },
+   "viewers_by_language": {
+    "ar": 1382,
+    "de": 7866,
+    "en": 208964,
+    "es": 4189,
+    "fr": 7694,
+    "ja": 34237,
+    "ko": 3725,
+    "pt": 1444,
+    "ru": 31737,
+    "zh": 25296
+   }
+  },
+  "youtube": {
+   "rockstar_channel": {
+    "subscribers": "13800000",
+    "total_views": "1772047765"
+   },
+   "video_ids_tracked": 5,
+   "videos": {
+    "EiQEBYDox_k": {
+     "comments": "71277",
+     "likes": "1070174",
+     "title": "Grand Theft Auto VI: Official Cover Art Reveal",
+     "views": "15475507"
+    },
+    "QdBZY2fkU-0": {
+     "comments": "1024288",
+     "likes": "12477253",
+     "title": "Grand Theft Auto VI Trailer 1",
+     "views": "296647564"
+    },
+    "VQRLujxTm3c": {
+     "comments": "553564",
+     "likes": "6615055",
+     "title": "Grand Theft Auto VI Trailer 2",
+     "views": "183414344"
+    },
+    "qq76pQsI1iw": {
+     "comments": "30220",
+     "likes": "353117",
+     "title": "Grand Theft Auto VI: An Extended Look Coming August 27",
+     "views": "9886593"
+    },
+    "tJbzMqJGH4k": {
+     "comments": "121978",
+     "likes": "1635211",
+     "title": "Grand Theft Auto VI: An Extended Look",
+     "views": "29474510"
+    }
+   }
+  }
+ }
+}
