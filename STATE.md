@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-28 12:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-28 15:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **375 snapshots** over 626.8 hours (26.1 days); last one 0.0 h ago
+- **378 snapshots** over 629.8 hours (26.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-28/1205.json`
+Newest snapshot: `data/2026-09-28/1505.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-28 12:05 UTC`
-- 375 of ~627 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-28 15:05 UTC`
+- 378 of ~630 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,28 +53,26 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/375 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/375 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 271/375 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 335/375 | frozen at 6 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 365/375 | frozen at 8 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 270/375 | zero in 10 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 270/375 | zero in 15 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 270/375 | zero in 16 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 270/375 | zero in 12 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 270/375 | zero in 10 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 293/375 | zero in 20 of 21 readings |
-| 🔴 | `yt_subscribers` | 371/375 | frozen at 1.38e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 293/375 | frozen at 0 for all 21 readings; zero in 21 of 21 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 223/375 | missing 7 of 21 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/378 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/378 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 274/378 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 338/378 | frozen at 6 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 368/378 | frozen at 8 for all 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 273/378 | zero in 15 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 273/378 | zero in 13 of 24 readings |
+| 🔴 | `traffic_newyork_delay_pct` | 273/378 | zero in 10 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 296/378 | zero in 23 of 24 readings |
+| 🔴 | `yt_subscribers` | 374/378 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 296/378 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 225/378 | missing 8 of 24 since it started |
 
-**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `power_de_lag_hours`, `power_de_load_mw`, `power_es_lag_hours`, `power_es_load_mw`, `power_fr_lag_hours`, `power_fr_load_mw`, `power_it_lag_hours`, `power_it_load_mw`, `power_se_lag_hours`, `power_se_load_mw`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
+**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `power_es_lag_hours`, `power_es_load_mw`, `power_fr_lag_hours`, `power_fr_load_mw`, `power_it_lag_hours`, `power_it_load_mw`, `power_se_lag_hours`, `power_se_load_mw`, `traffic_warsaw_delay_pct`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
 ## Indices
 
@@ -91,12 +89,13 @@ Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (
 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
-| `entsoe_load.json` | 64,297 in 8 series | 2022-10-01 | 2026-09-04 | 2380 KB |
-| `gdelt_geography.json` | 86 | 2026-06-09 | 2026-09-06 | 4 KB |
-| `mta_ridership.json` | 10,600 | 2023-01-01 | 2026-09-03 | 550 KB |
-| `stackexchange.json` | 176 in 2 series | 2023-01-01 | 2026-09-05 | 9 KB |
+| `chicago_ridership.json` | 1,277 | 2023-01-01 | 2026-06-30 | 127 KB |
+| `entsoe_load.json` | 68,521 in 8 series | 2022-10-01 | 2026-09-26 | 2536 KB |
+| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
+| `mta_ridership.json` | 10,791 | 2023-01-01 | 2026-09-24 | 560 KB |
+| `stackexchange.json` | 198 in 2 series | 2023-01-01 | 2026-09-27 | 10 KB |
 | `wikipedia.json` | 8,034 in 6 series | 2023-01-01 | 2026-08-31 | 284 KB |
-| `wikipedia_pageviews.json` | 8,564 in 7 series | 2023-01-01 | 2026-09-05 | 268 KB |
+| `wikipedia_pageviews.json` | 8,718 in 7 series | 2023-01-01 | 2026-09-27 | 273 KB |
 
 ## Front end
 
