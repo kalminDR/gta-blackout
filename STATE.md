@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-28 06:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-28 08:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **369 snapshots** over 620.8 hours (25.9 days); last one 0.0 h ago
+- **371 snapshots** over 622.8 hours (26.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-28/0605.json`
+Newest snapshot: `data/2026-09-28/0805.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-28 06:05 UTC`
-- 369 of ~621 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-28 08:05 UTC`
+- 371 of ~623 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,26 +53,26 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/369 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/369 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 265/369 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 329/369 | frozen at 6 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 359/369 | frozen at 8 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 264/369 | zero in 12 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 264/369 | zero in 16 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 264/369 | zero in 13 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 264/369 | zero in 13 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 264/369 | zero in 14 of 24 readings |
-| 🔴 | `yt_subscribers` | 365/369 | frozen at 1.38e+07 for all 24 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 220/369 | missing 7 of 19 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/371 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/371 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 267/371 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 331/371 | frozen at 6 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 361/371 | frozen at 8 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 266/371 | zero in 11 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 266/371 | zero in 14 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 266/371 | zero in 14 of 24 readings |
+| 🔴 | `traffic_newyork_delay_pct` | 266/371 | zero in 13 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 266/371 | zero in 12 of 24 readings |
+| 🔴 | `yt_subscribers` | 367/371 | frozen at 1.38e+07 for all 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 221/371 | missing 8 of 21 since it started |
 
-**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `power_de_lag_hours`, `power_de_load_mw`, `power_es_lag_hours`, `power_es_load_mw`, `power_fr_lag_hours`, `power_fr_load_mw`, `power_it_lag_hours`, `power_it_load_mw`, `power_se_lag_hours`, `power_se_load_mw`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`, `yt_rockstar_views_per_hour`, `yt_subscribers_per_hour`.
+**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `power_de_lag_hours`, `power_de_load_mw`, `power_es_lag_hours`, `power_es_load_mw`, `power_fr_lag_hours`, `power_fr_load_mw`, `power_it_lag_hours`, `power_it_load_mw`, `power_pl_lag_hours`, `power_pl_load_mw`, `power_se_lag_hours`, `power_se_load_mw`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`, `yt_rockstar_views_per_hour`, `yt_subscribers_per_hour`.
 
 ## Indices
 
