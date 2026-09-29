@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-29 15:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-29 17:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **404 snapshots** over 653.9 hours (27.2 days); last one 0.0 h ago
+- **406 snapshots** over 655.8 hours (27.3 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-29/1506.json`
+Newest snapshot: `data/2026-09-29/1705.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Newest snapshot: `data/2026-09-29/1506.json`
 
 ## Planned but not built
 
-- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_chicago.py, test_predictions.py, test_score.py but not registered as a source
+- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_backfill.py, test_chicago.py, test_predictions.py, test_score.py but not registered as a source
 - **`chicago`** — Did people commute: a second, independent transit system — referenced in backfill.py, test_chicago.py but not registered as a source
 - **`wikipedia`** — Attention: edits and pageviews, six languages — referenced in backfill.py but not registered as a source
 
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 15:06 UTC`
-- 404 of ~654 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 17:05 UTC`
+- 406 of ~656 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,24 +53,24 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/404 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/404 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 300/404 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 364/404 | frozen at 6 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 299/404 | zero in 10 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 299/404 | zero in 17 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 299/404 | zero in 10 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 299/404 | zero in 10 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 299/404 | zero in 11 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 320/404 | zero in 22 of 23 readings |
-| 🔴 | `yt_subscribers` | 400/404 | frozen at 1.38e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 320/404 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/406 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/406 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 302/406 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 366/406 | frozen at 6 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 301/406 | zero in 10 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 301/406 | zero in 15 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 301/406 | zero in 10 of 24 readings |
+| 🔴 | `traffic_newyork_delay_pct` | 301/406 | zero in 10 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 301/406 | zero in 10 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 322/406 | zero in 22 of 23 readings |
+| 🔴 | `yt_subscribers` | 402/406 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 322/406 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
@@ -79,9 +79,9 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | **null** |
+| displacement | 109.0 (from 9 of 9 components) |
 | work | **null** |
-| infrastructure | **null** |
+| infrastructure | 100.0 (from 1 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
@@ -90,9 +90,10 @@ Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 66,553 in 8 series | 2022-10-01 | 2026-09-27 | 2463 KB |
+| `entsoe_load.json` | 68,713 in 8 series | 2022-10-01 | 2026-09-27 | 2543 KB |
 | `gdelt_geography.json` | 80 | 2026-07-05 | 2026-09-29 | 3 KB |
 | `mta_ridership.json` | 10,816 | 2023-01-01 | 2026-09-27 | 561 KB |
+| `shares.json` | 200 in 2 series | 2026-05-06 | 2026-09-28 | 11 KB |
 | `stackexchange.json` | 199 in 2 series | 2023-01-01 | 2026-09-28 | 10 KB |
 | `wikipedia.json` | 8,034 in 6 series | 2023-01-01 | 2026-08-31 | 284 KB |
 | `wikipedia_pageviews.json` | 8,725 in 7 series | 2023-01-01 | 2026-09-28 | 274 KB |
