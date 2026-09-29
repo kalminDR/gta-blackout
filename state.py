@@ -578,7 +578,18 @@ def main():
         w("| Panel | Value |")
         w("|---|---|")
         for k, v in vals.items():
-            w(f"| {k} | {'**null**' if v is None else f'{v:.1f}'} |")
+            # An index arrives as a dict once it has enough baseline to speak
+            # ({"index": 106, "components": 9, ...}) and as null until then.
+            # The dict form first appeared on 29 September 2026 and crashed
+            # this line, which had only ever seen nulls.
+            if isinstance(v, dict):
+                idx, got, want = v.get("index"), v.get("components"), v.get("components_expected")
+                shown = "**null**" if idx is None else f"{idx:.1f}"
+                if got is not None and want:
+                    shown += f" (from {got} of {want} components)"
+            else:
+                shown = "**null**" if v is None else f"{v:.1f}"
+            w(f"| {k} | {shown} |")
         w("")
         w(f"Baseline needs {ir['min_hour_of_week']} samples per hour-of-week bucket. "
           f"**{ir['buckets_ready']} of {ir['buckets_total']} buckets qualify** "

@@ -444,6 +444,15 @@ readings in the first two days.) Separate
 from `worker.js` on purpose — one holds a GitHub token, the other takes the
 public's answers.
 
+**Two clocks need the runs to see each other.** On 29 September the fallback
+started 29 minutes late, at the same second as the heartbeat's run, queued
+behind it, and then woke up on the commit that had triggered it — from before
+the reading it waited for. It collected a duplicate, and its commit hit a
+conflict on the generated files that the retry loop could not get out of. The
+checkout now takes the branch as it is when the run starts, and on a conflict
+the commit step keeps its own generated files and rebuilds them over the
+combined history. Snapshots themselves never collide: each run writes its own.
+
 **The top-of-the-hour GitHub schedule is best-effort and was never a
 guarantee.** Do not move the collector back onto it alone.
 
