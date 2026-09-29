@@ -170,7 +170,10 @@ print("\n10. The gate: the fallback schedule stands down when the hour is done")
 # The heartbeat collects at :05; GitHub's fallback fires at :37.
 check("reading 32 minutes old: skip", gate_at(T0, T0 + timedelta(minutes=32)), False)
 check("reading 90 minutes old: run", gate_at(T0, T0 + timedelta(minutes=90)), True)
-check("the boundary, 45 minutes: run", gate_at(T0, T0 + timedelta(minutes=45)), True)
+# Observed 28 and 29 September: the ":37" fallback started at :55 and :59.
+check("fallback 54 minutes after the heartbeat: skip",
+      gate_at(T0, T0 + timedelta(minutes=54)), False)
+check("the boundary, 60 minutes: run", gate_at(T0, T0 + timedelta(minutes=60)), True)
 empty = tempfile.mkdtemp()
 here = os.getcwd()
 try:

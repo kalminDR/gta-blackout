@@ -509,6 +509,97 @@ def fetch_entsoe(token):
     }
 
 
+# ------------------------------------------------- Take-Two share price
+
+def fetch_shares(key, existing):
+    """Daily closes for Take-Two and the Nasdaq-100, merged into what we have.
+
+    Never raises and never returns less history than it was given: this file
+    is the only copy of anything older than a hundred trading days. A symbol
+    whose call fails keeps its rows and gains a `last_error`. See shares.py.
+    """
+    import shares
+    out = {"source": shares.SOURCE, "symbols": {}}
+    old = (existing or {}).get("symbols") or {}
+    for i, symbol in enumerate(shares.SYMBOLS):
+        prev = old.get(symbol) or {}
+        rows = prev.get("rows") or []
+        entry = {"name": shares.SYMBOLS[symbol], "rows": rows}
+        if not key:
+            entry["last_error"] = "skipped: no ALPHAVANTAGE_KEY in environment"
+        else:
+            if i:
+                time.sleep(15)      # the free tier refuses bursts
+            try:
+                rows = shares.merge(rows, shares.parse(get_json(shares.url(symbol, key))))
+                entry["rows"] = rows
+            except Exception as e:
+                # The key is in the URL; keep it out of anything committed.
+                entry["last_error"] = str(e)[:200].replace(key, "***")
+        entry["first"] = rows[0]["date"] if rows else None
+        entry["last"] = rows[-1]["date"] if rows else None
+        out["symbols"][symbol] = entry
+    return out
+
+
+def _existing(name):
+    """A backfill file as it stands on disk, or {} if there is none."""
+    try:
+        with open(os.path.join(OUT, name + ".json"), encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _merge_entsoe(old, new):
+    """Union of hourly points per country; a re-fetched hour replaces ours.
+
+    ENTSO-E is fetched in monthly chunks and any chunk can time out. Rewriting
+    the file from one run's results therefore drops whatever that run missed,
+    and on 29 September 2026 that removed October 2025 from Germany, November
+    2025 from Spain and November 2022 from Italy -- the autumn baseline the
+    electricity prediction is scored against.
+    """
+    merged = dict(new)
+    data = {}
+    for code in sorted(set((old.get("data") or {})) | set((new.get("data") or {}))):
+        hours = {}
+        for src in (old, new):                      # new last, so it wins
+            entry = (src.get("data") or {}).get(code) or {}
+            for ts, mw in entry.get("points") or []:
+                hours[ts] = mw
+        if hours:
+            ordered = sorted(hours)
+            data[code] = {"first": ordered[0], "last": ordered[-1],
+                          "hours": len(ordered),
+                          "points": [[t, hours[t]] for t in ordered]}
+    merged["data"] = data
+    merged["countries_ok"] = sorted(data)
+    return merged
+
+
+def _keep_history(name, old, new):
+    """What to write: never a file with less history than the one on disk.
+
+    Most sources here re-send their whole history on every call, so a
+    successful run can simply replace the file. A failed run cannot: writing
+    its error would leave the file empty until the next day, and score.py
+    reads these files -- a subway prediction that cannot be scored on
+    20 November because the MTA timed out that morning. So a failure keeps
+    the old data and says what went wrong beside it.
+    """
+    failed = "error" in new or "skipped" in new
+    if failed and old and "error" not in old:
+        kept = dict(old)
+        kept["last_error"] = new.get("error") or new.get("skipped")
+        kept["last_error_at_utc"] = new.get("fetched_at_utc")
+        return kept
+    if name == "entsoe_load" and old.get("data") and not failed:
+        return _merge_entsoe(old, new)
+    return new
+
+
 def main():
     given = sys.argv[1].strip() if len(sys.argv) > 1 else ""
     start = date.fromisoformat(given) if given else date(2023, 1, 1)
@@ -522,6 +613,9 @@ def main():
         "wikipedia": lambda: fetch_wikipedia(start, end),
         "wikipedia_pageviews": lambda: fetch_wikipedia_pageviews(start, end),
         "gdelt_geography": lambda: fetch_gdelt_geography(),
+        "shares": lambda: fetch_shares(
+            os.environ.get("ALPHAVANTAGE_KEY", "").strip(),
+            _existing("shares")),
         "entsoe_load": lambda: (
             fetch_entsoe(os.environ.get("ENTSOE_TOKEN", "").strip())
             if os.environ.get("ENTSOE_TOKEN", "").strip()
@@ -539,6 +633,9 @@ def main():
             payload, status = {"error": str(e)[:300]}, "FAILED"
             failures += 1
         payload["fetched_at_utc"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+        payload = _keep_history(name, _existing(name), payload)
+        if "last_error" in payload and status == "ok":
+            status = "KEPT"
         with open(os.path.join(OUT, name + ".json"), "w", encoding="utf-8") as f:
             json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
         size = os.path.getsize(os.path.join(OUT, name + ".json")) / 1024

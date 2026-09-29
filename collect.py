@@ -14,9 +14,9 @@ Design rules:
   4. Append-only. Never overwrite an existing snapshot.
 
 Deliberately NOT collected here: share prices. Yahoo and Stooq both refuse
-requests from GitHub Actions IP ranges, and minute-level history stays free
-for about 30 days anyway - so grab TTWO/SONY/MSFT by hand in early December
-instead of fighting a rate limiter every hour until then.
+requests from GitHub Actions IP ranges, and a closing price is a daily number
+anyway. Take-Two's close is fetched once a day by backfill.py instead, from a
+provider that takes a key rather than blocking by address. See shares.py.
 
 Missing API keys are fine - that source is simply skipped and marked as such.
 """
@@ -1208,7 +1208,13 @@ CADENCE_MIN_READINGS = 4
 # skips itself. See the gate step in collect.yml: an external clock is the
 # primary trigger and GitHub's own schedule is only the fallback, so when both
 # fire in the same hour the second must not produce a duplicate reading.
-GATE_MINUTES = 45
+#
+# This was 45 until 29 September 2026. GitHub started the ":37" fallback as
+# late as :55 and :59, when the heartbeat's reading was 50-54 minutes old, so
+# it collected again six minutes before the next heartbeat -- two readings in
+# one hour, twice in two days. The heartbeat runs every 60 minutes, so a
+# reading younger than that means this hour is already covered.
+GATE_MINUTES = 60
 
 
 def _snapshot_time(path, snap):

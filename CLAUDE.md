@@ -438,7 +438,9 @@ The fix is a second clock. `heartbeat.js` is a separate Cloudflare Worker that
 asks GitHub to run the workflow at five past every hour; GitHub's own schedule
 stays at :37 as a fallback (off the top of the hour, where its queue is most
 congested). A `--gate` step makes the fallback stand down when a reading less
-than 45 minutes old already exists, so the two never double-count. Separate
+than 60 minutes old already exists, so the two never double-count. (It was 45
+until GitHub started the ":37" run at :55 and :59 and produced two duplicate
+readings in the first two days.) Separate
 from `worker.js` on purpose — one holds a GitHub token, the other takes the
 public's answers.
 
@@ -624,6 +626,55 @@ day. `inputs.start_date` exists only for `workflow_dispatch`, so the scheduled
 run passed an empty string; both the workflow and `backfill.py` now fall back
 to 2023-01-01 rather than crashing on `date.fromisoformat("")`.
 
+### A daily backfill must never shrink a file
+
+Making the backfill daily (above) had a cost nobody priced. Every run
+rewrote each file from that run's results, which is safe only when a person
+watches the run. On 29 September 2026 three ENTSO-E monthly chunks timed out
+and the rewrite dropped them: October 2025 for Germany, November 2025 for
+Spain, November 2022 for Italy — the autumn baseline the electricity
+prediction is scored against. `test_power.py` failed on main, and only
+because it happened to read those months.
+
+Restored the same day by merging the three committed versions of the file;
+git history is the reason nothing was lost for good. Since then
+`backfill._keep_history` decides what is written: ENTSO-E is merged hour by
+hour with what is on disk, and any source whose run fails keeps its old file
+with `last_error` beside it. The same would otherwise have hit the MTA file on
+the morning of 20 November and left the subway prediction unscoreable.
+`test_backfill.py` pushes on both.
+
+### Take-Two's share price, once a day, and never a verdict
+
+Added 29 September 2026. The earlier plan was to download Take-Two, Sony and
+Microsoft prices by hand in early December, while minute-level history was
+still free. That is the backfill nobody runs again: it depends on someone
+remembering, and the gap would have been found in January.
+
+**Only Take-Two.** Sony and Microsoft are far too large for one game to move
+their shares. The Nasdaq-100 (through the QQQ fund; the provider serves no
+indices) travels beside it, so a day the whole market fell is not read as a
+day GTA fell.
+
+**Daily, from the backfill job, via Alpha Vantage** (`ALPHAVANTAGE_KEY`).
+Yahoo and Stooq refuse GitHub's runners; a key-based provider does not block
+by address. Each call returns the last hundred trading days, so a missed day
+is filled by the next run. Unlike every other backfill file, `shares.json` is
+**merged, never rewritten**: a failed call keeps what is on disk, because
+nothing older than a hundred days can be fetched again. `test_shares.py`
+pushes on exactly that.
+
+**It lives under claim 06 as a MEASURED fact with no prediction.** A share
+price says what investors expect the game to earn, not whether anybody stayed
+home, and launch days often fall on record sales because the news was priced
+in months earlier. Scoring it would publish a result the price cannot carry.
+The page prints the close, the day's move against the Nasdaq-100, and — only
+once 40 days of history exist — how far an ordinary day moves it.
+
+The provider's response shape was written from its documentation; this
+environment cannot reach it. **The first live backfill run is the real test,**
+and `test_shares.py` should be corrected against what it actually returns.
+
 **`yt_subscribers_per_hour`** is always zero because YouTube rounds the
 subscriber count to 13.7M. Not broken, meaningless. Remove it.
 
@@ -639,7 +690,8 @@ declaration filed with eBay, which currently discloses them.
 November 2025), GitHub (bot activity dominates; issue comments fell ~98% while
 pushes doubled), Stack Overflow (from ~21k questions a week in early 2023 to
 roughly 40 a day by August 2026 — kept for the record, useless as a work
-signal), Yahoo Finance (runner IPs blocked), Best Buy (US phone number
+signal), Yahoo Finance (runner IPs blocked; share prices now come daily from
+Alpha Vantage instead), Best Buy (US phone number
 required), GDELT by-country (HTTP 429 from runner IPs; the by-language series
 does work).
 
@@ -671,8 +723,11 @@ stills, characters, logos, or the Pricedown typeface.
   and a thin cadence must fail it, with the gate that keeps two clocks from
   double-counting), `test_chicago.py` (the CTA parser, and the day-type
   derivation), `test_traffic.py` (only kept points count, and the kept set is
-  locked for the prediction window).
-  Run all nine after touching collection or aggregation. The counts move; the
+  locked for the prediction window), `test_shares.py` (the provider's errors
+  read as errors, and a failed call never shrinks the stored history),
+  `test_backfill.py` (no backfill run writes a file with less history than
+  it had).
+  Run all eleven after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to

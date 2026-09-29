@@ -23,6 +23,7 @@ import indices
 import power
 import predictions
 import score
+import shares
 import json
 import os
 import sys
@@ -580,6 +581,15 @@ def main():
         print(f"warning: evening ratio unavailable: {str(e)[:120]}",
               file=sys.stderr)
 
+    # Take-Two's latest close, from the daily backfill. A witness under claim
+    # 06 that never gets a verdict; see shares.py for why.
+    try:
+        shares_now = shares.summary(shares.load())
+    except Exception as e:
+        shares_now = None
+        print(f"warning: share price unavailable: {str(e)[:120]}",
+              file=sys.stderr)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
@@ -587,6 +597,7 @@ def main():
                    "observed": observed_ranges(points),
                    "panels": panels,
                    "evening": evening,
+                   "shares": shares_now,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
 
