@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-29 05:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-29 06:12 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **393 snapshots** over 643.8 hours (26.8 days); last one 0.0 h ago
+- **394 snapshots** over 644.9 hours (26.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-29/0505.json`
+Newest snapshot: `data/2026-09-29/0611.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 05:05 UTC`
-- 393 of ~644 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 06:11 UTC`
+- 394 of ~645 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,25 +53,24 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/393 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/393 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 289/393 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 353/393 | frozen at 6 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 288/393 | zero in 10 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 288/393 | zero in 17 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 288/393 | zero in 11 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 310/393 | zero in 22 of 23 readings |
-| 🔴 | `yt_subscribers` | 389/393 | frozen at 1.38e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 310/393 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 237/393 | missing 6 of 23 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/394 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/394 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 290/394 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 354/394 | frozen at 6 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 289/394 | zero in 10 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 289/394 | zero in 17 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 289/394 | zero in 11 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 311/394 | zero in 22 of 23 readings |
+| 🔴 | `yt_subscribers` | 390/394 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 311/394 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
 
-**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_losangeles_delay_pct`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
+**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_losangeles_delay_pct`, `yt_EiQEBYDox_k_likes_per_hour`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
 ## Indices
 
