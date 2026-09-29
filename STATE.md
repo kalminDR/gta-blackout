@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-29 22:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-29 23:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **411 snapshots** over 660.9 hours (27.5 days); last one 0.0 h ago
+- **412 snapshots** over 661.9 hours (27.6 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-29/2206.json`
+Newest snapshot: `data/2026-09-29/2306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Newest snapshot: `data/2026-09-29/2206.json`
 | `youtube` | 🟢 OK | 3 fields | `YOUTUBE_API_KEY`, `YOUTUBE_VIDEO_IDS` |
 | `traffic` | 🟢 OK | 6 fields | `TOMTOM_API_KEY` |
 | `console_status` | 🟢 OK | 2 fields | — |
-| `steam_charts` | 🟢 OK | 1 fields | — |
+| `steam_charts` | 🟢 OK | 2 fields | — |
 | `console_prices` | 🟢 OK | 3 fields | `EBAY_CLIENT_ID`, `EBAY_CLIENT_SECRET` |
 | `retail_stock` | 🟡 WAITING | skipped: no BESTBUY_API_KEY | `BESTBUY_API_KEY` |
 | `entsoe` | 🟢 OK | 9 fields | `ENTSOE_TOKEN` |
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 22:06 UTC`
-- 411 of ~661 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-29 23:06 UTC`
+- 412 of ~662 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,22 +53,22 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/411 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/411 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 307/411 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 371/411 | frozen at 6 for all 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 306/411 | zero in 15 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 306/411 | zero in 12 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 306/411 | zero in 10 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 327/411 | zero in 22 of 23 readings |
-| 🔴 | `yt_subscribers` | 407/411 | frozen at 1.38e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 327/411 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/412 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/412 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 308/412 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 372/412 | frozen at 6 for all 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 307/412 | zero in 15 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 307/412 | zero in 12 of 24 readings |
+| 🔴 | `traffic_newyork_delay_pct` | 307/412 | zero in 10 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 328/412 | zero in 22 of 23 readings |
+| 🔴 | `yt_subscribers` | 408/412 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 328/412 | frozen at 0 for all 23 readings; zero in 23 of 23 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_warsaw_delay_pct`, `yt_EiQEBYDox_k_likes_per_hour`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
@@ -77,7 +77,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 109.0 (from 9 of 9 components) |
+| displacement | 115.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 1 of 2 components) |
 
