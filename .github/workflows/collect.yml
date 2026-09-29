@@ -30,7 +30,15 @@ jobs:
     timeout-minutes: 10
 
     steps:
+      # The branch as it is now, not the commit that triggered the run. Runs
+      # queue behind each other (see concurrency above), and a queued run
+      # would otherwise start from a checkout that predates the run it waited
+      # for. On 29 September 2026 the fallback queued behind the heartbeat's
+      # run, woke up on the older commit, could not see the reading taken
+      # two minutes earlier, and collected a duplicate.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-python@v5
         with:
@@ -87,9 +95,21 @@ jobs:
           fi
           git commit -m "snapshot $(date -u '+%Y-%m-%d %H:%M') UTC"
           # Another run may have landed while we were working - rebase, retry.
+          #
+          # Snapshots never collide: every run writes its own file. Only the
+          # generated files can (public/, STATE.md), and when they did, the old
+          # loop could not recover -- the rebase stopped on the conflict and
+          # every retry failed on "unmerged files", losing the reading. So on
+          # a clash keep ours, then rebuild them over the combined history.
           for i in 1 2 3; do
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
-            git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            if git pull --rebase -X theirs origin "${GITHUB_REF_NAME}"; then
+              python summarise.py && { python state.py || true; }
+              git add public/ STATE.md
+              git diff --staged --quiet || git commit -q --amend --no-edit
+              git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            else
+              git rebase --abort || true
+            fi
             echo "push failed, retrying ($i)"
             sleep 5
           done
