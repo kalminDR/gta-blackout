@@ -175,22 +175,34 @@ finally:
     score.SCORERS.update(broken)
 
 print("\n8. A source that goes dark says so, and still never says 'failed'")
-# ENTSO-E retired web-api.tp.entsoe.eu on 8 September 2026. If it never
-# returns, the power prediction must report that the witness is gone -- not
-# that the evening is merely incomplete, which reads like "wait a bit", and
-# above all not "failed".
+# ENTSO-E was down for 29 hours on 7-8 September 2026. If an outage like that
+# lasts through the launch, the power prediction must report that the witness
+# is gone -- not that the evening is merely incomplete, which reads like
+# "wait a bit", and above all not "failed".
 import power as _power
 _bf = _power.load_backfill()
 stops_early = {"sources": {"entsoe": {"DE": {"hourly": [
     ["2026-09-07T14:00:00+00:00", 40000.0],
     ["2026-09-07T18:00:00+00:00", 46000.0]]}}}}
-r = score.score_power([stops_early], _bf)
-check("a source that stopped before the launch is not a failure",
+# Read on a day long after those readings: the source really has gone.
+r = score.score_power([stops_early], _bf, ctx_today=datetime.date(2026, 11, 19))
+check("a source that stopped and stayed stopped is not a failure",
       r["verdict"], None)
 check("and the reason says it went dark rather than 'not yet'",
-      "went dark" in (r["reason"] or ""))
+      "gone dark" in (r["reason"] or ""))
 check("naming the last day it published", r["evidence"]["last_reading"],
       "2026-09-07")
+
+# The same readings, read the next morning. Nothing has gone dark -- the
+# launch is simply months away. The first version of this wording compared
+# the last reading to the launch day rather than to today, so it announced a
+# dead source on every day before 19 November, including days with a complete
+# reading from the evening before.
+r = score.score_power([stops_early], _bf, ctx_today=datetime.date(2026, 9, 8))
+check("a reading from yesterday is not a source that went dark",
+      "gone dark" in (r["reason"] or ""), False)
+check("it is simply not the launch day yet",
+      "launch-day evening yet" in (r["reason"] or ""))
 
 r = score.score_power([], _bf)
 check("no readings at all is also not a failure", r["verdict"], None)

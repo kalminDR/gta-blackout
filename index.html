@@ -590,9 +590,10 @@ const CLAIMS = [
     lede: "Sony and Microsoft publish their own service health. If the launch "
         + "is as big as we think, they will be the ones to say so." },
   { id: "money", n: "06", title: "It cost somebody money",
-    lede: "This one is not a measurement and never will be. It is arithmetic "
+    lede: "The cost is not a measurement and never will be. It is arithmetic "
         + "on top of the measurements, with every assumption visible and "
-        + "adjustable. It gets no verdict, because it cannot earn one.",
+        + "adjustable. It gets no verdict, because it cannot earn one. The one "
+        + "measured number here is what the stock market made of the day.",
     estimate: true },
 ];
 
@@ -728,7 +729,31 @@ function eveningRows(evening){
   return { rows: rows, note: note };
 }
 
-function renderClaims(metrics, released, latest, evening){
+// Claim 06's one measured number: Take-Two's latest close, from the daily
+// backfill (shares.py). It never gets a verdict -- a launch day can fall on
+// record sales, because the good news was priced in long before -- so it is
+// printed as a fact, marked MEASURED because it sits under an estimate, and
+// set against the Nasdaq-100 so a day the whole market fell is not read as a
+// day GTA fell. "A typical day" appears only once there is history for it.
+function sharesRow(s){
+  if (!s || typeof s.close !== "number") return null;
+  const day = new Date(s.date + "T12:00:00Z").toLocaleDateString("en-GB",
+    { day: "numeric", month: "long", timeZone: "UTC" });
+  let say = "Take-Two shares closed at $" + s.close.toFixed(2) + " on " + day;
+  if (typeof s.change_pct === "number" && typeof s.market_change_pct === "number"){
+    const move = function(v, up, down){
+      return (v >= 0 ? up : down) + " " + Math.abs(v).toFixed(1) + "%"; };
+    say += ", " + move(s.change_pct, "up", "down") + " on the day, while the Nasdaq-100 "
+         + move(s.market_change_pct, "rose", "fell");
+    if (typeof s.typical_excess_pct === "number"){
+      say += ". On an ordinary day Take-Two ends about " + s.typical_excess_pct.toFixed(1)
+           + "% away from the market's move";
+    }
+  }
+  return ['<span class="mark measured">Measured</span> Take-Two', say];
+}
+
+function renderClaims(metrics, released, latest, evening, shares){
   const byKey = {};
   metrics.forEach(function(m){ byKey[m.key] = m; });
 
@@ -749,6 +774,11 @@ function renderClaims(metrics, released, latest, evening){
     // The evening ratio joins claim 02 ahead of the baseline-driven
     // witnesses: it has four years of history behind it and can speak today,
     // while the others are still learning what an ordinary hour looks like.
+    if (c.id === "money"){
+      const sr = sharesRow(shares);
+      if (sr) live.unshift(sr);
+    }
+
     let eveningNote = null;
     if (c.id === "home"){
       const ev = eveningRows(evening);
@@ -1020,7 +1050,7 @@ async function load(){
   const sr = (data.latest || {}).selfreport || (L.selfreport || null);
   if (sr && typeof sr.total === "number") renderTally(sr);
 
-  renderClaims(METRICS, new Date() >= RELEASE, L, data.evening || {});
+  renderClaims(METRICS, new Date() >= RELEASE, L, data.evening || {}, data.shares);
 
   const html = [];
   Object.keys(PANELS).forEach(function(key){

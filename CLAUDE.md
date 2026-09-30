@@ -165,10 +165,39 @@ Fixed by lowering the TomTom zoom from 10 to 8, expanding to six candidates per
 city, recording `segment_metres` per reading, and rejecting points under 700m or
 of class FRC4+ at aggregation time rather than averaging them in.
 
-**Still open:** after a few days of readings, keep the best three per city on
-measured evidence. Coordinates cannot be verified from a sandbox, which is
-exactly why the choice was left to the data. Note TomTom volume is now 36
-calls/hour (864/day) — check the plan ceiling before November.
+### Half the traffic points could not hear a rush hour
+
+Settled on 27 September 2026 from 250 readings per candidate. The property
+that separated them was not length or road class but whether a point ever
+registers delay at all. Twenty-one of the thirty-six showed travel time over
+free flow in 20–66% of readings; fifteen in 11% or fewer, eleven of those
+under 5%. A road that reads "empty" through
+every rush hour cannot show a quieter Thursday, and because the city figure
+sums seconds, a long deaf segment also dilutes the points that do hear.
+
+**Every point that can hear is kept (18), not "the best three".** The
+responsive and deaf groups have nothing between 11% and 20%, so the cut sits
+in that gap; a cap of three would only have forced a coin-toss in Los Angeles
+between two points at 24.0% and 23.6%. London and Warsaw keep two, because
+only two could hear. A deaf point is never added to even the numbers up.
+
+Carried back to claim 01: on the kept points the weekday evening commute
+stands clearly above the weekend in every city, and by more than before —
+Berlin 50% vs 34% delay (was 23% vs 16%), Los Angeles 220% vs 88% (was 140%
+vs 57%). That gap is what 19 November has to close for "fewer of us went to
+work" to show.
+
+The city figure is rebuilt from kept points only, over the whole history, and
+from the rebuild (6 September 09:00 UTC) onwards — before that, the same point
+names sat on different stretches of road. Dropped points are in
+`collect.RETIRED_POINTS` with their reason. TomTom volume halves to 18
+calls/hour (432/day).
+
+**The kept set must not change between 1 October and 17 December.** The
+traffic prediction ranks Thursdays in that window against each other; a
+point swapped in mid-window measures a road the earlier Thursdays never saw.
+`test_traffic.py` locks the set. If a point dies, it is dropped, not
+replaced.
 
 ### The Russian PlayStation Store nearly won us a prediction for free
 
@@ -316,9 +345,11 @@ half a day. Had the collector still been keeping one point per call, the
 flapping would have punched holes straight through the evening hours the ratio
 depends on.
 
-### web-api.tp.entsoe.eu was retired on 8 September 2026
+### ENTSO-E went down for 29 hours on 7-8 September, and it was not retired
 
-Not a blink. The endpoint is gone.
+**This section previously said the endpoint had been retired. That was wrong,
+and it is corrected here rather than deleted, because the reasoning that
+produced it was sound and the conclusion still was not.**
 
 The decline was visible for two days first: read timeouts on 6 September,
 HTTP 503 with their styled maintenance page on the 7th, HTTP 599 that evening,
@@ -333,10 +364,9 @@ ratio for the 7th or the 8th.
 The URL had never changed since the day it was written. Nothing on our side
 caused this.
 
-**What it costs, honestly.** Nothing yet, and possibly nothing at all. The
+**What it cost.** Two evening ratios, 7 and 8 September, and nothing else. The
 ratio's baseline comes from the backfill's four autumn windows, never from the
-live series, so September evenings were never going to be evidence. What
-matters is whether a working endpoint exists in November.
+live series, so September evenings were never going to be evidence.
 
 If none does, claim 02 keeps its **first** witness — evening traffic — and
 loses its second. The published power prediction then reports that it could
@@ -350,16 +380,81 @@ that stop before the launch day (the source went dark), and an evening merely
 not finished yet. The middle one used to print as the third, which reads like
 "wait a bit" when the truth is "the witness is not coming".
 
-**Still open: where it went.** Do not guess a replacement URL — a wrong
-endpoint that returns something plausible is worse than a clean failure. If
-ENTSO-E has migrated, the new address has to be confirmed from a browser and
-this environment cannot reach it.
+**It came back at 18:19 UTC on 8 September**, on the same URL, with no change
+at our end. Two more days of heavy flapping followed — 0 to 8 countries per
+reading, hour to hour — and it has been steady since the 10th.
+
+**What the wrong conclusion was built on.** A plain-text `404 page not found`
+held for twelve hours across two independent networks, after two days of
+decline. Every part of that was true. The inference — that a 404 means gone
+where a 503 means down — is the sort that is usually right and was not.
+
+The lesson is not "check harder". It is that **an outage has no upper bound
+you can infer from its symptoms**, and a conclusion about a service's future
+should not be written into a document that later sessions will treat as
+settled. What should have been recorded is what was measured: the errors, the
+hours, the cost. The prediction that it would not return added nothing and was
+the only part that turned out false.
+
+**Nothing downstream depended on the wrong conclusion**, which is the one piece
+of luck here. The scorer was already built so that a dead source yields no
+verdict, and that behaviour is correct whether a source is dead for a day or
+for good.
 
 ### GB does not publish electricity to ENTSO-E
 
 Post-Brexit. The backfill returns 8 of 9 countries and names the reason. If
 Britain is wanted, the fallback is Elexon BMRS or the NESO data portal, both
 free and key-free. Not yet written.
+
+### GitHub stopped starting the collector, and every light stayed green
+
+From **13 September 2026** GitHub's scheduler started the hourly job only every
+four to six hours: 24 readings a day through the 12th, then 17 on the 13th and
+five or six a day from the 14th, for two weeks before anyone looked. Every run
+that happened succeeded. The run numbers are consecutive — the missing runs
+were never created, so there was nothing to fail. `collect.py --check` judged
+the sources, the sources were fine, and the workflow went green on every run
+while about three-quarters of the readings went missing.
+
+What it cost, by claim. The hour-of-week baseline needs six readings per
+hour-of-week and each one was getting a reading about one week in four; at
+that rate it would not fill before launch. Claim 03's Twitch prediction asks for four *consecutive*
+hourly readings above threshold — impossible to pass on a five-a-day cadence
+for a reason that has nothing to do with the launch. Thursday evenings, which
+claim 02's traffic witness depends on, were thin. Electricity lost little: each
+ENTSO-E call carries twelve hours, so a reading every five hours still left
+most evenings whole.
+
+The lesson is the same one as the Russian PlayStation Store, from the other
+side. **A health check that asks "did the sources answer?" cannot see a run
+that never started.** Only the gaps between readings can. `--check` now also
+fails when fewer than four readings arrived in the six hours before the newest
+one, and names the scheduler rather than a source. Replayed over the whole
+record, it stays silent 2–12 September and fires first at 17:21 UTC on
+13 September.
+
+The fix is a second clock. `heartbeat.js` is a separate Cloudflare Worker that
+asks GitHub to run the workflow at five past every hour; GitHub's own schedule
+stays at :37 as a fallback (off the top of the hour, where its queue is most
+congested). A `--gate` step makes the fallback stand down when a reading less
+than 60 minutes old already exists, so the two never double-count. (It was 45
+until GitHub started the ":37" run at :55 and :59 and produced two duplicate
+readings in the first two days.) Separate
+from `worker.js` on purpose — one holds a GitHub token, the other takes the
+public's answers.
+
+**Two clocks need the runs to see each other.** On 29 September the fallback
+started 29 minutes late, at the same second as the heartbeat's run, queued
+behind it, and then woke up on the commit that had triggered it — from before
+the reading it waited for. It collected a duplicate, and its commit hit a
+conflict on the generated files that the retry loop could not get out of. The
+checkout now takes the branch as it is when the run starts, and on a conflict
+the commit step keeps its own generated files and rebuilds them over the
+combined history. Snapshots themselves never collide: each run writes its own.
+
+**The top-of-the-hour GitHub schedule is best-effort and was never a
+guarantee.** Do not move the collector back onto it alone.
 
 ### GitHub Actions shows local time; snapshots are named in UTC
 
@@ -506,9 +601,88 @@ secret — the browser calls that endpoint, so the URL is public by
 construction. Until the variable is set the collector reports "skipped"
 exactly as before.
 
-**`chicago`** — a second, independent transit system — is in the plan with no
-code. It matters because New York is currently a single point of failure for
-claim 01's strongest evidence.
+### Chicago, and the backfill that nobody was running
+
+`fetch_chicago` is in `backfill.py` as of 7 September 2026, reading
+`data.cityofchicago.org` dataset `6iiy-9s97` — daily bus, rail and total
+boardings, back to 2001. It exists for redundancy: New York was the only place
+we could see whether people travelled to work, so claim 01's strongest evidence
+had no fallback if the MTA feed were late or revised on 19 November. The
+endpoint was confirmed from a browser before a line was written, because this
+environment cannot reach it.
+
+Chicago brings something New York does not: **the CTA labels every day** as
+weekday, Saturday, or Sunday-and-holiday. In the New York series every holiday
+had to be found by hunting for dips. Here the operator says so, and a weekday
+carrying a weekend code *is* a holiday.
+
+The codes are W, A and U, but that is derived in `_day_type_meaning` rather
+than asserted — for each code the function reads which weekdays actually carry
+it. A code book remembered rather than read is how a wrong assumption survives,
+and the years before 2020 are of limited use anyway: the pandemic moved the
+level so far that anything older is a different city.
+
+**The bigger find: the backfill only ran by hand.** Its own comment said
+"history does not change, so there is nothing to gain from running it on a
+schedule". That is true of 2023 and false of every source here that publishes
+daily — yesterday becomes history every day. The MTA series was frozen at
+3 September, and `score.py` reads that file to decide the subway prediction.
+**A backfill nobody remembers to run is a prediction that can never be
+scored,** and it would have been discovered on 20 November.
+
+It now runs daily at 06:30 UTC, after both cities have published the previous
+day. `inputs.start_date` exists only for `workflow_dispatch`, so the scheduled
+run passed an empty string; both the workflow and `backfill.py` now fall back
+to 2023-01-01 rather than crashing on `date.fromisoformat("")`.
+
+### A daily backfill must never shrink a file
+
+Making the backfill daily (above) had a cost nobody priced. Every run
+rewrote each file from that run's results, which is safe only when a person
+watches the run. On 29 September 2026 three ENTSO-E monthly chunks timed out
+and the rewrite dropped them: October 2025 for Germany, November 2025 for
+Spain, November 2022 for Italy — the autumn baseline the electricity
+prediction is scored against. `test_power.py` failed on main, and only
+because it happened to read those months.
+
+Restored the same day by merging the three committed versions of the file;
+git history is the reason nothing was lost for good. Since then
+`backfill._keep_history` decides what is written: ENTSO-E is merged hour by
+hour with what is on disk, and any source whose run fails keeps its old file
+with `last_error` beside it. The same would otherwise have hit the MTA file on
+the morning of 20 November and left the subway prediction unscoreable.
+`test_backfill.py` pushes on both.
+
+### Take-Two's share price, once a day, and never a verdict
+
+Added 29 September 2026. The earlier plan was to download Take-Two, Sony and
+Microsoft prices by hand in early December, while minute-level history was
+still free. That is the backfill nobody runs again: it depends on someone
+remembering, and the gap would have been found in January.
+
+**Only Take-Two.** Sony and Microsoft are far too large for one game to move
+their shares. The Nasdaq-100 (through the QQQ fund; the provider serves no
+indices) travels beside it, so a day the whole market fell is not read as a
+day GTA fell.
+
+**Daily, from the backfill job, via Alpha Vantage** (`ALPHAVANTAGE_KEY`).
+Yahoo and Stooq refuse GitHub's runners; a key-based provider does not block
+by address. Each call returns the last hundred trading days, so a missed day
+is filled by the next run. Unlike every other backfill file, `shares.json` is
+**merged, never rewritten**: a failed call keeps what is on disk, because
+nothing older than a hundred days can be fetched again. `test_shares.py`
+pushes on exactly that.
+
+**It lives under claim 06 as a MEASURED fact with no prediction.** A share
+price says what investors expect the game to earn, not whether anybody stayed
+home, and launch days often fall on record sales because the news was priced
+in months earlier. Scoring it would publish a result the price cannot carry.
+The page prints the close, the day's move against the Nasdaq-100, and — only
+once 40 days of history exist — how far an ordinary day moves it.
+
+The provider's response shape was written from its documentation; this
+environment cannot reach it. **The first live backfill run is the real test,**
+and `test_shares.py` should be corrected against what it actually returns.
 
 ### Two cleanups, done 8 September 2026
 
@@ -535,13 +709,44 @@ collector has a `sample_titles` of its own; that one is unrelated and stays.
 
 ---
 
+### `listings_*` was measuring the page size, not the market
+
+Found on 9 September 2026 in `state.py`'s own frozen-metric table, which is
+what that table is for.
+
+Five of the nine eBay listing counts read exactly **100** in every reading —
+`listings_uk_ps5_pro`, `listings_uk_xbox_series_x`, and all three US products.
+Nothing ever exceeded 100 in any market. That is not a market that happens to
+hold a round number of consoles: the request carries `&limit=100`, and `count`
+was simply the number of items that came back.
+
+So the metric reported that we had hit the limit, and it could only ever move
+downward. On a launch day when consoles get scarce it would have looked
+entirely plausible while measuring an API parameter.
+
+Nobody was misled — `listings_*` was published in `series.json` and
+`latest.json` but was never a witness on the page or a scored metric. Claim 04
+is exactly where somebody would have reached for it later, though.
+
+**Replaced by two metrics rather than one series quietly changing meaning.**
+`ebay_matches_*` is eBay's own match total; `ebay_sampled_*` is how many we
+actually priced, which is worth having on its own because it says how much
+weight the median can carry. Snapshots taken before today carry no total, so
+`ebay_matches_*` reads null for them. Missing, never invented.
+
+**The general lesson: a metric pinned to a round number is a parameter, not a
+measurement.** Check the request before believing the reading.
+
+---
+
 ## 7. Settled, do not revisit without new evidence
 
 **Rejected sources**, each with a documented reason: Reddit (API closed,
 November 2025), GitHub (bot activity dominates; issue comments fell ~98% while
 pushes doubled), Stack Overflow (from ~21k questions a week in early 2023 to
 roughly 40 a day by August 2026 — kept for the record, useless as a work
-signal), Yahoo Finance (runner IPs blocked), Best Buy (US phone number
+signal), Yahoo Finance (runner IPs blocked; share prices now come daily from
+Alpha Vantage instead), Best Buy (US phone number
 required), GDELT by-country (HTTP 429 from runner IPs; the by-language series
 does work).
 
@@ -569,14 +774,30 @@ stills, characters, logos, or the Pricedown typeface.
   that were rewritten), `test_score.py` (the verdicts, and the invariant that
   absent data never reads as "failed"), `test_schema.py` (the D1 schema against
   the statements `worker.js` actually issues), `test_check.py` (the health
-  check, from both sides: a blink must not fail the run, a dead source must).
-  Run all seven after touching collection or aggregation. The counts move; the
+  check, from both sides: a blink must not fail the run, a dead source must;
+  and a thin cadence must fail it, with the gate that keeps two clocks from
+  double-counting), `test_chicago.py` (the CTA parser, and the day-type
+  derivation), `test_traffic.py` (only kept points count, and the kept set is
+  locked for the prediction window), `test_shares.py` (the provider's errors
+  read as errors, and a failed call never shrinks the stored history),
+  `test_backfill.py` (no backfill run writes a file with less history than
+  it had).
+  Run all eleven after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
   force it. `test_power.py` had an `ok=` parameter for one run, and two checks
   passed while asserting nothing. One way to state an expectation, no override.
 - `collect.py --check` exercises the collectors.
+- **Never carry a generated file in a feature branch.** `STATE.md`,
+  `public/series.json`, `public/latest.json`, `public/chart.json` and
+  `public/predictions.json` are rewritten from scratch by the hourly workflow.
+  A branch that carries its own copy conflicts with every run, and the conflict
+  preserves nothing: hand-merging two generated files produces a report that
+  describes neither state. Before pushing, reset them to main
+  (`git checkout origin/main -- STATE.md public/`) and let the first run after
+  the merge regenerate them. This has now caused a merge conflict three times —
+  twice on `public/`, once on `STATE.md` after `state.py` joined the workflow.
 - **Never invent a number.** A missing country stays missing; a dead measurement
   point is dropped, not averaged in; an index without enough baseline prints
   nothing. An empty cell is more honest than a filled false one, and the whole

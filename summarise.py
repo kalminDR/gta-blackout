@@ -17,11 +17,13 @@ numbers and never derived ones.
 Run:  python summarise.py
 """
 
+import collect
 import glob
 import indices
 import power
 import predictions
 import score
+import shares
 import json
 import os
 import sys
@@ -52,6 +54,10 @@ STEAM_RANK_APPIDS = {271590: "steam_rank_gta5", 3240220: "steam_rank_gta5_enh"}
 # is not a commuter route. Both mirror the collector's own thresholds.
 MIN_SEGMENT_METRES = 700
 MIN_ROAD_CLASS = 4
+
+# The first snapshot of the rebuilt traffic collector (zoom 8, six candidates
+# per city). Everything earlier was a different set of road segments.
+TRAFFIC_SINCE = "2026-09-06T09:00:00+00:00"
 
 CITY_KEYS = {
     "Budapest": "traffic_budapest",
@@ -200,14 +206,21 @@ def flatten(snap):
     # --- Traffic: how much slower than a free-flowing road.
     # Median across several points per city, so one dud measurement point
     # or a segment that shifts cannot drag the city's number around.
+    #
+    # Only the kept points count, across the whole history, so the series is
+    # one instrument from start to finish. Readings from before the rebuild
+    # are left out even where a point's name survived it: at the old zoom the
+    # same name sat on a different stretch of road.
     traffic = src.get("traffic") or {}
+    rebuilt = (row["t"] or "") >= TRAFFIC_SINCE
     for city, key in CITY_KEYS.items():
         entry = traffic.get(city) or {}
-        readings = entry.get("points")
+        readings = entry.get("points") if rebuilt else None
         if not isinstance(readings, list):
-            # Snapshots from before the multi-point change had one flat
-            # reading per city. Keep reading them so the history survives.
-            readings = [entry] if entry else []
+            readings = []
+        kept = collect.CITY_POINTS.get(city, {})
+        readings = [r for r in readings
+                    if isinstance(r, dict) and r.get("point") in kept]
 
         # Sum the seconds, then take the ratio - which is how traffic
         # indices are normally built. It weights each point by how long its
@@ -261,7 +274,7 @@ def flatten(snap):
         # Zero rejections is a measurement, not an absence: it says the gate
         # looked and found nothing wrong. Writing it as null made a working
         # quality gate read as a dead metric in the status report.
-        row[f"{key}_points_rejected"] = rejected
+        row[f"{key}_points_rejected"] = rejected if rebuilt else None
         row[f"{key}_seconds_measured"] = free_total or None
         # A rising road class means a point has drifted onto a smaller road.
         row[f"{key}_road_class"] = round(median(road_classes), 1) if road_classes else None
@@ -294,7 +307,18 @@ def flatten(snap):
         for prod in ("ps5_pro", "ps5", "xbox_series_x"):
             row[f"price_{short}_{prod}"] = as_number(
                 dig(src, "console_prices", market, prod, "median"))
-            row[f"listings_{short}_{prod}"] = as_number(
+            # `listings_*` used to carry the count of priced items, which the
+            # request caps at 100. Five of nine markets were pinned there for
+            # every reading, so the number said "we hit the limit", not "this
+            # many consoles are for sale" -- and it could only ever move down.
+            #
+            # Two honest metrics replace it rather than one series quietly
+            # changing meaning halfway through. How many eBay says match:
+            row[f"ebay_matches_{short}_{prod}"] = as_number(
+                dig(src, "console_prices", market, prod, "matches"))
+            # And how many we actually priced, which says how much weight the
+            # median can carry.
+            row[f"ebay_sampled_{short}_{prod}"] = as_number(
                 dig(src, "console_prices", market, prod, "count"))
 
     for prod in ("ps5_pro", "ps5", "xbox_series_x"):
@@ -573,6 +597,15 @@ def main():
         print(f"warning: evening ratio unavailable: {str(e)[:120]}",
               file=sys.stderr)
 
+    # Take-Two's latest close, from the daily backfill. A witness under claim
+    # 06 that never gets a verdict; see shares.py for why.
+    try:
+        shares_now = shares.summary(shares.load())
+    except Exception as e:
+        shares_now = None
+        print(f"warning: share price unavailable: {str(e)[:120]}",
+              file=sys.stderr)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
@@ -580,6 +613,7 @@ def main():
                    "observed": observed_ranges(points),
                    "panels": panels,
                    "evening": evening,
+                   "shares": shares_now,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
 

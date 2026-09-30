@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-08 10:18 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-30 19:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
-- **1 planned sources have no code at all**: chicago
-- **155 snapshots** over 145.0 hours (6.0 days); last one 0.0 h ago
+- **0 planned sources have no code at all**
+- **432 snapshots** over 681.9 hours (28.4 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-08/1017.json`
+Newest snapshot: `data/2026-09-30/1906.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -29,18 +29,23 @@ Newest snapshot: `data/2026-09-08/1017.json`
 
 ## Planned but not built
 
-- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_predictions.py, test_score.py but not registered as a source
-- **`chicago`** — Did people commute: a second, independent transit system — **no code anywhere in the repo**
+- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_backfill.py, test_chicago.py, test_predictions.py, test_score.py but not registered as a source
+- **`chicago`** — Did people commute: a second, independent transit system — referenced in backfill.py, test_chicago.py but not registered as a source
 - **`wikipedia`** — Attention: edits and pageviews, six languages — referenced in backfill.py but not registered as a source
 
 Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot activity dominates; issue comments fell ~98%); **stackoverflow** (Volume collapsed to ~1% of 2023 by August 2026); **yahoo_finance** (Runner IPs blocked); **bestbuy** (Requires a US phone number); **gdelt** (Runner IPs rate-limited; manual browser fetch instead)
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-08 10:17 UTC`
-- 155 of ~146 expected hourly readings
-- **1 gaps over two hours:**
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-30 19:06 UTC`
+- 432 of ~682 expected hourly readings
+- **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
+  - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
+  - 3.2 h, 2026-09-13 17:21 → 20:36 UTC
+  - 2.4 h, 2026-09-13 20:36 → 23:03 UTC
+  - 5.4 h, 2026-09-13 23:03 → 04:29 UTC
+  - 6.0 h, 2026-09-14 04:29 → 10:29 UTC
 
 ## Metrics needing attention
 
@@ -48,65 +53,48 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/155 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/155 | never returned a number — source not authenticating |
-| 🔴 | `baseline_quality` | 0/155 | never returned a number |
-| 🔴 | `deviations` | 0/155 | never returned a number |
-| 🔴 | `listings_uk_ps5_pro` | 51/155 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 51/155 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 51/155 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 51/155 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 51/155 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 115/155 | frozen at 6 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 149/155 | frozen at 20 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 150/155 | zero in 11 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 143/155 | zero in 10 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 56/155 | zero in 20 of 24 readings |
-| 🔴 | `traffic_newyork_delay_pct` | 143/155 | zero in 11 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 143/155 | zero in 12 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 139/155 | zero in 22 of 24 readings |
-| 🔴 | `yt_subscribers` | 151/155 | frozen at 1.37e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 139/155 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
-| 🟠 | `power_de_lag_hours` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_de_load_mw` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_es_lag_hours` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_es_load_mw` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_fr_lag_hours` | 26/155 | missing 22 of 24 since it started |
-| 🟠 | `power_fr_load_mw` | 26/155 | missing 22 of 24 since it started |
-| 🟠 | `power_hu_lag_hours` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_hu_load_mw` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_it_lag_hours` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_it_load_mw` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_nl_lag_hours` | 26/155 | missing 22 of 24 since it started |
-| 🟠 | `power_nl_load_mw` | 26/155 | missing 22 of 24 since it started |
-| 🟠 | `power_pl_lag_hours` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_pl_load_mw` | 27/155 | missing 22 of 24 since it started |
-| 🟠 | `power_se_lag_hours` | 26/155 | missing 22 of 24 since it started |
-| 🟠 | `power_se_load_mw` | 26/155 | missing 22 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/432 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/432 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 328/432 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 392/432 | frozen at 6 for all 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 327/432 | zero in 15 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 327/432 | zero in 10 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 327/432 | zero in 11 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 348/432 | zero in 23 of 24 readings |
+| 🔴 | `yt_subscribers` | 428/432 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 348/432 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
 
-**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_losangeles_seconds_measured`, `traffic_losangeles_travel_index`, `yt_QdBZY2fkU-0_likes_per_hour`.
+**Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | **null** |
+| displacement | 102.0 (from 9 of 9 components) |
 | work | **null** |
-| infrastructure | **null** |
+| infrastructure | 100.0 (from 1 of 2 components) |
 
-Baseline needs 6 samples per hour-of-week bucket. **1 of 168 buckets qualify** (144 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
-| `entsoe_load.json` | 64,297 in 8 series | 2022-10-01 | 2026-09-04 | 2380 KB |
-| `gdelt_geography.json` | 86 | 2026-06-09 | 2026-09-06 | 4 KB |
-| `mta_ridership.json` | 10,600 | 2023-01-01 | 2026-09-03 | 550 KB |
-| `stackexchange.json` | 176 in 2 series | 2023-01-01 | 2026-09-05 | 9 KB |
+| `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
+| `entsoe_load.json` | 68,905 in 8 series | 2022-10-01 | 2026-09-28 | 2550 KB |
+| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
+| `mta_ridership.json` | 10,823 | 2023-01-01 | 2026-09-28 | 562 KB |
+| `shares.json` | 202 in 2 series | 2026-05-06 | 2026-09-29 | 11 KB |
+| `stackexchange.json` | 200 in 2 series | 2023-01-01 | 2026-09-29 | 10 KB |
 | `wikipedia.json` | 8,034 in 6 series | 2023-01-01 | 2026-08-31 | 284 KB |
-| `wikipedia_pageviews.json` | 8,564 in 7 series | 2023-01-01 | 2026-09-05 | 268 KB |
+| `wikipedia_pageviews.json` | 8,732 in 7 series | 2023-01-01 | 2026-09-29 | 274 KB |
 
 ## Front end
 
