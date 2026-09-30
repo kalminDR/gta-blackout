@@ -635,6 +635,20 @@ day. `inputs.start_date` exists only for `workflow_dispatch`, so the scheduled
 run passed an empty string; both the workflow and `backfill.py` now fall back
 to 2023-01-01 rather than crashing on `date.fromisoformat("")`.
 
+### Chicago arrives two months late, so it is not a launch-day fallback
+
+Measured from the backfill's own history, not assumed: the file ended at
+30 June on 28 September and at 31 July on 29 September. The city publishes a
+whole month at once, about two months after it ends. **19 November will
+therefore appear around the end of January 2027.**
+
+So the reason Chicago was added — a fallback if the MTA feed is late on
+20 November — does not hold. On launch day New York is still claim 01's only
+transit witness. Chicago keeps a different job: an independent second city
+that can confirm, or fail to confirm, the New York result in the new year,
+and that job is worth saying on the page in those words rather than implying
+two witnesses on the day.
+
 ### A daily backfill must never shrink a file
 
 Making the backfill daily (above) had a cost nobody priced. Every run
