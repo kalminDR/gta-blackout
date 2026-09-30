@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-09-30 13:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-09-30 14:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **426 snapshots** over 675.9 hours (28.2 days); last one 0.0 h ago
+- **427 snapshots** over 676.9 hours (28.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-09-30/1306.json`
+Newest snapshot: `data/2026-09-30/1406.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-09-30 13:06 UTC`
-- 426 of ~676 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-09-30 14:06 UTC`
+- 427 of ~677 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,22 +53,22 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/426 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/426 | never returned a number — source not authenticating |
-| 🔴 | `listings_de_xbox_series_x` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_ps5_pro` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_uk_xbox_series_x` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_ps5_pro` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `listings_us_xbox_series_x` | 322/426 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 386/426 | frozen at 6 for all 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 321/426 | zero in 16 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 321/426 | zero in 11 of 24 readings |
-| 🔴 | `traffic_warsaw_delay_pct` | 321/426 | zero in 11 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 342/426 | zero in 23 of 24 readings |
-| 🔴 | `yt_subscribers` | 422/426 | frozen at 1.38e+07 for all 24 readings |
-| 🔴 | `yt_subscribers_per_hour` | 342/426 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/427 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/427 | never returned a number — source not authenticating |
+| 🔴 | `listings_de_xbox_series_x` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_ps5_pro` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_uk_xbox_series_x` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_ps5_pro` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `listings_us_xbox_series_x` | 323/427 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 387/427 | frozen at 6 for all 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 322/427 | zero in 15 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 322/427 | zero in 11 of 24 readings |
+| 🔴 | `traffic_warsaw_delay_pct` | 322/427 | zero in 11 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 343/427 | zero in 23 of 24 readings |
+| 🔴 | `yt_subscribers` | 423/427 | frozen at 1.38e+07 for all 24 readings |
+| 🔴 | `yt_subscribers_per_hour` | 343/427 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`, `yt_QdBZY2fkU-0_likes_per_hour`, `yt_VQRLujxTm3c_likes_per_hour`.
 
@@ -78,7 +78,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 |---|---|
 | attention | **null** |
 | displacement | 113.0 (from 9 of 9 components) |
-| work | 98.0 (from 6 of 6 components) |
+| work | 94.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 1 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
@@ -88,13 +88,13 @@ Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 68,713 in 8 series | 2022-10-01 | 2026-09-27 | 2543 KB |
-| `gdelt_geography.json` | 80 | 2026-07-05 | 2026-09-29 | 3 KB |
-| `mta_ridership.json` | 10,816 | 2023-01-01 | 2026-09-27 | 561 KB |
-| `shares.json` | 200 in 2 series | 2026-05-06 | 2026-09-28 | 11 KB |
-| `stackexchange.json` | 199 in 2 series | 2023-01-01 | 2026-09-28 | 10 KB |
+| `entsoe_load.json` | 68,905 in 8 series | 2022-10-01 | 2026-09-28 | 2550 KB |
+| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
+| `mta_ridership.json` | 10,823 | 2023-01-01 | 2026-09-28 | 562 KB |
+| `shares.json` | 202 in 2 series | 2026-05-06 | 2026-09-29 | 11 KB |
+| `stackexchange.json` | 200 in 2 series | 2023-01-01 | 2026-09-29 | 10 KB |
 | `wikipedia.json` | 8,034 in 6 series | 2023-01-01 | 2026-08-31 | 284 KB |
-| `wikipedia_pageviews.json` | 8,725 in 7 series | 2023-01-01 | 2026-09-28 | 274 KB |
+| `wikipedia_pageviews.json` | 8,732 in 7 series | 2023-01-01 | 2026-09-29 | 274 KB |
 
 ## Front end
 
