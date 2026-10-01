@@ -1147,7 +1147,12 @@ function esc(v){
 
 async function loadPredictions(){
   try {
-    const r = await fetch("predictions.json", {cache: "no-cache"});
+    // public/, like latest.json and chart.json: summarise.py writes all
+    // three there. Until 1 October 2026 this asked for "predictions.json" at
+    // the top level, which does not exist -- so the six predictions, published
+    // on 6 September, never once appeared on the page, and the catch below
+    // made sure nothing said so.
+    const r = await fetch("public/predictions.json", {cache: "no-cache"});
     if (!r.ok) return;
     const doc = await r.json();
     renderPredictions(doc);
