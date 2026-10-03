@@ -222,7 +222,23 @@ def _expects_zero(key):
     return key.endswith(("_incidents", "_service_issues", "_points_rejected"))
 
 
-def _judge(vals, n_points, expects_zero=False):
+# Metrics whose zero is a real reading for part of every day. A city's road
+# delay is exactly zero overnight, when the roads are empty, so "zero in more
+# than 40% of readings" is simply night-time. London reads zero in about 15 of
+# 24 hours and Los Angeles in about 10; flagging that as a fault put three
+# healthy cities in red every day once readings became hourly.
+#
+# The failure that does matter for these is a city that never registers delay
+# at all -- the deaf points dropped on 27 September. So these are judged on
+# how often they move, not on how often they rest.
+MIN_MOVING = 3
+
+
+def _zero_at_rest(key):
+    return key.startswith("traffic_") and key.endswith("_delay_pct")
+
+
+def _judge(vals, n_points, expects_zero=False, zero_at_rest=False):
     """Verdict on one metric over one window. Returns (severity, flags)."""
     nums = [v for v in vals if isinstance(v, (int, float))]
     present, nulls = len(nums), len(vals) - len(nums)
@@ -230,7 +246,13 @@ def _judge(vals, n_points, expects_zero=False):
 
     if present == 0:
         return 3, ["never returned a number"]
-    if not expects_zero:
+    if zero_at_rest:
+        moving = sum(1 for v in nums if v != 0)
+        if present >= 20 and moving < MIN_MOVING:
+            sev = max(sev, 3)
+            flags.append(f"registered delay in only {moving} of {present} "
+                         "readings -- deaf rather than asleep")
+    elif not expects_zero:
         if len(set(nums)) == 1 and present >= 20:
             sev = max(sev, 3)
             flags.append(f"frozen at {nums[0]:g} for all {present} readings")
@@ -270,13 +292,22 @@ def metric_health():
         # the metrics that genuinely stopped moving. yt_subscribers belongs
         # here too -- YouTube rounds the public count, so it is constant by
         # construction rather than by failure.
-        if k.endswith(("_road_class", "_points_ok", "yt_subscribers")):
+        #
+        # ebay_sampled_* is how many listings we priced, and the request asks
+        # for at most 100, so it sits at 100 whenever the market has plenty.
+        # That is the sample size working, not a stuck collector; the market's
+        # own size is ebay_matches_*, which is judged normally.
+        # polymarket_market_count is how many GTA markets exist, which changes
+        # when someone opens or closes one -- a few times a season.
+        if (k.endswith(("_road_class", "_points_ok", "yt_subscribers",
+                        "polymarket_market_count"))
+                or k.startswith("ebay_sampled_")):
             continue
 
-        ez = _expects_zero(k)
-        sev, flags = _judge(vals, n_points, ez)
+        ez, zr = _expects_zero(k), _zero_at_rest(k)
+        sev, flags = _judge(vals, n_points, ez, zr)
         recent = vals[-n_recent:]
-        r_sev, r_flags = _judge(recent, n_recent, ez)
+        r_sev, r_flags = _judge(recent, n_recent, ez, zr)
         r_present = len([v for v in recent if isinstance(v, (int, float))])
 
         # Broken over the whole history but clean over the last day is a
