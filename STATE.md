@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-04 06:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-04 07:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **515 snapshots** over 764.9 hours (31.9 days); last one 0.0 h ago
+- **516 snapshots** over 765.9 hours (31.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-04/0606.json`
+Newest snapshot: `data/2026-10-04/0706.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-04 06:06 UTC`
-- 515 of ~765 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-04 07:06 UTC`
+- 516 of ~766 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,27 +53,27 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/515 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/515 | never returned a number — source not authenticating |
-| 🔴 | `ebay_sampled_de_xbox_series_x` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_uk_ps5` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_uk_ps5_pro` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_uk_xbox_series_x` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_us_ps5` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_us_ps5_pro` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `ebay_sampled_us_xbox_series_x` | 411/515 | frozen at 100 for all 24 readings |
-| 🔴 | `polymarket_market_count` | 475/515 | frozen at 6 for all 24 readings |
-| 🔴 | `power_es_lag_hours` | 338/515 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 337/515 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 344/515 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 335/515 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 342/515 | frozen at 0.86 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 504/515 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 504/515 | frozen at 31 for all 24 readings |
-| 🔴 | `traffic_budapest_delay_pct` | 410/515 | zero in 11 of 24 readings |
-| 🔴 | `traffic_london_delay_pct` | 410/515 | zero in 15 of 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 410/515 | zero in 11 of 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 431/515 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/516 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/516 | never returned a number — source not authenticating |
+| 🔴 | `ebay_sampled_de_xbox_series_x` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_uk_ps5` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_uk_ps5_pro` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_uk_xbox_series_x` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_us_ps5` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_us_ps5_pro` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `ebay_sampled_us_xbox_series_x` | 412/516 | frozen at 100 for all 24 readings |
+| 🔴 | `polymarket_market_count` | 476/516 | frozen at 6 for all 24 readings |
+| 🔴 | `power_es_lag_hours` | 339/516 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 338/516 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 345/516 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 336/516 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 343/516 | frozen at 0.86 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 505/516 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 505/516 | frozen at 31 for all 24 readings |
+| 🔴 | `traffic_budapest_delay_pct` | 411/516 | zero in 12 of 24 readings |
+| 🔴 | `traffic_london_delay_pct` | 411/516 | zero in 16 of 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 411/516 | zero in 11 of 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 432/516 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `traffic_warsaw_delay_pct`, `yt_EiQEBYDox_k_likes_per_hour`.
 
