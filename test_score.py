@@ -113,8 +113,15 @@ check("and on the day it is provisional",
 print("\n4. Servers: one PlayStation incident outside Russia")
 check("an incident passes",
       score.score_servers([hourly(LAUNCH, 20, psn_incidents=2)])["verdict"], "passed")
-check("a clean day fails",
-      score.score_servers([hourly(LAUNCH, 20, psn_incidents=0)])["verdict"], "failed")
+check("a clean day fails once the two-day window has closed",
+      score.score_servers([hourly(LAUNCH, 20, psn_incidents=0)], today=AFTER)["verdict"],
+      "failed")
+# The rule covers 19 and 20 November. Printing FAILED on launch night, with a
+# day still to run, is what the first launch rehearsal showed (rehearsal.py).
+r = score.score_servers([hourly(LAUNCH, 20, psn_incidents=0)], today=LAUNCH)
+check("a clean launch night is not yet a failure", r["verdict"], None)
+check("it is provisional, and says the window is still open",
+      (r["provisional"], "20 November" in (r["reason"] or "")), (True, True))
 check("the day after counts too",
       score.score_servers([hourly(LAUNCH + datetime.timedelta(days=1), 3,
                                   psn_incidents=1)])["verdict"], "passed")
@@ -153,7 +160,8 @@ partial = [hourly(LAUNCH, 20, **{g: 100 for g in BASKET[:-1]})]
 full_other = [hourly(datetime.date(2026, 10, 1), 20, **{g: 100 for g in BASKET})]
 r = score.score_steam(partial + full_other, today=AFTER)
 check("an incomplete launch reading yields no verdict", r["verdict"], None)
-check("rather than a spuriously low total", "basket" in (r["reason"] or ""), True)
+check("rather than a spuriously low total, and says so",
+      "all six games" in (r["reason"] or ""), True)
 
 print("\n7. score_all never raises, and never invents")
 r = score.score_all([], snapshots=[], mta=[])
