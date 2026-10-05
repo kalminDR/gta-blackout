@@ -493,7 +493,8 @@ about gaps.
 
 **The six predictions are published**, as of 6 September 2026, in
 `predictions.py` and on the page under `#predictions`. **They first appeared
-on the page on 1 October** (PR #17): the page asked for `predictions.json` at
+on the page on 5 October** (PR #17, found 1 October, merged the 5th; the page
+now says so, with a link to the 6 September commit): the page asked for `predictions.json` at
 the top level while `summarise.py` writes it into `public/`, and the error
 handler left the section empty without a word. The commit history is what
 proves they were written in advance. A section that fails silently is the
