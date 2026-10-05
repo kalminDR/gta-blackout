@@ -535,6 +535,36 @@ def observed_ranges(points):
     }
 
 
+def subway_now(mta_rows, weeks=4):
+    """New York's latest daily subway count, for claim 01, or None.
+
+    The MTA publishes the previous day's figures every morning, and the
+    subway row sometimes arrives a day after the commuter-rail rows, so the
+    newest date in the file can carry no subway count yet. The latest day
+    *with* a count is used, never the newest date.
+
+    Beside it, the same weekday averaged over the previous `weeks` weeks --
+    a plain arithmetic comparison a reader can check, not a deviation score.
+    Days missing from the record are skipped, never filled.
+    """
+    by_day = {}
+    for r in mta_rows or []:
+        if r.get("mode") == "Subway" and isinstance(r.get("count"), (int, float)):
+            by_day[r["date"]] = r["count"]
+    if not by_day:
+        return None
+    last = max(by_day)
+    day = datetime.fromisoformat(last).date()
+    earlier = [by_day.get((day - timedelta(weeks=w)).isoformat())
+               for w in range(1, weeks + 1)]
+    earlier = [v for v in earlier if v is not None]
+    out = {"date": last, "weekday": day.strftime("%A"), "rides": int(by_day[last])}
+    if len(earlier) == weeks:
+        out["same_weekday_mean"] = int(round(sum(earlier) / weeks))
+        out["weeks_compared"] = weeks
+    return out
+
+
 def main():
     files = sorted(glob.glob(os.path.join(DATA_DIR, "*", "*.json")))
     if not files:
@@ -606,6 +636,17 @@ def main():
         print(f"warning: share price unavailable: {str(e)[:120]}",
               file=sys.stderr)
 
+    # New York's subway, the strongest witness for claim 01, from the daily
+    # backfill. It was scored for the predictions but never shown on the page.
+    try:
+        mta_path = os.path.join(DATA_DIR, "backfill", "mta_ridership.json")
+        with open(mta_path, encoding="utf-8") as f:
+            subway = subway_now(json.load(f).get("data"))
+    except Exception as e:
+        subway = None
+        print(f"warning: subway figure unavailable: {str(e)[:120]}",
+              file=sys.stderr)
+
     with open(os.path.join(OUT_DIR, "latest.json"), "w", encoding="utf-8") as f:
         json.dump({"generated_at_utc": now.isoformat(timespec="seconds"),
                    "coverage": coverage,
@@ -614,6 +655,7 @@ def main():
                    "panels": panels,
                    "evening": evening,
                    "shares": shares_now,
+                   "subway": subway,
                    "changes": build_changes(points)},
                   f, ensure_ascii=False, indent=1)
 

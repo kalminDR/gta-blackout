@@ -584,7 +584,7 @@ const CLAIMS = [
     lede: "The most testable part of the claim. If one game takes the evening, "
         + "every other game should empty out at the same moment." },
   { id: "consoles", n: "04", title: "You could not buy a console",
-    lede: "When demand outruns supply, the second-hand price moves first, and "
+    lede: "When demand outruns supply, the resale price moves first, and "
         + "it moves in public." },
   { id: "servers", n: "05", title: "The servers buckled",
     lede: "Sony and Microsoft publish their own service health. If the launch "
@@ -604,6 +604,12 @@ const CLAIMS = [
 // short label, and a sentence maker that takes the percentage deviation from
 // baseline and returns plain English. Anything without a sentence maker stays
 // out of this section and lives in the methods table instead.
+//
+// Present tense, always. Every sentence here reads the newest hourly reading
+// against the usual for that hour of the week, so it describes now. They were
+// written in the past tense for launch day, which made an ordinary Tuesday in
+// October read as though something had already happened. What 19 November
+// did is said by the predictions and their verdicts, not by these lines.
 function pct(v){ return Math.abs(v) < 10 ? Math.abs(v).toFixed(1)+"%" : Math.round(Math.abs(v))+"%"; }
 
 const CITY_LABEL = { budapest:"Budapest", london:"London", berlin:"Berlin",
@@ -613,50 +619,51 @@ const WITNESS = {};
 Object.keys(CITY_LABEL).forEach(function(c){
   WITNESS["traffic_"+c+"_travel_index"] = { claim:"work", label:CITY_LABEL[c]+" roads",
     say: function(d){ return d < 0
-      ? CITY_LABEL[c]+"'s roads were "+pct(d)+" clearer than an ordinary Thursday"
-      : CITY_LABEL[c]+"'s roads were "+pct(d)+" busier than an ordinary Thursday"; } };
+      ? CITY_LABEL[c]+"'s roads are "+pct(d)+" clearer than usual for this hour of the week"
+      : CITY_LABEL[c]+"'s roads are "+pct(d)+" busier than usual for this hour of the week"; } };
 });
-["de","fr","es","it","nl","pl","se","hu"].forEach(function(c){
-  const NAME = { de:"Germany", fr:"France", es:"Spain", it:"Italy",
-                 nl:"the Netherlands", pl:"Poland", se:"Sweden", hu:"Hungary" }[c];
-  WITNESS["power_"+c+"_load_mw"] = { claim:"home", label:NAME+" grid",
-    say: function(d){ return d > 0
-      ? NAME+" drew "+pct(d)+" more electricity than a normal evening"
-      : NAME+" drew "+pct(d)+" less electricity than a normal evening"; } };
-});
+// Raw electricity load is not a witness. A cold evening lifts it as surely as
+// a country staying in, and France on electric heating lifts it most of all --
+// that is the confound this project fell into twice (CLAUDE.md, section 5).
+// Claim 02 hears electricity only through the evening ratio below, which
+// cancels the weather. Listing eight loads as "still learning" also told the
+// reader eight witnesses were coming that never should.
 [["steam_cs2","Counter-Strike 2"],["steam_dota2","Dota 2"],["steam_pubg","PUBG"],
  ["steam_apex","Apex Legends"],["steam_bg3","Baldur's Gate 3"],["steam_rdr2","Red Dead 2"],
  ["steam_gta5","GTA V"],["steam_gta5_enhanced","GTA V Enhanced"]].forEach(function(pair){
   WITNESS[pair[0]] = { claim:"quiet", label:pair[1],
     say: function(d){ return d < 0
-      ? pair[1]+" lost "+pct(d)+" of the players it would normally have right now"
-      : pair[1]+" had "+pct(d)+" more players than normal"; } };
+      ? pair[1]+" has "+pct(d)+" fewer players than usual for this hour"
+      : pair[1]+" has "+pct(d)+" more players than usual for this hour"; } };
 });
 WITNESS["twitch_other_viewers"] = { claim:"quiet", label:"Everything else on Twitch",
   say: function(d){ return d < 0
-    ? "Every other game on Twitch was "+pct(d)+" quieter than normal"
-    : "Every other game on Twitch was "+pct(d)+" busier than normal"; } };
+    ? "Every other game on Twitch is "+pct(d)+" quieter than usual for this hour"
+    : "Every other game on Twitch is "+pct(d)+" busier than usual for this hour"; } };
 [["us","the United States","$"],["uk","Britain","\u00a3"],["de","Germany","\u20ac"]].forEach(function(m){
-  [["ps5","a second-hand PS5"],["ps5_pro","a second-hand PS5 Pro"],
-   ["xbox_series_x","a second-hand Xbox Series X"]].forEach(function(pr){
+  // Not "second-hand": the search has no condition filter, so it prices new,
+  // used and bundled listings alike. What it measures is what sellers on eBay
+  // are asking, and that is what moves when consoles run short.
+  [["ps5","a PS5"],["ps5_pro","a PS5 Pro"],
+   ["xbox_series_x","an Xbox Series X"]].forEach(function(pr){
     WITNESS["price_"+m[0]+"_"+pr[0]] = { claim:"consoles", label:{ps5:"PS5",ps5_pro:"PS5 Pro",xbox_series_x:"Xbox"}[pr[0]]+" \u00b7 "+m[0].toUpperCase(),
       say: function(d){ return d > 0
-        ? "In "+m[1]+", "+pr[1]+" cost "+pct(d)+" more than before the launch"
-        : "In "+m[1]+", "+pr[1]+" cost "+pct(d)+" less than before the launch"; } };
+        ? "In "+m[1]+", sellers on eBay are asking "+pct(d)+" more than usual for "+pr[1]
+        : "In "+m[1]+", sellers on eBay are asking "+pct(d)+" less than usual for "+pr[1]; } };
   });
 });
 WITNESS["psn_incidents"] = { claim:"servers", label:"PlayStation Network",
   say: function(d){ return d > 0
-    ? "Sony was reporting more service problems than usual"
-    : "Sony reported no more trouble than on an ordinary day"; } };
+    ? "Sony is reporting more service problems than usual"
+    : "Sony is reporting no more trouble than usual"; } };
 WITNESS["xbox_service_issues"] = { claim:"servers", label:"Xbox Live",
   say: function(d){ return d > 0
-    ? "Microsoft was reporting more service problems than usual"
-    : "Microsoft reported no more trouble than on an ordinary day"; } };
+    ? "Microsoft is reporting more service problems than usual"
+    : "Microsoft is reporting no more trouble than usual"; } };
 
 // Some witnesses can speak before any baseline exists.
 //
-// A deviation needs weeks of history. A price does not: "a second-hand PS5
+// A deviation needs weeks of history. A price does not: "a PS5
 // costs $525 in America today" is already a fact worth printing, and printing
 // it now is what makes the November comparison mean anything. So a witness may
 // carry a second voice that reads the raw current value, used whenever the
@@ -664,11 +671,11 @@ WITNESS["xbox_service_issues"] = { claim:"servers", label:"Xbox Live",
 const CURRENCY = { us:"$", uk:"\u00a3", de:"\u20ac" };
 const NOW_SAY = {};
 [["us","America"],["uk","Britain"],["de","Germany"]].forEach(function(m){
-  [["ps5","a second-hand PS5"],["ps5_pro","a PS5 Pro"],
+  [["ps5","a PS5"],["ps5_pro","a PS5 Pro"],
    ["xbox_series_x","an Xbox Series X"]].forEach(function(pr){
     NOW_SAY["price_"+m[0]+"_"+pr[0]] = function(v){
-      return "In "+m[1]+", "+pr[1]+" costs "+CURRENCY[m[0]]
-           + Math.round(v).toLocaleString("en-US")+" today"; };
+      return "In "+m[1]+", sellers on eBay are asking "+CURRENCY[m[0]]
+           + Math.round(v).toLocaleString("en-US")+" for "+pr[1]+" today (median)"; };
   });
 });
 Object.keys(CITY_LABEL).forEach(function(c){
@@ -701,30 +708,57 @@ function eveningRows(evening){
   const codes = Object.keys(evening || {}).filter(function(c){ return GRID_NAME[c]; });
   if (!codes.length) return { rows: [], note: null };
 
-  const rows = [], quiet = [];
+  // What is measured: the evening peak divided by the same day's 16:00, set
+  // against autumn evenings of the same kind (weekday or weekend). So the
+  // sentence speaks of the evening's rise, never of "more electricity".
+  //
+  // October is folded into one line. The baseline pools October to
+  // December, and the evening shape drifts across that window: in the four
+  // autumns on record, early-October evenings average about one standard
+  // deviation above it and late-November ones a little below. Through October
+  // several grids therefore read "high" every year, and printing each one
+  // would be the calendar dressed as a finding. 19 November sits in the part
+  // of the window where ordinary weekdays never cleared the bar.
+  const rows = [], quiet = [], seasonal = [];
+  let day = null;
   codes.forEach(function(c){
     const e = evening[c], name = GRID_NAME[c];
+    day = day || e.day;
     if (e.speaks && typeof e.deviation_pct === "number"){
+      if (e.day && e.day.slice(5, 7) === "10"){ seasonal.push(name); return; }
       const d = e.deviation_pct;
       rows.push([name + "'s evening",
-        d > 0 ? name + " drew " + Math.abs(d).toFixed(1) + "% more in the evening than an ordinary one"
-              : name + " drew " + Math.abs(d).toFixed(1) + "% less in the evening than an ordinary one"]);
+        name + "'s evening rise over the afternoon was " + Math.abs(d).toFixed(1) + "% "
+        + (d > 0 ? "steeper" : "flatter") + " than on an ordinary autumn " + (e.weekend ? "weekend" : "weekday")]);
     } else if (typeof e.detects_pct === "number"){
-      quiet.push(e.detects_pct);
+      quiet.push([name, e.detects_pct]);
     }
   });
 
-  // One line for everything that stayed quiet, carrying the range of what
-  // those grids could have caught. Six numbers on the page would be the
-  // apparatus talking about itself; this is the same fact in a sentence.
+  // One sentence for everything that stayed quiet, naming the sharpest and
+  // the bluntest grid and what each could have caught. Six numbers on the
+  // page would be the apparatus talking about itself. Naming them matters:
+  // Hungary is usually the bluntest, and it is the grid a Hungarian reader
+  // looks at first, so the page should say plainly how little it can see.
   let note = null;
   if (quiet.length){
-    const lo = Math.min.apply(null, quiet), hi = Math.max.apply(null, quiet);
-    note = quiet.length + (quiet.length === 1 ? " grid" : " grids")
-         + " saw an ordinary evening"
-         + (lo === hi ? ", and would have caught a change of " + lo + "%"
-                      : "; the sharpest would have caught a change of " + lo
-                        + "%, the bluntest needs " + hi + "%");
+    quiet.sort(function(a, b){ return a[1] - b[1]; });
+    const when = day ? new Date(day + "T12:00:00Z").toLocaleDateString("en-GB",
+      { weekday: "long", timeZone: "UTC" }) + " evening" : "The latest evening";
+    const lo = quiet[0], hi = quiet[quiet.length - 1];
+    const who = quiet.length === codes.length ? "all " + quiet.length + " grids"
+              : quiet.length + (quiet.length === 1 ? " grid" : " grids");
+    note = when + " looked ordinary on " + who + ". "
+         + (quiet.length === 1
+            ? lo[0] + " would have noticed a change of " + Math.round(lo[1]) + "%."
+            : lo[0] + " would have noticed a change of " + Math.round(lo[1]) + "%; "
+              + hi[0] + ", the least sensitive, would need " + Math.round(hi[1]) + "%.");
+  }
+  if (seasonal.length){
+    note = (note ? note + " " : "") + seasonal.join(", ").replace(/, ([^,]*)$/, " and $1")
+         + (seasonal.length === 1 ? " reads" : " read")
+         + " above the autumn average, as early-October evenings do every year:"
+         + " the comparison is built for mid-November, not for now.";
   }
   return { rows: rows, note: note };
 }
@@ -753,7 +787,23 @@ function sharesRow(s){
   return ['<span class="mark measured">Measured</span> Take-Two', say];
 }
 
-function renderClaims(metrics, released, latest, evening, shares){
+// Claim 01's strongest witness: New York's subway, one count a day from the
+// MTA, published the next morning. Beside it the same weekday averaged over
+// the four weeks before -- arithmetic a reader can check, not a score.
+function subwayRow(s){
+  if (!s || typeof s.rides !== "number") return null;
+  const day = new Date(s.date + "T12:00:00Z").toLocaleDateString("en-GB",
+    { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+  const m = function(v){ return (v / 1e6).toFixed(2) + " million"; };
+  let say = m(s.rides) + " subway rides in New York on " + day;
+  if (typeof s.same_weekday_mean === "number"){
+    say += ", against " + m(s.same_weekday_mean) + " on an average " + s.weekday
+         + " in the " + s.weeks_compared + " weeks before";
+  }
+  return ["New York subway", say];
+}
+
+function renderClaims(metrics, released, latest, evening, shares, subway){
   const byKey = {};
   metrics.forEach(function(m){ byKey[m.key] = m; });
 
@@ -777,6 +827,10 @@ function renderClaims(metrics, released, latest, evening, shares){
     if (c.id === "money"){
       const sr = sharesRow(shares);
       if (sr) live.unshift(sr);
+    }
+    if (c.id === "work"){
+      const sw = subwayRow(subway);
+      if (sw) live.unshift(sw);
     }
 
     let eveningNote = null;
@@ -1050,7 +1104,7 @@ async function load(){
   const sr = (data.latest || {}).selfreport || (L.selfreport || null);
   if (sr && typeof sr.total === "number") renderTally(sr);
 
-  renderClaims(METRICS, new Date() >= RELEASE, L, data.evening || {}, data.shares);
+  renderClaims(METRICS, new Date() >= RELEASE, L, data.evening || {}, data.shares, data.subway);
 
   const html = [];
   Object.keys(PANELS).forEach(function(key){
@@ -1083,6 +1137,11 @@ async function load(){
 // known. After 19 November each one gains a verdict, and a failed one keeps
 // its place with the reading that failed it. That is the whole point of
 // publishing them early, so the rendering never treats a failure as an error.
+function claimLabel(id){
+  const c = CLAIMS.filter(function(x){ return x.id === id; })[0];
+  return c ? "Claim " + c.n + " · " + c.title : "";
+}
+
 function renderPredictions(doc){
   if (!doc || !Array.isArray(doc.predictions)) return;
   const judged = new Date() >= RELEASE;
@@ -1121,7 +1180,10 @@ function renderPredictions(doc){
       : "";
 
     return '<article class="pred">'
-      + '<div class="top"><span class="num">0' + (i + 1) + "</span>" + verdict + "</div>"
+      // Labelled by the claim it tests. Numbered 01-06 on its own it looked
+      // like a match for claims 01-06, which it is not: two test claim 01,
+      // two test claim 03, none tests 04 or 06.
+      + '<div class="top"><span class="num">' + esc(claimLabel(p.claim)) + "</span>" + verdict + "</div>"
       + "<h3>" + esc(p.says) + "</h3>"
       + '<p class="rule">' + esc(p.rule) + "</p>"
       + "<details><summary>Where the number came from</summary>"

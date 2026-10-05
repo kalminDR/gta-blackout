@@ -72,8 +72,8 @@ same time. The boldness lives in the copy. The rigour lives in the marking.
 
 ### Witnesses may speak without a baseline
 
-A deviation needs weeks of history. A price does not. "A second-hand PS5 costs
-$525 in America today" is a fact worth printing now, and printing it now is what
+A deviation needs weeks of history. A price does not. "Sellers on eBay are
+asking $500 for a PS5 in America today" is a fact worth printing now, and printing it now is what
 makes the November comparison mean anything. Witnesses therefore have two
 voices: one for deviation-from-baseline, one for the raw current value. See
 `NOW_SAY` in `index.html`.
@@ -237,6 +237,31 @@ too optimistic for the rest. **Hungary is the least sensitive instrument of the
 eight** — it needs a 20% swing to reach three standard deviations. That is
 worth saying out loud, because Hungary is the country a Hungarian reader looks
 at first, and it is the one least able to see anything.
+
+### The autumn baseline leans with the season, and that is fine for 19 November
+
+Found on 1 October 2026, the first day scored against the October–December
+baseline: four of eight grids "spoke" on an ordinary Sunday, the Netherlands at
++61%. Not the launch, not a fault — the evening shape drifts inside the window.
+Averaged over the four autumns on record, early-October evenings sit about
++0.7 to +1.3σ above the pooled mean in most countries, late-November ones
+−0.6 to −0.9σ, December −0.6 to −1.1σ.
+
+**For the published prediction this is harmless, measured not assumed:** on
+ordinary weekdays 12–26 November, the three-of-eight rule fired **0 times in
+42** (and 0 in 8 Thursdays). The published 1.4% is, if anything, cautious for
+the launch date. Do not narrow the scorer's baseline to fix October: the
+scorer implements a rule published on 6 September, and changing its baseline
+would change the rule.
+
+What it does change is the page. Through October several grids read high
+every year, so `eveningRows` in `index.html` folds October's readings into one
+line that names the season instead of printing each as a finding.
+
+Raw electricity load is no longer a witness on the page at all. A cold
+evening lifts it as surely as a country staying in — the confound in attempts
+1 and 2 above — and it was listed as eight witnesses "still learning" that
+should never have been coming.
 
 ### The World Cup evidence was the weekend, not the football
 
@@ -467,7 +492,12 @@ about gaps.
 ## 6. Open items
 
 **The six predictions are published**, as of 6 September 2026, in
-`predictions.py` and on the page under `#predictions`. Each carries its rule,
+`predictions.py` and on the page under `#predictions`. **They first appeared
+on the page on 1 October** (PR #17): the page asked for `predictions.json` at
+the top level while `summarise.py` writes it into `public/`, and the error
+handler left the section empty without a word. The commit history is what
+proves they were written in advance. A section that fails silently is the
+skipped-source lesson again: render the page, do not assume it. Each carries its rule,
 where its threshold came from, and how often that rule fires on an ordinary
 day — that last number being the one that matters. `PUBLISHED_AT` is a
 constant, never a clock: if it moved with every run, "written down in advance"
