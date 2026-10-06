@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-06 15:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-06 16:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **572 snapshots** over 821.9 hours (34.2 days); last one 0.0 h ago
+- **573 snapshots** over 822.9 hours (34.3 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-06/1506.json`
+Newest snapshot: `data/2026-10-06/1606.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-06 15:06 UTC`
-- 572 of ~822 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-06 16:06 UTC`
+- 573 of ~823 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,10 +53,10 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/572 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/572 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5` | 561/572 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 488/572 | zero in 21 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/573 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/573 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5` | 562/573 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 489/573 | zero in 21 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -65,8 +65,8 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 103.0 (from 9 of 9 components) |
-| work | 104.0 (from 6 of 6 components) |
+| displacement | 100.0 (from 9 of 9 components) |
+| work | 97.0 (from 6 of 6 components) |
 | infrastructure | 173.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **2 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
