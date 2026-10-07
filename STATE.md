@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-07 22:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-07 23:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **602 snapshots** over 852.9 hours (35.5 days); last one 0.0 h ago
+- **603 snapshots** over 853.9 hours (35.6 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-07/2206.json`
+Newest snapshot: `data/2026-10-07/2306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-07 22:06 UTC`
-- 602 of ~853 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-07 23:06 UTC`
+- 603 of ~854 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,11 +53,11 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/602 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/602 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 561/602 | frozen at 4.12062e+06 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 423/602 | frozen at 1.36 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 518/602 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/603 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/603 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 562/603 | frozen at 4.12062e+06 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 424/603 | frozen at 1.36 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 519/603 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -66,7 +66,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 105.0 (from 9 of 9 components) |
+| displacement | 104.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 173.0 (from 2 of 2 components) |
 
