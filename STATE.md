@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-08 02:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-08 03:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **606 snapshots** over 856.9 hours (35.7 days); last one 0.0 h ago
+- **607 snapshots** over 857.9 hours (35.7 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-08/0206.json`
+Newest snapshot: `data/2026-10-08/0306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-08 02:06 UTC`
-- 606 of ~857 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-08 03:06 UTC`
+- 607 of ~858 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,12 +53,12 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/606 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/606 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 565/606 | frozen at 4.12062e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 595/606 | frozen at 11 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 595/606 | frozen at 33 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 522/606 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/607 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/607 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 566/607 | frozen at 4.12062e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 596/607 | frozen at 11 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 596/607 | frozen at 33 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 523/607 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -67,7 +67,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 104.0 (from 9 of 9 components) |
+| displacement | 105.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 671.0 (from 2 of 2 components) |
 
