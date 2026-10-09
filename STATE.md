@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-09 13:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-09 14:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **641 snapshots** over 891.9 hours (37.2 days); last one 0.0 h ago
+- **642 snapshots** over 892.9 hours (37.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-09/1306.json`
+Newest snapshot: `data/2026-10-09/1406.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 13:06 UTC`
-- 641 of ~892 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 14:06 UTC`
+- 642 of ~893 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,9 +53,9 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/641 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/641 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 557/641 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/642 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/642 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 558/642 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -64,8 +64,8 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 95.0 (from 9 of 9 components) |
-| work | 120.0 (from 6 of 6 components) |
+| displacement | 93.0 (from 9 of 9 components) |
+| work | 105.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **6 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
@@ -75,13 +75,13 @@ Baseline needs 6 samples per hour-of-week bucket. **6 of 168 buckets qualify** (
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 70,441 in 8 series | 2022-10-01 | 2026-10-06 | 2607 KB |
-| `gdelt_geography.json` | 2,340 in 30 series | 2026-07-11 | 2026-10-06 | 83 KB |
-| `mta_ridership.json` | 10,893 | 2023-01-01 | 2026-10-06 | 565 KB |
-| `shares.json` | 214 in 2 series | 2026-05-06 | 2026-10-07 | 12 KB |
-| `stackexchange.json` | 208 in 2 series | 2023-01-01 | 2026-10-07 | 10 KB |
-| `wikipedia.json` | 6,845 in 5 series | 2023-01-01 | 2026-09-30 | 241 KB |
-| `wikipedia_pageviews.json` | 8,788 in 7 series | 2023-01-01 | 2026-10-07 | 275 KB |
+| `entsoe_load.json` | 70,633 in 8 series | 2022-10-01 | 2026-10-07 | 2614 KB |
+| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
+| `mta_ridership.json` | 10,908 | 2023-01-01 | 2026-10-07 | 566 KB |
+| `shares.json` | 216 in 2 series | 2026-05-06 | 2026-10-08 | 12 KB |
+| `stackexchange.json` | 209 in 2 series | 2023-01-01 | 2026-10-08 | 10 KB |
+| `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
+| `wikipedia_pageviews.json` | 8,795 in 7 series | 2023-01-01 | 2026-10-08 | 276 KB |
 
 ## Front end
 
