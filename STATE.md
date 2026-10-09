@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-09 03:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-09 04:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **631 snapshots** over 881.9 hours (36.7 days); last one 0.0 h ago
+- **632 snapshots** over 882.9 hours (36.8 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-09/0306.json`
+Newest snapshot: `data/2026-10-09/0406.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 03:06 UTC`
-- 631 of ~882 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 04:06 UTC`
+- 632 of ~883 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,9 +53,9 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/631 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/631 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 547/631 | zero in 21 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/632 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/632 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 548/632 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
