@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-09 17:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-09 18:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **645 snapshots** over 895.9 hours (37.3 days); last one 0.0 h ago
+- **646 snapshots** over 896.9 hours (37.4 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-09/1706.json`
+Newest snapshot: `data/2026-10-09/1806.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 17:06 UTC`
-- 645 of ~896 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-09 18:06 UTC`
+- 646 of ~897 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,9 +53,9 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/645 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/645 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 561/645 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/646 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/646 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 562/646 | zero in 23 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -64,8 +64,8 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 101.0 (from 9 of 9 components) |
-| work | 101.0 (from 6 of 6 components) |
+| displacement | 104.0 (from 9 of 9 components) |
+| work | 113.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **6 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
