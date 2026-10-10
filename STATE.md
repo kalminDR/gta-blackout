@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-10 15:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-10 16:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **667 snapshots** over 917.9 hours (38.2 days); last one 0.0 h ago
+- **668 snapshots** over 918.9 hours (38.3 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-10/1506.json`
+Newest snapshot: `data/2026-10-10/1606.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 15:06 UTC`
-- 667 of ~918 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 16:06 UTC`
+- 668 of ~919 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,12 +53,12 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/667 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/667 | never returned a number — source not authenticating |
-| 🔴 | `power_pl_load_mw` | 492/667 | zero in 10 of 24 readings |
-| 🔴 | `steam_rank_gta5` | 656/667 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 583/667 | zero in 22 of 24 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 461/667 | missing 7 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/668 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/668 | never returned a number — source not authenticating |
+| 🔴 | `power_pl_load_mw` | 493/668 | zero in 10 of 24 readings |
+| 🔴 | `steam_rank_gta5` | 657/668 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 584/668 | zero in 21 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 462/668 | missing 7 of 24 since it started |
 
 ## Indices
 
