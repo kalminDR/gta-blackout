@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-10 12:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-10 13:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **664 snapshots** over 914.9 hours (38.1 days); last one 0.0 h ago
+- **665 snapshots** over 915.9 hours (38.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-10/1206.json`
+Newest snapshot: `data/2026-10-10/1306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 12:06 UTC`
-- 664 of ~915 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 13:06 UTC`
+- 665 of ~916 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,12 +53,12 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/664 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/664 | never returned a number — source not authenticating |
-| 🔴 | `power_pl_load_mw` | 489/664 | zero in 10 of 24 readings |
-| 🔴 | `steam_rank_gta5` | 653/664 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 580/664 | zero in 22 of 24 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 458/664 | missing 7 of 23 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/665 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/665 | never returned a number — source not authenticating |
+| 🔴 | `power_pl_load_mw` | 490/665 | zero in 10 of 24 readings |
+| 🔴 | `steam_rank_gta5` | 654/665 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 581/665 | zero in 22 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 459/665 | missing 7 of 24 since it started |
 
 ## Indices
 
@@ -76,13 +76,13 @@ Baseline needs 6 samples per hour-of-week bucket. **6 of 168 buckets qualify** (
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 70,633 in 8 series | 2022-10-01 | 2026-10-07 | 2614 KB |
-| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
-| `mta_ridership.json` | 10,908 | 2023-01-01 | 2026-10-07 | 566 KB |
-| `shares.json` | 216 in 2 series | 2026-05-06 | 2026-10-08 | 12 KB |
-| `stackexchange.json` | 209 in 2 series | 2023-01-01 | 2026-10-08 | 10 KB |
+| `entsoe_load.json` | 70,825 in 8 series | 2022-10-01 | 2026-10-08 | 2621 KB |
+| `gdelt_geography.json` | 2,340 in 30 series | 2026-07-13 | 2026-10-10 | 83 KB |
+| `mta_ridership.json` | 10,917 | 2023-01-01 | 2026-10-08 | 567 KB |
+| `shares.json` | 218 in 2 series | 2026-05-06 | 2026-10-09 | 12 KB |
+| `stackexchange.json` | 210 in 2 series | 2023-01-01 | 2026-10-09 | 10 KB |
 | `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
-| `wikipedia_pageviews.json` | 8,795 in 7 series | 2023-01-01 | 2026-10-08 | 276 KB |
+| `wikipedia_pageviews.json` | 8,802 in 7 series | 2023-01-01 | 2026-10-09 | 276 KB |
 
 ## Front end
 
