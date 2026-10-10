@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-10 18:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-10 19:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **670 snapshots** over 920.9 hours (38.4 days); last one 0.0 h ago
+- **671 snapshots** over 921.9 hours (38.4 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-10/1806.json`
+Newest snapshot: `data/2026-10-10/1906.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 18:06 UTC`
-- 670 of ~921 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 19:06 UTC`
+- 671 of ~922 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,11 +53,11 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/670 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/670 | never returned a number — source not authenticating |
-| 🔴 | `power_pl_load_mw` | 495/670 | zero in 10 of 24 readings |
-| 🔴 | `steam_rank_gta5` | 659/670 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 586/670 | zero in 21 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/671 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/671 | never returned a number — source not authenticating |
+| 🔴 | `power_pl_load_mw` | 496/671 | zero in 10 of 24 readings |
+| 🔴 | `steam_rank_gta5` | 660/671 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 587/671 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
