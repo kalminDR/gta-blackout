@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-10 07:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-10 08:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **659 snapshots** over 909.9 hours (37.9 days); last one 0.0 h ago
+- **660 snapshots** over 910.9 hours (38.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-10/0706.json`
+Newest snapshot: `data/2026-10-10/0806.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 07:06 UTC`
-- 659 of ~910 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-10 08:06 UTC`
+- 660 of ~911 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,10 +53,11 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/659 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/659 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5` | 648/659 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 575/659 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/660 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/660 | never returned a number — source not authenticating |
+| 🔴 | `power_pl_load_mw` | 485/660 | zero in 10 of 24 readings |
+| 🔴 | `steam_rank_gta5` | 649/660 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 576/660 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
