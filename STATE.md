@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-11 14:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-11 15:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **690 snapshots** over 940.9 hours (39.2 days); last one 0.0 h ago
+- **691 snapshots** over 941.9 hours (39.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-11/1406.json`
+Newest snapshot: `data/2026-10-11/1506.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-11 14:06 UTC`
-- 690 of ~941 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-11 15:06 UTC`
+- 691 of ~942 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,17 +53,16 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/690 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/690 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 649/690 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `power_es_lag_hours` | 512/690 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 511/690 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 517/690 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 508/690 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 516/690 | frozen at 0.86 for all 24 readings |
-| 🔴 | `price_de_ps5_pro` | 586/690 | frozen at 1034.82 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 679/690 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 606/690 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/691 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/691 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 650/691 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `power_es_lag_hours` | 513/691 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 512/691 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 518/691 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 509/691 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 517/691 | frozen at 0.86 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 680/691 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 607/691 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
