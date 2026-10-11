@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-11 21:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-11 22:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **697 snapshots** over 947.9 hours (39.5 days); last one 0.0 h ago
+- **698 snapshots** over 948.9 hours (39.5 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-11/2106.json`
+Newest snapshot: `data/2026-10-11/2206.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-11 21:06 UTC`
-- 697 of ~948 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-11 22:06 UTC`
+- 698 of ~949 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,16 +53,16 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/697 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/697 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 656/697 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `power_es_lag_hours` | 519/697 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 518/697 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 524/697 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 515/697 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 523/697 | frozen at 0.86 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 686/697 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 613/697 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/698 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/698 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 657/698 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `power_es_lag_hours` | 520/698 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 519/698 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 525/698 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 516/698 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 524/698 | frozen at 0.86 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 687/698 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 614/698 | zero in 22 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -72,7 +72,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 |---|---|
 | attention | **null** |
 | displacement | **null** |
-| work | **null** |
+| work | 100.0 (from 3 of 6 components) |
 | infrastructure | **null** |
 
 Baseline needs 6 samples per hour-of-week bucket. **8 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
