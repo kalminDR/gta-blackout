@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-12 03:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-12 04:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **703 snapshots** over 953.9 hours (39.7 days); last one 0.0 h ago
+- **704 snapshots** over 954.9 hours (39.8 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-12/0306.json`
+Newest snapshot: `data/2026-10-12/0406.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-12 03:06 UTC`
-- 703 of ~954 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-12 04:06 UTC`
+- 704 of ~955 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,19 +53,19 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/703 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/703 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 662/703 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `power_es_lag_hours` | 525/703 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 524/703 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 530/703 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 521/703 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 529/703 | frozen at 0.86 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 692/703 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 692/703 | frozen at 29 for all 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 598/703 | registered delay in only 1 of 24 readings -- deaf rather than asleep |
-| 🔴 | `traffic_losangeles_seconds_measured` | 598/703 | frozen at 167 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 619/703 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/704 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/704 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 663/704 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `power_es_lag_hours` | 526/704 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 525/704 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 531/704 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 522/704 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 530/704 | frozen at 0.86 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 693/704 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 693/704 | frozen at 29 for all 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 599/704 | registered delay in only 1 of 24 readings -- deaf rather than asleep |
+| 🔴 | `traffic_losangeles_seconds_measured` | 599/704 | frozen at 167 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 620/704 | zero in 23 of 24 readings |
 
 **Repaired.** These were failing earlier in the record and are clean across the last 24 readings. Listed so the fix is visible, and so nobody fixes it twice: `yt_EiQEBYDox_k_likes_per_hour`.
 
@@ -74,8 +74,8 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 96.0 (from 9 of 9 components) |
-| work | 100.0 (from 4 of 6 components) |
+| displacement | 94.0 (from 9 of 9 components) |
+| work | 100.0 (from 5 of 6 components) |
 | infrastructure | 141.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **8 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
