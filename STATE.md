@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-12 05:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-12 06:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **705 snapshots** over 955.9 hours (39.8 days); last one 0.0 h ago
+- **706 snapshots** over 956.9 hours (39.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-12/0506.json`
+Newest snapshot: `data/2026-10-12/0606.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-12 05:06 UTC`
-- 705 of ~956 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-12 06:06 UTC`
+- 706 of ~957 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,28 +53,28 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/705 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/705 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 664/705 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `power_es_lag_hours` | 527/705 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 526/705 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 532/705 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 523/705 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 531/705 | frozen at 0.86 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 694/705 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 694/705 | frozen at 29 for all 24 readings |
-| 🔴 | `traffic_losangeles_delay_pct` | 600/705 | registered delay in only 1 of 24 readings -- deaf rather than asleep |
-| 🔴 | `traffic_losangeles_seconds_measured` | 600/705 | frozen at 167 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 621/705 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/706 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/706 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 665/706 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `power_es_lag_hours` | 528/706 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 527/706 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 533/706 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 524/706 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 532/706 | frozen at 0.86 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 695/706 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 695/706 | frozen at 29 for all 24 readings |
+| 🔴 | `traffic_losangeles_delay_pct` | 601/706 | registered delay in only 1 of 24 readings -- deaf rather than asleep |
+| 🔴 | `traffic_losangeles_seconds_measured` | 601/706 | frozen at 167 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 622/706 | zero in 23 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 97.0 (from 9 of 9 components) |
+| displacement | 104.0 (from 9 of 9 components) |
 | work | 99.0 (from 5 of 6 components) |
-| infrastructure | 141.0 (from 2 of 2 components) |
+| infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **8 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
