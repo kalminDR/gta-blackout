@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-13 07:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-13 08:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **731 snapshots** over 981.9 hours (40.9 days); last one 0.0 h ago
+- **732 snapshots** over 982.9 hours (41.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-13/0706.json`
+Newest snapshot: `data/2026-10-13/0806.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Newest snapshot: `data/2026-10-13/0706.json`
 
 ## Planned but not built
 
-- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, score.py, summarise.py, test_backfill.py, test_chicago.py, test_predictions.py, test_score.py but not registered as a source
+- **`mta`** — Did people commute: New York transit (backfill, daily) — referenced in backfill.py, rehearsal.py, score.py, summarise.py, test_backfill.py, test_chicago.py, test_predictions.py, test_rehearsal.py, test_score.py but not registered as a source
 - **`chicago`** — Did people commute: a second, independent transit system — referenced in backfill.py, test_chicago.py but not registered as a source
 - **`wikipedia`** — Attention: edits and pageviews, six languages — referenced in backfill.py but not registered as a source
 
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 07:06 UTC`
-- 731 of ~982 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 08:06 UTC`
+- 732 of ~983 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,11 +53,11 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/731 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/731 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 690/731 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 720/731 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 647/731 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/732 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/732 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 691/732 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 721/732 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 648/732 | zero in 23 of 24 readings |
 
 ## Indices
 
