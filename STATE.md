@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-13 18:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-13 19:09 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **742 snapshots** over 992.9 hours (41.4 days); last one 0.0 h ago
+- **743 snapshots** over 993.9 hours (41.4 days); last one 0.1 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-13/1806.json`
+Newest snapshot: `data/2026-10-13/1906.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 18:06 UTC`
-- 742 of ~993 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 19:06 UTC`
+- 743 of ~994 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,12 +53,12 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/742 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/742 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 701/742 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 731/742 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_total_views` | 738/742 | frozen at 1.78174e+09 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 658/742 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/743 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/743 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 702/743 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 732/743 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_total_views` | 739/743 | frozen at 1.78174e+09 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 659/743 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
 
 ## Indices
 
