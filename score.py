@@ -41,6 +41,22 @@ WINDOW_END = datetime.date(2026, 12, 17)
 EVENING_HOURS = (18, 19, 20, 21, 22, 23)
 
 
+# Reasons are published: the page prints them under a prediction that has no
+# verdict, and on launch night they are the most-read lines on it. So they
+# name cities and countries the way a reader would, never as series keys.
+CITY_NAME = {"budapest": "Budapest", "london": "London", "berlin": "Berlin",
+             "warsaw": "Warsaw", "newyork": "New York",
+             "losangeles": "Los Angeles"}
+GRID_NAME = {"DE": "Germany", "FR": "France", "ES": "Spain", "IT": "Italy",
+             "NL": "the Netherlands", "PL": "Poland", "SE": "Sweden",
+             "HU": "Hungary"}
+
+
+def _names(keys, table):
+    names = [table.get(k, k) for k in keys]
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+
+
 def _result(verdict=None, reason=None, provisional=False, **evidence):
     return {"verdict": verdict, "reason": reason,
             "provisional": provisional, "evidence": evidence}
@@ -82,7 +98,7 @@ def _local_hour(iso, tz):
 
 # ------------------------------------------------------------------ 01 subway
 
-def score_subway(mta_rows):
+def score_subway(mta_rows, today=None):
     """Lower than 5 and 12 November, and 3% below the mean of the three.
 
     Reads the MTA backfill rather than the hourly series: ridership is
@@ -101,7 +117,16 @@ def score_subway(mta_rows):
 
     missing = [d.isoformat() for d in wanted if d not in daily]
     if missing:
-        return _cannot(f"the MTA series does not yet carry {', '.join(missing)}",
+        # The MTA publishes each day's count the following morning, so on
+        # launch night this is the expected state, not a gap. Two days on, it
+        # is a gap, and the wording must stop implying it is on its way.
+        late = (today or datetime.date.today()) > RELEASE + datetime.timedelta(days=2)
+        return _cannot(
+            ("the New York subway figures have no count for " + ", ".join(missing)
+             + " although it is due by now") if late else
+            ("New York publishes each day's subway count the following morning; "
+             + ("19 November is not in yet" if missing == [RELEASE.isoformat()]
+                else "not yet published: " + ", ".join(missing))),
                        have=sorted(d.isoformat() for d in daily)[-1:] or None)
 
     vals = {d: daily[d] for d in wanted}
@@ -153,8 +178,16 @@ def score_traffic(points, today=None):
         }
 
     if unscorable:
+        # Los Angeles' launch evening ends at 08:00 UTC on 20 November.
+        # "Yet" while the window is young: true whether a city's evening is
+        # still under way or the collector has not caught up. Without it the
+        # reason reads as a loss on launch night. Afterwards it is a loss, and
+        # says so plainly.
+        still_running = today <= RELEASE + datetime.timedelta(days=1)
         return _cannot(
-            "no launch-evening reading for " + ", ".join(sorted(unscorable)),
+            ("no launch-evening reading yet for " if still_running
+             else "no launch-evening reading for ")
+            + _names(sorted(unscorable), CITY_NAME),
             cities_scored=sorted(per_city))
 
     lowest = [c for c, d in per_city.items() if d["lowest_so_far"]]
@@ -179,8 +212,21 @@ STALE_AFTER_DAYS = 2
 
 def score_power(snapshots, backfill=None, ctx_today=None):
     """Three of eight grids at two standard deviations from their own autumn."""
-    verdicts = power.verdicts_from_snapshots(snapshots, backfill)
-    on_the_day = {c: v for c, v in verdicts.items() if v.get("day") == RELEASE.isoformat()}
+    # The launch day is judged by name. This used to take each country's
+    # newest complete evening and keep it only if it was 19 November -- so the
+    # verdict existed for one night, and from the evening of the 20th the
+    # hourly rescoring replaced it with "no complete launch-day evening yet",
+    # for good. Found by rehearsing the launch on made-up readings
+    # (rehearsal.py), not by waiting for it.
+    live = power.merge_windows(snapshots)
+    bf = backfill if backfill is not None else power.load_backfill()
+    verdicts = power.verdicts(live, bf)            # newest evening, for wording
+    on_the_day = {}
+    for code, pts in live.items():
+        if code in bf:
+            v = power.verdict([list(p) for p in pts], bf[code], day=RELEASE)
+            if v:
+                on_the_day[code] = v
     if not on_the_day:
         days = sorted(d for d in {v.get("day") for v in verdicts.values()} if d)
         # "Not yet" and "the source is gone" are different findings, and on
@@ -216,6 +262,17 @@ def score_power(snapshots, backfill=None, ctx_today=None):
                        without_baseline=unscored)
 
     speaking = sorted(c for c, v in scored.items() if v.get("speaks"))
+    # A grid that published nothing for the launch evening is not a grid that
+    # stayed quiet. If the missing ones could still have made up the three,
+    # failure is not established -- the outage would be reading as evidence.
+    # Found by rehearsing a launch day on which only two grids report.
+    missing = sorted(set(bf) - set(scored))
+    if len(speaking) < 3 and len(speaking) + len(missing) >= 3:
+        return _cannot(
+            f"only {len(scored)} of {len(bf)} grids have a launch-evening "
+            f"reading and three are needed; {_names(missing, GRID_NAME)} "
+            "did not report",
+            grids_speaking=speaking, grids_missing=missing)
     return _result(
         "passed" if len(speaking) >= 3 else "failed",
         grids={c: {"deviation_pct": v.get("deviation_pct"), "z": v.get("z"),
@@ -254,7 +311,7 @@ def score_steam(points, today=None):
             hours_won.append(hour)
 
     if not hours_measured:
-        return _cannot("no complete launch-evening basket reading",
+        return _cannot("no launch-evening reading with all six games present",
                        games_required=basket)
 
     open_window = today <= WINDOW_END
@@ -271,9 +328,29 @@ def score_steam(points, today=None):
 
 # ------------------------------------------------------------------ 03 twitch
 
-def score_twitch(points):
+# The two-day windows of the Twitch and PlayStation rules close at the end of
+# 20 November, UTC. A pass can be declared the moment it happens; a failure
+# only once the window is over. Before that, "not yet" is the true answer --
+# printing FAILED on launch night, with a day of the window still to run, was
+# what the first rehearsal showed.
+WINDOW_TWO_DAY_END = datetime.datetime(2026, 11, 21, tzinfo=datetime.timezone.utc)
+
+
+def _two_day_window_open(today):
+    return (today or datetime.date.today()) < WINDOW_TWO_DAY_END.date()
+
+
+def score_twitch(points, today=None):
     """Twice the same-hour, same-weekday median, four hours running."""
     metric = indices.Metric("twitch_top100_total", "attention", 1, "Twitch top 100")
+    # The median is taken from readings up to the moment the window closes,
+    # never after. Otherwise every later hour joins the baseline: weeks of
+    # people still streaming GTA would raise the "ordinary" level, and a pass
+    # declared on 21 November could quietly turn into a failure in December.
+    # A verdict is what the readings said when the window closed.
+    points = [p for p in points
+              if (indices.parse_time(p.get("t")) or WINDOW_TWO_DAY_END)
+              < WINDOW_TWO_DAY_END]
     obs = indices.collect_observations(points, metric)
     if not obs:
         return _cannot("no Twitch readings in the series")
@@ -296,6 +373,12 @@ def score_twitch(points):
         run = run + 1 if ratio >= 2.0 else 0
         best = max(best, run)
 
+    if best < 4 and _two_day_window_open(today):
+        return _result(None,
+                       reason="the window runs to the end of 20 November (UTC)",
+                       provisional=True, longest_run_so_far=best,
+                       needed="4 consecutive hourly readings")
+
     if without_baseline and best < 4:
         return _cannot(
             f"{without_baseline} of {len(window)} launch-window readings have no "
@@ -310,7 +393,7 @@ def score_twitch(points):
 
 # ---------------------------------------------------------------- 05 servers
 
-def score_servers(points):
+def score_servers(points, today=None):
     """One PlayStation incident outside Russia, on the day or the day after."""
     window = []
     for p in points:
@@ -325,6 +408,11 @@ def score_servers(points):
         return _cannot("no PlayStation status readings on 19 or 20 November")
 
     incidents = [(t, v) for t, v in window if v > 0]
+    if not incidents and _two_day_window_open(today):
+        return _result(None,
+                       reason="the window runs to the end of 20 November (UTC)",
+                       provisional=True, readings=len(window),
+                       needed="at least one")
     return _result("passed" if incidents else "failed",
                    readings=len(window),
                    readings_with_an_incident=len(incidents),
@@ -335,13 +423,13 @@ def score_servers(points):
 # --------------------------------------------------------------------- all
 
 SCORERS = {
-    "subway": lambda ctx: score_subway(ctx.get("mta")),
+    "subway": lambda ctx: score_subway(ctx.get("mta"), ctx.get("today")),
     "traffic": lambda ctx: score_traffic(ctx["points"], ctx.get("today")),
     "power": lambda ctx: score_power(ctx.get("snapshots") or [],
                                      ctx.get("backfill"), ctx.get("today")),
     "steam": lambda ctx: score_steam(ctx["points"], ctx.get("today")),
-    "twitch": lambda ctx: score_twitch(ctx["points"]),
-    "servers": lambda ctx: score_servers(ctx["points"]),
+    "twitch": lambda ctx: score_twitch(ctx["points"], ctx.get("today")),
+    "servers": lambda ctx: score_servers(ctx["points"], ctx.get("today")),
 }
 
 

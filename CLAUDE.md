@@ -560,6 +560,43 @@ can still come in lower. They report `provisional` and show where they stand;
 the page renders that as SO FAR. Saying so is better than implying the day
 settles it.
 
+### The launch, rehearsed on 5 October 2026
+
+`rehearsal.py` builds a made-up autumn — 1 October to 18 December, hourly, in
+the collector's own shape — with a launch effect switched on or off, and runs
+the real scorers at launch night, the next evening, a week later and after
+the window closes. `test_rehearsal.py` keeps four versions of 19 November as
+assertions: a strong launch, a strong launch still played for weeks, nothing
+happening, and nothing happening with the collector down. It took one run to
+find three faults no single-moment test had:
+
+- **The electricity verdict lived for one night.** `score_power` took each
+  country's newest evening and kept it only if it was 19 November, so from
+  the evening of the 20th the hourly rescoring replaced a real result with
+  "no complete launch-day evening yet", permanently. It now judges the
+  launch day by name.
+- **Twitch and PlayStation printed FAILED on launch night**, with 20 November
+  — half their window — still to run. A pass is declared the moment it
+  happens; a failure only once the window has closed. Until then: SO FAR.
+- **Two grids reporting printed FAILED** for a rule that needs three. If the
+  missing grids could still have made up three, there is no verdict and the
+  reason names who did not report. That is the core rule of `score.py`, and
+  it had a hole exactly where an ENTSO-E outage would fall.
+
+One property was fixed before it could bite: **Twitch's median is taken from
+readings up to the moment its window closes.** Otherwise every later hour
+joins the baseline, weeks of GTA streaming raise "ordinary", and a pass
+declared on 21 November could quietly become a failure in December — an edit
+nobody made. A verdict is what the readings said when the window closed.
+
+None of this changes a published rule; each is the scorer implementing the
+rule as written. The reasons it publishes now name cities and countries
+("Los Angeles", "Hungary") rather than series keys, because on launch night
+they are the most-read lines on the page.
+
+**Run the rehearsal again after any change to `score.py`, and once more on
+12 November with real preload-week data in the series.**
+
 ### Corrections to published predictions
 
 The commitment is that we will not *quietly* edit them. That is not a promise
@@ -826,8 +863,9 @@ stills, characters, logos, or the Pricedown typeface.
   locked for the prediction window), `test_shares.py` (the provider's errors
   read as errors, and a failed call never shrinks the stored history),
   `test_backfill.py` (no backfill run writes a file with less history than
-  it had).
-  Run all eleven after touching collection or aggregation. The counts move; the
+  it had), `test_rehearsal.py` (the six verdicts across launch night, the
+  next day, a week on and the window's close, in four versions of the day).
+  Run all twelve after touching collection or aggregation. The counts move; the
   suites print their own totals, so read those rather than trusting a number
   written here.
 - A test helper that lets a caller force the verdict will eventually be used to
