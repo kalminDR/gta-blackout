@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-13 14:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-13 15:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **738 snapshots** over 988.9 hours (41.2 days); last one 0.0 h ago
+- **739 snapshots** over 989.9 hours (41.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-13/1406.json`
+Newest snapshot: `data/2026-10-13/1506.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 14:06 UTC`
-- 738 of ~989 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 15:06 UTC`
+- 739 of ~990 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,20 +53,20 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/738 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/738 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 697/738 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 727/738 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_total_views` | 734/738 | frozen at 1.78174e+09 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 654/738 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/739 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/739 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 698/739 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 728/739 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_total_views` | 735/739 | frozen at 1.78174e+09 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 655/739 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 104.0 (from 9 of 9 components) |
-| work | 106.0 (from 6 of 6 components) |
+| displacement | 105.0 (from 9 of 9 components) |
+| work | 105.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **12 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
@@ -76,13 +76,13 @@ Baseline needs 6 samples per hour-of-week bucket. **12 of 168 buckets qualify** 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 71,209 in 8 series | 2022-10-01 | 2026-10-10 | 2636 KB |
-| `gdelt_geography.json` | 76 | 2026-07-15 | 2026-10-10 | 3 KB |
-| `mta_ridership.json` | 10,917 | 2023-01-01 | 2026-10-08 | 567 KB |
-| `shares.json` | 218 in 2 series | 2026-05-06 | 2026-10-09 | 12 KB |
-| `stackexchange.json` | 212 in 2 series | 2023-01-01 | 2026-10-11 | 10 KB |
+| `entsoe_load.json` | 71,401 in 8 series | 2022-10-01 | 2026-10-11 | 2643 KB |
+| `gdelt_geography.json` | 2,250 in 30 series | 2026-07-16 | 2026-10-10 | 80 KB |
+| `mta_ridership.json` | 10,942 | 2023-01-01 | 2026-10-11 | 568 KB |
+| `shares.json` | 220 in 2 series | 2026-05-06 | 2026-10-12 | 12 KB |
+| `stackexchange.json` | 213 in 2 series | 2023-01-01 | 2026-10-12 | 10 KB |
 | `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
-| `wikipedia_pageviews.json` | 8,816 in 7 series | 2023-01-01 | 2026-10-11 | 276 KB |
+| `wikipedia_pageviews.json` | 8,823 in 7 series | 2023-01-01 | 2026-10-12 | 277 KB |
 
 ## Front end
 
