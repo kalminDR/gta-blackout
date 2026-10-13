@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-13 10:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-13 11:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **734 snapshots** over 984.9 hours (41.0 days); last one 0.0 h ago
+- **735 snapshots** over 985.9 hours (41.1 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-13/1006.json`
+Newest snapshot: `data/2026-10-13/1106.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 10:06 UTC`
-- 734 of ~985 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 11:06 UTC`
+- 735 of ~986 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,20 +53,20 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/734 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/734 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 693/734 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 723/734 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_total_views` | 730/734 | frozen at 1.78174e+09 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 650/734 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/735 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/735 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 694/735 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 724/735 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_total_views` | 731/735 | frozen at 1.78174e+09 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 651/735 | frozen at 0 for all 24 readings; zero in 24 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 113.0 (from 9 of 9 components) |
-| work | 101.0 (from 6 of 6 components) |
+| displacement | 109.0 (from 9 of 9 components) |
+| work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **11 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
