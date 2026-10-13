@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-13 05:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-13 06:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **729 snapshots** over 979.9 hours (40.8 days); last one 0.0 h ago
+- **730 snapshots** over 980.9 hours (40.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-13/0506.json`
+Newest snapshot: `data/2026-10-13/0606.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 05:06 UTC`
-- 729 of ~980 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-13 06:06 UTC`
+- 730 of ~981 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,18 +53,18 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/729 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/729 | never returned a number — source not authenticating |
-| 🔴 | `polymarket_total_volume` | 688/729 | frozen at 4.1224e+06 for all 24 readings |
-| 🔴 | `steam_rank_gta5` | 718/729 | frozen at 10 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 645/729 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/730 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/730 | never returned a number — source not authenticating |
+| 🔴 | `polymarket_total_volume` | 689/730 | frozen at 4.1224e+06 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 719/730 | frozen at 10 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 646/730 | zero in 23 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 111.0 (from 9 of 9 components) |
+| displacement | 115.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
