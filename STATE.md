@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-14 22:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-14 23:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **770 snapshots** over 1020.8 hours (42.5 days); last one 0.0 h ago
+- **771 snapshots** over 1021.8 hours (42.6 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-14/2205.json`
+Newest snapshot: `data/2026-10-14/2305.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-14 22:05 UTC`
-- 770 of ~1021 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-14 23:05 UTC`
+- 771 of ~1022 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,28 +53,28 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/770 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/770 | never returned a number — source not authenticating |
-| 🔴 | `power_es_lag_hours` | 589/770 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 588/770 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 595/770 | frozen at 0.61 for all 23 readings |
-| 🔴 | `power_it_lag_hours` | 585/770 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 592/770 | frozen at 0.86 for all 22 readings |
-| 🔴 | `steam_rank_gta5` | 759/770 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 759/770 | frozen at 33 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 686/770 | zero in 23 of 24 readings |
-| 🟠 | `yt_qq76pQsI1iw_likes_per_hour` | 601/770 | missing 7 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/771 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/771 | never returned a number — source not authenticating |
+| 🔴 | `power_es_lag_hours` | 590/771 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 589/771 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 596/771 | frozen at 0.61 for all 23 readings |
+| 🔴 | `power_it_lag_hours` | 586/771 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 593/771 | frozen at 0.86 for all 22 readings |
+| 🔴 | `steam_rank_gta5` | 760/771 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 760/771 | frozen at 33 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 687/771 | zero in 23 of 24 readings |
+| 🟠 | `yt_qq76pQsI1iw_likes_per_hour` | 602/771 | missing 7 of 24 since it started |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 102.0 (from 9 of 9 components) |
+| displacement | 104.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
-Baseline needs 6 samples per hour-of-week bucket. **19 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **20 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
