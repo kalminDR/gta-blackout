@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-14 12:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-14 13:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **760 snapshots** over 1010.9 hours (42.1 days); last one 0.0 h ago
+- **761 snapshots** over 1011.9 hours (42.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-14/1206.json`
+Newest snapshot: `data/2026-10-14/1306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-14 12:06 UTC`
-- 760 of ~1011 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-14 13:06 UTC`
+- 761 of ~1012 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,39 +53,39 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/760 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/760 | never returned a number — source not authenticating |
-| 🔴 | `power_fr_lag_hours` | 578/760 | frozen at 1.36 for all 23 readings |
-| 🔴 | `power_hu_lag_hours` | 585/760 | frozen at 0.61 for all 22 readings |
-| 🔴 | `power_it_lag_hours` | 575/760 | frozen at 0.86 for all 23 readings |
-| 🔴 | `power_nl_lag_hours` | 583/760 | frozen at 0.86 for all 22 readings |
-| 🔴 | `steam_rank_gta5` | 749/760 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 749/760 | frozen at 33 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 676/760 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/761 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/761 | never returned a number — source not authenticating |
+| 🔴 | `power_fr_lag_hours` | 579/761 | frozen at 1.36 for all 23 readings |
+| 🔴 | `power_hu_lag_hours` | 586/761 | frozen at 0.61 for all 22 readings |
+| 🔴 | `power_it_lag_hours` | 576/761 | frozen at 0.86 for all 23 readings |
+| 🔴 | `power_nl_lag_hours` | 584/761 | frozen at 0.86 for all 22 readings |
+| 🔴 | `steam_rank_gta5` | 750/761 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 750/761 | frozen at 33 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 677/761 | zero in 22 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 104.0 (from 9 of 9 components) |
-| work | 100.0 (from 6 of 6 components) |
+| displacement | 102.0 (from 9 of 9 components) |
+| work | 104.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
-Baseline needs 6 samples per hour-of-week bucket. **14 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **15 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 71,401 in 8 series | 2022-10-01 | 2026-10-11 | 2643 KB |
-| `gdelt_geography.json` | 2,250 in 30 series | 2026-07-16 | 2026-10-10 | 80 KB |
-| `mta_ridership.json` | 10,942 | 2023-01-01 | 2026-10-11 | 568 KB |
-| `shares.json` | 220 in 2 series | 2026-05-06 | 2026-10-12 | 12 KB |
-| `stackexchange.json` | 213 in 2 series | 2023-01-01 | 2026-10-12 | 10 KB |
+| `entsoe_load.json` | 71,593 in 8 series | 2022-10-01 | 2026-10-12 | 2650 KB |
+| `gdelt_geography.json` | no dated series found |  |  | 0 KB |
+| `mta_ridership.json` | 10,949 | 2023-01-01 | 2026-10-12 | 568 KB |
+| `shares.json` | 222 in 2 series | 2026-05-06 | 2026-10-13 | 12 KB |
+| `stackexchange.json` | 214 in 2 series | 2023-01-01 | 2026-10-13 | 10 KB |
 | `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
-| `wikipedia_pageviews.json` | 8,823 in 7 series | 2023-01-01 | 2026-10-12 | 277 KB |
+| `wikipedia_pageviews.json` | 8,830 in 7 series | 2023-01-01 | 2026-10-13 | 277 KB |
 
 ## Front end
 
