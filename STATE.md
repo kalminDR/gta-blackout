@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-16 14:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-16 15:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **810 snapshots** over 1060.9 hours (44.2 days); last one 0.0 h ago
+- **811 snapshots** over 1061.9 hours (44.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-16/1406.json`
+Newest snapshot: `data/2026-10-16/1506.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 14:06 UTC`
-- 810 of ~1061 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 15:06 UTC`
+- 811 of ~1062 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,19 +53,20 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/810 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/810 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5_enh` | 799/810 | frozen at 31 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 726/810 | zero in 23 of 24 readings |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 649/810 | missing 11 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/811 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/811 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5_enh` | 800/811 | frozen at 31 for all 24 readings |
+| 🔴 | `yt_rockstar_total_views` | 807/811 | frozen at 1.78358e+09 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 727/811 | zero in 23 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 650/811 | missing 11 of 24 since it started |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 97.0 (from 9 of 9 components) |
-| work | 117.0 (from 6 of 6 components) |
+| displacement | 96.0 (from 9 of 9 components) |
+| work | 121.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **27 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
