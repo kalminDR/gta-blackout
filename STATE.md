@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-16 07:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-16 08:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **803 snapshots** over 1053.9 hours (43.9 days); last one 0.0 h ago
+- **804 snapshots** over 1054.9 hours (44.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-16/0706.json`
+Newest snapshot: `data/2026-10-16/0806.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 07:06 UTC`
-- 803 of ~1054 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 08:06 UTC`
+- 804 of ~1055 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,17 +53,18 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/803 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/803 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5_enh` | 792/803 | frozen at 31 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 719/803 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/804 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/804 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5_enh` | 793/804 | frozen at 31 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 720/804 | zero in 23 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 648/804 | missing 6 of 23 since it started |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 107.0 (from 9 of 9 components) |
+| displacement | 105.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
