@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-16 01:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-16 02:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **797 snapshots** over 1047.9 hours (43.7 days); last one 0.0 h ago
+- **798 snapshots** over 1048.9 hours (43.7 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-16/0106.json`
+Newest snapshot: `data/2026-10-16/0206.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 01:06 UTC`
-- 797 of ~1048 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-16 02:06 UTC`
+- 798 of ~1049 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,18 +53,17 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/797 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/797 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5` | 786/797 | frozen at 12 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 786/797 | frozen at 31 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 713/797 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/798 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/798 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5_enh` | 787/798 | frozen at 31 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 714/798 | zero in 22 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 103.0 (from 9 of 9 components) |
+| displacement | 105.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
