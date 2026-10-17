@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-17 05:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-17 06:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **825 snapshots** over 1075.8 hours (44.8 days); last one 0.0 h ago
+- **826 snapshots** over 1076.8 hours (44.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-17/0505.json`
+Newest snapshot: `data/2026-10-17/0605.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-17 05:05 UTC`
-- 825 of ~1076 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-17 06:05 UTC`
+- 826 of ~1077 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,17 +53,17 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/825 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/825 | never returned a number — source not authenticating |
-| 🔴 | `power_es_lag_hours` | 641/825 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 639/825 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 647/825 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 638/825 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 645/825 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_pl_lag_hours` | 643/825 | frozen at 1.11 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 741/825 | zero in 23 of 24 readings |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 656/825 | missing 15 of 24 since it started |
-| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 652/825 | missing 11 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/826 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/826 | never returned a number — source not authenticating |
+| 🔴 | `power_es_lag_hours` | 642/826 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 640/826 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 648/826 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 639/826 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 646/826 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_pl_lag_hours` | 644/826 | frozen at 1.11 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 742/826 | zero in 22 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 656/826 | missing 9 of 17 since it started |
+| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 652/826 | missing 12 of 24 since it started |
 
 ## Indices
 
@@ -71,7 +71,7 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 |---|---|
 | attention | **null** |
 | displacement | **null** |
-| work | 100.0 (from 1 of 6 components) |
+| work | 112.0 (from 1 of 6 components) |
 | infrastructure | **null** |
 
 Baseline needs 6 samples per hour-of-week bucket. **34 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
