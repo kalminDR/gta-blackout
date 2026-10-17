@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-17 00:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-17 01:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **820 snapshots** over 1070.9 hours (44.6 days); last one 0.0 h ago
+- **821 snapshots** over 1071.9 hours (44.7 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-17/0006.json`
+Newest snapshot: `data/2026-10-17/0106.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-17 00:06 UTC`
-- 820 of ~1071 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-17 01:06 UTC`
+- 821 of ~1072 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,18 +53,19 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/820 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/820 | never returned a number — source not authenticating |
-| 🔴 | `power_es_lag_hours` | 636/820 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_fr_lag_hours` | 634/820 | frozen at 1.36 for all 24 readings |
-| 🔴 | `power_hu_lag_hours` | 642/820 | frozen at 0.61 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 633/820 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_nl_lag_hours` | 640/820 | frozen at 0.86 for all 24 readings |
-| 🔴 | `power_pl_lag_hours` | 638/820 | frozen at 1.11 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 809/820 | frozen at 31 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 736/820 | zero in 23 of 24 readings |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 656/820 | missing 13 of 23 since it started |
-| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 652/820 | missing 7 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/821 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/821 | never returned a number — source not authenticating |
+| 🔴 | `power_es_lag_hours` | 637/821 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_fr_lag_hours` | 635/821 | frozen at 1.36 for all 24 readings |
+| 🔴 | `power_hu_lag_hours` | 643/821 | frozen at 0.61 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 634/821 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_nl_lag_hours` | 641/821 | frozen at 0.86 for all 24 readings |
+| 🔴 | `power_pl_lag_hours` | 639/821 | frozen at 1.11 for all 24 readings |
+| 🔴 | `steam_rank_gta5` | 810/821 | frozen at 11 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 810/821 | frozen at 31 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 737/821 | zero in 23 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 656/821 | missing 14 of 24 since it started |
+| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 652/821 | missing 8 of 24 since it started |
 
 ## Indices
 
@@ -72,10 +73,10 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 |---|---|
 | attention | **null** |
 | displacement | **null** |
-| work | 103.0 (from 2 of 6 components) |
+| work | 97.0 (from 2 of 6 components) |
 | infrastructure | **null** |
 
-Baseline needs 6 samples per hour-of-week bucket. **32 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **33 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
