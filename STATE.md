@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-18 11:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-18 12:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **855 snapshots** over 1105.8 hours (46.1 days); last one 0.0 h ago
+- **856 snapshots** over 1106.8 hours (46.1 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-18/1105.json`
+Newest snapshot: `data/2026-10-18/1205.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-18 11:05 UTC`
-- 855 of ~1106 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-18 12:05 UTC`
+- 856 of ~1107 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,23 +53,23 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/855 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/855 | never returned a number — source not authenticating |
-| 🔴 | `power_hu_lag_hours` | 673/855 | frozen at 0.61 for all 20 readings |
-| 🔴 | `power_it_lag_hours` | 664/855 | frozen at 0.86 for all 20 readings |
-| 🔴 | `power_nl_lag_hours` | 671/855 | frozen at 0.86 for all 20 readings |
-| 🔴 | `steam_rank_gta5` | 844/855 | frozen at 10 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 844/855 | frozen at 30 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 771/855 | zero in 23 of 24 readings |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 666/855 | missing 17 of 24 since it started |
-| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 667/855 | missing 11 of 24 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/856 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/856 | never returned a number — source not authenticating |
+| 🔴 | `power_hu_lag_hours` | 674/856 | frozen at 0.61 for all 20 readings |
+| 🔴 | `power_it_lag_hours` | 665/856 | frozen at 0.86 for all 20 readings |
+| 🔴 | `power_nl_lag_hours` | 672/856 | frozen at 0.86 for all 20 readings |
+| 🔴 | `steam_rank_gta5` | 845/856 | frozen at 10 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 845/856 | frozen at 30 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 772/856 | zero in 23 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 666/856 | missing 18 of 24 since it started |
+| 🟠 | `yt_VQRLujxTm3c_likes_per_hour` | 667/856 | missing 12 of 24 since it started |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 100.0 (from 9 of 9 components) |
+| displacement | 102.0 (from 9 of 9 components) |
 | work | **null** |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
@@ -80,11 +80,11 @@ Baseline needs 6 samples per hour-of-week bucket. **45 of 168 buckets qualify** 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 72,169 in 8 series | 2022-10-01 | 2026-10-15 | 2671 KB |
-| `gdelt_geography.json` | 2,368 in 32 series | 2026-07-20 | 2026-10-17 | 84 KB |
+| `entsoe_load.json` | 72,361 in 8 series | 2022-10-01 | 2026-10-16 | 2678 KB |
+| `gdelt_geography.json` | 2,442 in 33 series | 2026-07-21 | 2026-10-18 | 87 KB |
 | `mta_ridership.json` | 10,980 | 2023-01-01 | 2026-10-15 | 570 KB |
 | `shares.json` | 228 in 2 series | 2026-05-06 | 2026-10-16 | 12 KB |
-| `stackexchange.json` | 217 in 2 series | 2023-01-01 | 2026-10-16 | 10 KB |
+| `stackexchange.json` | 218 in 2 series | 2023-01-01 | 2026-10-17 | 10 KB |
 | `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
 | `wikipedia_pageviews.json` | 8,844 in 7 series | 2023-01-01 | 2026-10-15 | 277 KB |
 
