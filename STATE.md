@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-19 06:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-19 07:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **874 snapshots** over 1124.8 hours (46.9 days); last one 0.0 h ago
+- **875 snapshots** over 1125.8 hours (46.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-19/0605.json`
+Newest snapshot: `data/2026-10-19/0705.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-19 06:05 UTC`
-- 874 of ~1125 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-19 07:05 UTC`
+- 875 of ~1126 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,17 +53,17 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/874 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/874 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 790/874 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/875 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/875 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 791/875 | zero in 22 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 108.0 (from 9 of 9 components) |
-| work | 93.0 (from 5 of 6 components) |
+| displacement | 112.0 (from 9 of 9 components) |
+| work | 101.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **54 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
