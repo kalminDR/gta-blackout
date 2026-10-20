@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-20 04:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-20 05:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **896 snapshots** over 1146.8 hours (47.8 days); last one 0.0 h ago
+- **897 snapshots** over 1147.8 hours (47.8 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-20/0405.json`
+Newest snapshot: `data/2026-10-20/0505.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-20 04:05 UTC`
-- 896 of ~1147 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-20 05:05 UTC`
+- 897 of ~1148 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,13 +53,13 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/896 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/896 | never returned a number — source not authenticating |
-| 🔴 | `power_es_lag_hours` | 708/896 | frozen at 0.6 for all 23 readings |
-| 🔴 | `power_fr_lag_hours` | 704/896 | frozen at 1.35 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 705/896 | frozen at 0.85 for all 24 readings |
-| 🔴 | `power_pl_lag_hours` | 709/896 | frozen at 1.1 for all 21 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 812/896 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/897 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/897 | never returned a number — source not authenticating |
+| 🔴 | `power_es_lag_hours` | 709/897 | frozen at 0.6 for all 23 readings |
+| 🔴 | `power_fr_lag_hours` | 705/897 | frozen at 1.35 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 706/897 | frozen at 0.85 for all 24 readings |
+| 🔴 | `power_pl_lag_hours` | 710/897 | frozen at 1.1 for all 21 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 813/897 | zero in 22 of 24 readings |
 
 ## Indices
 
