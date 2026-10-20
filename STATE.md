@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-20 09:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-20 10:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **901 snapshots** over 1151.8 hours (48.0 days); last one 0.0 h ago
+- **902 snapshots** over 1152.8 hours (48.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-20/0905.json`
+Newest snapshot: `data/2026-10-20/1005.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-20 09:05 UTC`
-- 901 of ~1152 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-20 10:05 UTC`
+- 902 of ~1153 expected hourly readings
 - **77 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,21 +53,21 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/901 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/901 | never returned a number — source not authenticating |
-| 🔴 | `power_es_lag_hours` | 713/901 | frozen at 0.6 for all 23 readings |
-| 🔴 | `power_fr_lag_hours` | 709/901 | frozen at 1.35 for all 24 readings |
-| 🔴 | `power_it_lag_hours` | 710/901 | frozen at 0.85 for all 24 readings |
-| 🔴 | `power_pl_lag_hours` | 714/901 | frozen at 1.1 for all 21 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 817/901 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/902 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/902 | never returned a number — source not authenticating |
+| 🔴 | `power_es_lag_hours` | 714/902 | frozen at 0.6 for all 23 readings |
+| 🔴 | `power_fr_lag_hours` | 710/902 | frozen at 1.35 for all 24 readings |
+| 🔴 | `power_it_lag_hours` | 711/902 | frozen at 0.85 for all 24 readings |
+| 🔴 | `power_pl_lag_hours` | 715/902 | frozen at 1.1 for all 21 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 818/902 | zero in 22 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 103.0 (from 9 of 9 components) |
-| work | 99.0 (from 6 of 6 components) |
+| displacement | 105.0 (from 9 of 9 components) |
+| work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **61 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
