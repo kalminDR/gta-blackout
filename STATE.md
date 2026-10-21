@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-21 08:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-21 09:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **923 snapshots** over 1174.8 hours (49.0 days); last one 0.0 h ago
+- **924 snapshots** over 1175.8 hours (49.0 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-21/0805.json`
+Newest snapshot: `data/2026-10-21/0905.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-21 08:05 UTC`
-- 923 of ~1175 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-21 09:05 UTC`
+- 924 of ~1176 expected hourly readings
 - **78 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,20 +53,20 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/923 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/923 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 839/923 | zero in 22 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/924 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/924 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 840/924 | zero in 23 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 108.0 (from 9 of 9 components) |
-| work | 97.0 (from 6 of 6 components) |
+| displacement | 105.0 (from 9 of 9 components) |
+| work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
-Baseline needs 6 samples per hour-of-week bucket. **67 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **68 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
