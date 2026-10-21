@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-21 05:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-21 06:06 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **920 snapshots** over 1171.8 hours (48.8 days); last one 0.0 h ago
+- **921 snapshots** over 1172.8 hours (48.9 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-21/0505.json`
+Newest snapshot: `data/2026-10-21/0605.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-21 05:05 UTC`
-- 920 of ~1172 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-21 06:05 UTC`
+- 921 of ~1173 expected hourly readings
 - **78 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,16 +53,16 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/920 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/920 | never returned a number — source not authenticating |
-| 🔴 | `yt_rockstar_views_per_hour` | 836/920 | zero in 23 of 24 readings |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/921 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/921 | never returned a number — source not authenticating |
+| 🔴 | `yt_rockstar_views_per_hour` | 837/921 | zero in 22 of 24 readings |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 106.0 (from 9 of 9 components) |
+| displacement | 110.0 (from 9 of 9 components) |
 | work | 100.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
