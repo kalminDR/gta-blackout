@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-22 12:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-22 13:07 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **951 snapshots** over 1202.9 hours (50.1 days); last one 0.0 h ago
+- **952 snapshots** over 1203.9 hours (50.2 days); last one 0.0 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-22/1206.json`
+Newest snapshot: `data/2026-10-22/1306.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-22 12:06 UTC`
-- 951 of ~1203 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-22 13:06 UTC`
+- 952 of ~1204 expected hourly readings
 - **78 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,22 +53,22 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/951 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/951 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5` | 940/951 | frozen at 11 for all 24 readings |
-| 🔴 | `steam_rank_gta5_enh` | 940/951 | frozen at 32 for all 24 readings |
-| 🔴 | `yt_VQRLujxTm3c_likes_per_hour` | 732/951 | never returned a number |
-| 🔴 | `yt_rockstar_views_per_hour` | 867/951 | zero in 23 of 24 readings |
-| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 712/951 | missing 8 of 24 since it started |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 732/951 | missing 19 of 21 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/952 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/952 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5` | 941/952 | frozen at 11 for all 24 readings |
+| 🔴 | `steam_rank_gta5_enh` | 941/952 | frozen at 32 for all 24 readings |
+| 🔴 | `yt_VQRLujxTm3c_likes_per_hour` | 732/952 | never returned a number |
+| 🔴 | `yt_rockstar_views_per_hour` | 868/952 | zero in 23 of 24 readings |
+| 🟠 | `yt_EiQEBYDox_k_likes_per_hour` | 712/952 | missing 9 of 24 since it started |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 732/952 | missing 20 of 22 since it started |
 
 ## Indices
 
 | Panel | Value |
 |---|---|
 | attention | **null** |
-| displacement | 102.0 (from 9 of 9 components) |
-| work | 101.0 (from 6 of 6 components) |
+| displacement | 101.0 (from 9 of 9 components) |
+| work | 106.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
 Baseline needs 6 samples per hour-of-week bucket. **82 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
@@ -78,13 +78,13 @@ Baseline needs 6 samples per hour-of-week bucket. **82 of 168 buckets qualify** 
 | File | Readings | From | To | Size |
 |---|---|---|---|---|
 | `chicago_ridership.json` | 1,308 | 2023-01-01 | 2026-07-31 | 130 KB |
-| `entsoe_load.json` | 72,913 in 8 series | 2022-10-01 | 2026-10-19 | 2699 KB |
-| `gdelt_geography.json` | 2,442 in 33 series | 2026-07-24 | 2026-10-21 | 86 KB |
-| `mta_ridership.json` | 11,012 | 2023-01-01 | 2026-10-19 | 572 KB |
-| `shares.json` | 232 in 2 series | 2026-05-06 | 2026-10-20 | 13 KB |
-| `stackexchange.json` | 221 in 2 series | 2023-01-01 | 2026-10-20 | 11 KB |
+| `entsoe_load.json` | 73,129 in 8 series | 2022-10-01 | 2026-10-20 | 2707 KB |
+| `gdelt_geography.json` | 2,442 in 33 series | 2026-07-25 | 2026-10-22 | 86 KB |
+| `mta_ridership.json` | 11,019 | 2023-01-01 | 2026-10-20 | 572 KB |
+| `shares.json` | 234 in 2 series | 2026-05-06 | 2026-10-21 | 13 KB |
+| `stackexchange.json` | 222 in 2 series | 2023-01-01 | 2026-10-21 | 11 KB |
 | `wikipedia.json` | 8,214 in 6 series | 2023-01-01 | 2026-09-30 | 290 KB |
-| `wikipedia_pageviews.json` | 8,879 in 7 series | 2023-01-01 | 2026-10-20 | 278 KB |
+| `wikipedia_pageviews.json` | 8,886 in 7 series | 2023-01-01 | 2026-10-21 | 279 KB |
 
 ## Front end
 
