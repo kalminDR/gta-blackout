@@ -1,16 +1,16 @@
 # STATE — Grand Theft Attention
 
-Generated **2026-10-23 10:08 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
+Generated **2026-10-23 11:10 UTC** by `state.py`, from the repository itself. Nothing here is written from memory. If it disagrees with any other document, this file is right and the other document is stale.
 
 ## Where we are
 
 - **10 sources working**, 0 failing, 2 waiting on a key
 - **0 planned sources have no code at all**
-- **973 snapshots** over 1224.9 hours (51.0 days); last one 0.0 h ago
+- **974 snapshots** over 1225.9 hours (51.1 days); last one 0.1 h ago
 
 ## Sources
 
-Newest snapshot: `data/2026-10-23/1006.json`
+Newest snapshot: `data/2026-10-23/1106.json`
 
 | Source | State | What it says | Secrets |
 |---|---|---|---|
@@ -37,8 +37,8 @@ Deliberately abandoned: **reddit** (API closed, November 2025); **github** (Bot 
 
 ## Collection
 
-- First: `2026-09-02 09:14 UTC` · Last: `2026-10-23 10:06 UTC`
-- 973 of ~1225 expected hourly readings
+- First: `2026-09-02 09:14 UTC` · Last: `2026-10-23 11:06 UTC`
+- 974 of ~1226 expected hourly readings
 - **78 gaps over two hours:**
   - 3.1 h, 2026-09-03 02:19 → 05:27 UTC
   - 4.1 h, 2026-09-13 13:14 → 17:21 UTC
@@ -53,11 +53,11 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 
 | | Metric | Readings | Problem |
 |---|---|---|---|
-| 🔴 | `bestbuy_*` (6 metrics) | 0/973 | never returned a number — source not authenticating |
-| 🔴 | `power_*` (3 metrics) | 0/973 | never returned a number — source not authenticating |
-| 🔴 | `steam_rank_gta5` | 962/973 | frozen at 11 for all 24 readings |
-| 🔴 | `yt_rockstar_views_per_hour` | 889/973 | zero in 22 of 24 readings |
-| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 747/973 | missing 7 of 23 since it started |
+| 🔴 | `bestbuy_*` (6 metrics) | 0/974 | never returned a number — source not authenticating |
+| 🔴 | `power_*` (3 metrics) | 0/974 | never returned a number — source not authenticating |
+| 🔴 | `steam_rank_gta5` | 963/974 | frozen at 11 for all 24 readings |
+| 🔴 | `yt_rockstar_views_per_hour` | 890/974 | zero in 22 of 24 readings |
+| 🟠 | `yt_QdBZY2fkU-0_likes_per_hour` | 748/974 | missing 7 of 24 since it started |
 
 ## Indices
 
@@ -65,10 +65,10 @@ A metric that never errors but never moves is the dangerous kind: it reads as da
 |---|---|
 | attention | **null** |
 | displacement | 96.0 (from 9 of 9 components) |
-| work | 100.0 (from 6 of 6 components) |
+| work | 98.0 (from 6 of 6 components) |
 | infrastructure | 100.0 (from 2 of 2 components) |
 
-Baseline needs 6 samples per hour-of-week bucket. **97 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
+Baseline needs 6 samples per hour-of-week bucket. **98 of 168 buckets qualify** (168 seen at all). Nulls here are correct behaviour, not a bug: the page refuses to print a number it cannot support.
 
 ## Historical backfill
 
